@@ -46,7 +46,8 @@ export function Header() {
             variant="horizontal"
             tone="dark"
             priority
-            imageClassName="h-[30px] md:h-[36px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+            height={44}
+            imageClassName="h-[36px] sm:h-[40px] md:h-[44px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
           />
         </Link>
 

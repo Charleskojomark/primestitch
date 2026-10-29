@@ -8,8 +8,8 @@ export type LogoTone = "dark" | "light";
 export interface LogoProps {
   /**
    * The logo variant layout to render:
-   * - "horizontal": Primary navbar / header brand mark (icon + wordmark side-by-side)
-   * - "stacked": Footer / display layout (icon centered above wordmark)
+   * - "horizontal": Primary navbar / header brand mark (needle icon + wordmark side-by-side)
+   * - "stacked": Footer / display layout (needle icon centered above wordmark)
    * - "icon": Icon-only for staff sidebars, tracking, and compact states
    * - "wordmark": Typography-only brand name
    */
@@ -21,9 +21,9 @@ export interface LogoProps {
    */
   tone?: LogoTone;
   /**
-   * Explicit height in pixels. Defaults:
-   * - "horizontal": 36px on desktop, 30px on mobile
-   * - "stacked": 52px
+   * Explicit height in pixels.
+   * - "horizontal": 44px on desktop, 38px on mobile
+   * - "stacked": 64px
    * - "icon": 28px (enforces minimum 24px)
    * - "wordmark": 28px
    */
@@ -57,16 +57,17 @@ const LOGO_CONFIG: Record<
   }
 > = {
   horizontal: {
-    darkSrc: "/brand/logo-horizontal.png",
-    lightSrc: "/brand/logo-horizontal-white.png",
-    aspectRatio: 733 / 340, // ~2.156
-    defaultHeight: 36,
+    // Tightly cropped to eliminate dead whitespace so the logo appears bold and legible
+    darkSrc: "/brand/logo-horizontal-white-bg-tight.png",
+    lightSrc: "/brand/logo-horizontal-white-tight.png",
+    aspectRatio: 665 / 198, // ~3.359
+    defaultHeight: 44,
   },
   stacked: {
-    darkSrc: "/brand/logo-stacked.png",
-    lightSrc: "/brand/logo-stacked-white.png",
-    aspectRatio: 677 / 369, // ~1.835
-    defaultHeight: 52,
+    darkSrc: "/brand/logo-stacked-white-bg-tight.png",
+    lightSrc: "/brand/logo-stacked-white-tight.png",
+    aspectRatio: 503 / 332, // ~1.515
+    defaultHeight: 64,
   },
   icon: {
     darkSrc: "/brand/logo-icon-transparent.png",
@@ -105,7 +106,7 @@ export function Logo({
 
   // Clear space: minimum clear space equal to icon height divided by 2
   const iconHeight = variant === "icon" ? effHeight : Math.round(effHeight * 0.55);
-  const clearSpacePx = Math.max(12, Math.round(iconHeight / 2));
+  const clearSpacePx = Math.max(8, Math.round(iconHeight / 2));
 
   return (
     <div

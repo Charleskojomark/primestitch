@@ -11,7 +11,7 @@ export function Footer() {
           {/* Brand Promise & Mission */}
           <div className="space-y-4 md:col-span-1">
             <Link href="/" className="inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-tape rounded">
-              <Logo variant="stacked" tone="light" height={54} />
+              <Logo variant="stacked" tone="light" height={68} />
             </Link>
             <p className="text-xs text-slate-300 text-pretty leading-relaxed">
               Nigeria&apos;s made-to-measure tailoring house. Every outfit is assigned a master tailor with stage-by-stage transparency and a locked delivery date.
