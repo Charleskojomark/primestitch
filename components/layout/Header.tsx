@@ -32,25 +32,6 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-surface-card border-b border-border-seam shadow-subtle w-full max-w-full">
-      {/* Prime Promise Top Bar */}
-      <div className="bg-primary text-on-primary px-3 sm:px-4 py-1.5 text-[11px] font-mono flex items-center justify-between border-b border-[#1A2C4B] overflow-hidden">
-        <div className="flex items-center gap-2 min-w-0 truncate">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent-tape animate-pulse shrink-0" />
-          <span className="text-accent-tape font-bold shrink-0">PRIME PROMISE:</span>
-          <span className="truncate">Delivery on agreed date, or your next outfit is free.</span>
-        </div>
-        <div className="hidden md:flex items-center gap-4 text-slate-300 shrink-0">
-          <span>Aba Master Atelier • Nationwide Delivery</span>
-          <Link
-            href={staffRole ? "/admin" : "/staff/login"}
-            className="text-accent-tape hover:underline flex items-center gap-1 font-semibold"
-          >
-            <Briefcase className="w-3 h-3" />
-            <span>{staffRole ? `Staff (${staffRole})` : "Staff Login"}</span>
-          </Link>
-        </div>
-      </div>
-
       {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2">
         {/* Brand Monogram & Name */}
