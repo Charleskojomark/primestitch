@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { MeasurementInput } from "@/components/ui/MeasurementInput";
+import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 export default function MeasurerMobileWorkspacePage() {
   const router = useRouter();
@@ -284,12 +285,37 @@ export default function MeasurerMobileWorkspacePage() {
               />
             </div>
 
-            <div className="p-3 bg-surface-muted rounded-sm border border-border-subtle flex items-center justify-between text-xs font-mono">
-              <div className="flex items-center gap-2 text-text-muted">
-                <Camera className="w-4 h-4 text-primary" />
-                <span>Reference Posture Photo Attached (Front & Side)</span>
+            {/* Dual Posture Reference Photo Slots */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <label className="font-medium text-on-surface flex items-center gap-1.5">
+                  <Camera className="w-4 h-4 text-primary" />
+                  <span>Anatomic Posture Verification Slots</span>
+                </label>
+                <span className="font-mono text-text-muted text-[11px]">3:4 Ratio • 900 × 1200 px</span>
               </div>
-              <span className="text-accent-emerald font-bold">✓ Ready</span>
+              <div className="grid grid-cols-2 gap-3">
+                <PlaceholderImage
+                  src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400"
+                  alt="Front vertical stance posture reference photograph showing shoulder slope and chest line for cutter pattern adjustments"
+                  aspectRatio="3/4"
+                  label="Front Stance Slot"
+                  dimensionsBadge="3:4 • 900 × 1200 px"
+                  category="reference"
+                  showBadge
+                  className="rounded-sm border border-border-seam shadow-subtle"
+                />
+                <PlaceholderImage
+                  src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400"
+                  alt="Side profile posture reference photograph showing spine curvature and armhang angle for sleeve draft"
+                  aspectRatio="3/4"
+                  label="Side Profile Slot"
+                  dimensionsBadge="3:4 • 900 × 1200 px"
+                  category="reference"
+                  showBadge
+                  className="rounded-sm border border-border-seam shadow-subtle"
+                />
+              </div>
             </div>
           </div>
 

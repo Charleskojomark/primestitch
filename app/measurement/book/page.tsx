@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card, CardContent } from "@/components/ui/Card";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 export default function BookMeasurementPage() {
   const { measurers, createBooking, customerProfile } = usePrimeStitch();
@@ -80,10 +81,14 @@ export default function BookMeasurementPage() {
 
           {/* Assigned Measurer Card */}
           <div className="bg-surface-muted p-5 rounded-md border border-border-seam text-left flex items-center gap-4">
-            <img
+            <PlaceholderImage
               src={matchedMeasurer.avatar}
-              alt={matchedMeasurer.name}
-              className="w-16 h-16 rounded-full object-cover border-2 border-primary shrink-0"
+              alt={matchedMeasurer.avatarAlt || `Portrait of Master Fitter ${matchedMeasurer.name}`}
+              aspectRatio="1/1"
+              rounded="full"
+              dimensionsBadge="600 × 600 px (1:1)"
+              category="avatar"
+              className="w-16 h-16 border-2 border-primary shrink-0"
             />
             <div className="space-y-1 flex-1">
               <span className="text-[10px] font-mono uppercase tracking-wider text-text-muted block">
@@ -306,10 +311,14 @@ export default function BookMeasurementPage() {
               Assigned Specialist for {area}
             </span>
             <div className="flex items-center gap-3">
-              <img
+              <PlaceholderImage
                 src={matchedMeasurer.avatar}
-                alt={matchedMeasurer.name}
-                className="w-14 h-14 rounded-full object-cover border-2 border-primary shrink-0"
+                alt={matchedMeasurer.avatarAlt || `Portrait of Master Fitter ${matchedMeasurer.name}`}
+                aspectRatio="1/1"
+                rounded="full"
+                dimensionsBadge="600 × 600 px (1:1)"
+                category="avatar"
+                className="w-14 h-14 border-2 border-primary shrink-0"
               />
               <div className="space-y-0.5">
                 <h3 className="font-bold text-sm text-primary">

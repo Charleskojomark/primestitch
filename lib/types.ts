@@ -39,6 +39,8 @@ export interface Design {
   startingPrice: number;
   description: string;
   heroImage: string;
+  imageAlt?: string;
+  imageDimensions?: string;
   fabrics: Fabric[];
   availableColors: { name: string; hex: string }[];
   standardLeadDays: number;
@@ -70,6 +72,8 @@ export interface Tailor {
   currentWorkload: number; // count of active garments
   maxCapacity: number;
   avatar: string;
+  avatarAlt?: string;
+  avatarDimensions?: string;
   rating: number;
   phone: string;
 }
@@ -79,6 +83,8 @@ export interface Measurer {
   name: string;
   area: string; // Field coverage regions
   avatar: string;
+  avatarAlt?: string;
+  avatarDimensions?: string;
   phone: string;
   rating: number;
   activeToday: boolean;

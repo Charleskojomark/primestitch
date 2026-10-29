@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { STAGES, Stage } from "@/lib/types";
 
 export default function TailorMobileWorkspacePage() {
@@ -102,25 +103,36 @@ export default function TailorMobileWorkspacePage() {
               }`}
             >
               {/* Job Header */}
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-base text-primary">
-                      {job.id}
-                    </span>
-                    <Badge
-                      variant={job.isLate ? "error" : job.isAtRisk ? "tape" : "verified"}
-                      size="sm"
-                    >
-                      {job.status}
-                    </Badge>
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3 min-w-0">
+                  <div className="w-12 shrink-0">
+                    <PlaceholderImage
+                      alt={`${job.items[0]?.designName} pattern silhouette`}
+                      aspectRatio="3/4"
+                      category="garment"
+                      dimensionsBadge="3:4 • 1200 × 1600"
+                      className="rounded-sm border border-border-seam shadow-subtle"
+                    />
                   </div>
-                  <h3 className="font-bold text-sm text-primary font-display mt-0.5">
-                    {job.items[0]?.designName}
-                  </h3>
-                  <p className="text-xs text-text-muted font-mono">
-                    Fabric: {job.items[0]?.fabricName} • {job.items[0]?.colorName}
-                  </p>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-base text-primary">
+                        {job.id}
+                      </span>
+                      <Badge
+                        variant={job.isLate ? "error" : job.isAtRisk ? "tape" : "verified"}
+                        size="sm"
+                      >
+                        {job.status}
+                      </Badge>
+                    </div>
+                    <h3 className="font-bold text-sm text-primary font-display mt-0.5 truncate">
+                      {job.items[0]?.designName}
+                    </h3>
+                    <p className="text-xs text-text-muted font-mono truncate">
+                      Fabric: {job.items[0]?.fabricName} • {job.items[0]?.colorName}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="text-right shrink-0">

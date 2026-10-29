@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Card, CardContent } from "@/components/ui/Card";
 import { MeasurementInput } from "@/components/ui/MeasurementInput";
 import { DeliveryBanner } from "@/components/ui/DeliveryBanner";
+import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 export default function OrderPage() {
   const router = useRouter();
@@ -132,11 +133,15 @@ export default function OrderPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-6 items-start">
-            <div className="w-full sm:w-36 h-48 bg-slate-200 rounded-sm overflow-hidden shrink-0 border border-border-seam">
-              <img
+            <div className="w-full sm:w-36 shrink-0">
+              <PlaceholderImage
                 src={selectedDesign.heroImage}
-                alt={selectedDesign.name}
-                className="w-full h-full object-cover"
+                alt={selectedDesign.imageAlt || `${selectedDesign.name} silhouette`}
+                aspectRatio="3/4"
+                label={selectedDesign.name}
+                dimensionsBadge="3:4 • 1200 × 1600"
+                category="garment"
+                className="w-full border border-border-seam rounded-sm shadow-subtle"
               />
             </div>
 
@@ -547,24 +552,45 @@ export default function OrderPage() {
               </div>
 
               <div className="space-y-1.5 text-xs">
-                <label className="font-medium text-on-surface">Reference Photo or Style Inspiration</label>
-                <div className="border border-dashed border-border-seam p-3 rounded-sm flex items-center justify-between bg-surface-muted">
-                  <div className="flex items-center gap-2 text-text-muted">
-                    <Upload className="w-4 h-4 text-primary" />
-                    <span>Upload reference image</span>
+                <div className="flex items-center justify-between">
+                  <label className="font-medium text-on-surface">Reference Photo or Style Inspiration</label>
+                  <span className="text-[11px] font-mono text-text-muted">4:3 • 800 × 600 px</span>
+                </div>
+                <div className="border border-dashed border-border-seam p-3 rounded-sm flex items-center justify-between bg-surface-muted gap-3">
+                  <div className="flex items-center gap-2.5 text-text-muted min-w-0">
+                    <Upload className="w-4 h-4 text-primary shrink-0" />
+                    <span className="truncate text-xs">
+                      {draftOrder.referencePhotoUrl
+                        ? "Sample Reference Inspiration Attached"
+                        : "Upload inspiration photo (front or silhouette)"}
+                    </span>
                   </div>
                   <button
                     type="button"
                     onClick={() =>
                       updateDraftOrder({
-                        referencePhotoUrl: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400",
+                        referencePhotoUrl: draftOrder.referencePhotoUrl
+                          ? ""
+                          : "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400",
                       })
                     }
-                    className="text-[11px] font-mono text-primary font-bold hover:underline"
+                    className="text-[11px] font-mono text-primary font-bold hover:underline shrink-0"
                   >
-                    {draftOrder.referencePhotoUrl ? "✓ Image Attached" : "Attach Sample Photo"}
+                    {draftOrder.referencePhotoUrl ? "Remove Photo" : "Attach Sample"}
                   </button>
                 </div>
+                {draftOrder.referencePhotoUrl && (
+                  <div className="w-24 mt-2">
+                    <PlaceholderImage
+                      src={draftOrder.referencePhotoUrl}
+                      alt="Customer reference style photo showing preferred drape and neck embroidery"
+                      aspectRatio="4/3"
+                      dimensionsBadge="4:3 • 800 × 600"
+                      category="reference"
+                      className="rounded-sm border border-border-seam shadow-subtle"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 

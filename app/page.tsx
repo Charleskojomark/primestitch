@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Card, CardContent } from "@/components/ui/Card";
 import { DeliveryBanner } from "@/components/ui/DeliveryBanner";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 export default function HomePage() {
   const { designs, orders } = usePrimeStitch();
@@ -316,13 +317,18 @@ export default function HomePage() {
             <Card key={design.id} hasNotch className="flex flex-col justify-between group overflow-hidden">
               <div>
                 {/* Image Container with tape tag */}
-                <div className="relative aspect-[4/5] bg-slate-200 overflow-hidden">
-                  <img
+                <div className="relative">
+                  <PlaceholderImage
                     src={design.heroImage}
-                    alt={design.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    alt={design.imageAlt || `${design.name} bespoke garment silhouette`}
+                    aspectRatio="3/4"
+                    label={design.name}
+                    dimensionsBadge={design.imageDimensions || "1200 × 1600 px (3:4)"}
+                    category="garment"
+                    showBadge
+                    imageClassName="group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute top-2 left-2">
+                  <div className="absolute top-2 left-2 z-10">
                     <Badge variant="tape" size="sm">
                       {design.category}
                     </Badge>

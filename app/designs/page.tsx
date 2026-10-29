@@ -8,6 +8,7 @@ import { Layers, Filter, Clock, ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 export default function DesignsPage() {
   const { designs } = usePrimeStitch();
@@ -71,19 +72,24 @@ export default function DesignsPage() {
             >
               <div>
                 {/* Image Container with category pill and guarantee banner */}
-                <div className="relative aspect-[3/4] bg-slate-200 overflow-hidden">
-                  <img
+                <div className="relative">
+                  <PlaceholderImage
                     src={design.heroImage}
-                    alt={design.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    alt={design.imageAlt || `${design.name} bespoke garment silhouette`}
+                    aspectRatio="3/4"
+                    label={design.name}
+                    dimensionsBadge={design.imageDimensions || "1200 × 1600 px (3:4)"}
+                    category="garment"
+                    showBadge
+                    imageClassName="group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute top-2.5 left-2.5">
+                  <div className="absolute top-2.5 left-2.5 z-10">
                     <Badge variant="tape" size="sm">
                       {design.category}
                     </Badge>
                   </div>
                   {design.featured && (
-                    <div className="absolute top-2.5 right-2.5">
+                    <div className="absolute top-2.5 right-2.5 z-10">
                       <Badge variant="brass" size="sm">
                         Featured
                       </Badge>
@@ -91,7 +97,7 @@ export default function DesignsPage() {
                   )}
 
                   {/* Guaranteed Date Overlay on image bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-primary/95 text-white p-2.5 text-[11px] font-mono flex items-center justify-between border-t border-accent-tape">
+                  <div className="absolute bottom-0 left-0 right-0 z-10 bg-primary/95 text-white p-2.5 text-[11px] font-mono flex items-center justify-between border-t border-accent-tape">
                     <span className="text-accent-tape font-bold flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       Ready:

@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { DeliveryBanner } from "@/components/ui/DeliveryBanner";
+import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 export default function DesignDetailPage() {
   const params = useParams();
@@ -73,13 +74,18 @@ export default function DesignDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         {/* Left Column: Image Gallery & Fabric details */}
         <div className="lg:col-span-6 space-y-6">
-          <div className="relative aspect-[3/4] bg-slate-200 rounded-md overflow-hidden border border-border-seam shadow-card">
-            <img
+          <div className="relative">
+            <PlaceholderImage
               src={design.heroImage}
-              alt={design.name}
-              className="w-full h-full object-cover"
+              alt={design.imageAlt || `${design.name} bespoke garment silhouette`}
+              aspectRatio="3/4"
+              label={design.name}
+              dimensionsBadge={design.imageDimensions || "1200 × 1600 px (3:4)"}
+              category="garment"
+              showBadge
+              className="rounded-md border border-border-seam shadow-card"
             />
-            <div className="absolute top-4 left-4">
+            <div className="absolute top-4 left-4 z-10">
               <Badge variant="tape" size="md">
                 {design.category}
               </Badge>

@@ -7,6 +7,7 @@ import { Scissors, Ruler, ArrowLeft, Phone, MapPin, CheckCircle } from "lucide-r
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 export default function AdminTeamPage() {
   const { tailors, measurers } = usePrimeStitch();
@@ -51,10 +52,14 @@ export default function AdminTeamPage() {
             return (
               <Card key={tailor.id} className="p-5 space-y-4">
                 <div className="flex items-center gap-3">
-                  <img
+                  <PlaceholderImage
                     src={tailor.avatar}
-                    alt={tailor.name}
-                    className="w-14 h-14 rounded-full object-cover border-2 border-primary shrink-0"
+                    alt={tailor.avatarAlt || `Portrait of Master Tailor ${tailor.name}`}
+                    aspectRatio="1/1"
+                    rounded="full"
+                    dimensionsBadge={tailor.avatarDimensions || "600 × 600 px (1:1)"}
+                    category="avatar"
+                    className="w-14 h-14 border-2 border-primary shrink-0"
                   />
                   <div className="space-y-0.5">
                     <h3 className="font-bold text-base text-primary">
@@ -122,10 +127,14 @@ export default function AdminTeamPage() {
           {measurers.map((measurer) => (
             <Card key={measurer.id} className="p-5 space-y-4">
               <div className="flex items-center gap-3">
-                <img
+                <PlaceholderImage
                   src={measurer.avatar}
-                  alt={measurer.name}
-                  className="w-14 h-14 rounded-full object-cover border-2 border-primary shrink-0"
+                  alt={measurer.avatarAlt || `Portrait of Certified Measurer ${measurer.name}`}
+                  aspectRatio="1/1"
+                  rounded="full"
+                  dimensionsBadge={measurer.avatarDimensions || "600 × 600 px (1:1)"}
+                  category="avatar"
+                  className="w-14 h-14 border-2 border-primary shrink-0"
                 />
                 <div className="space-y-0.5">
                   <h3 className="font-bold text-base text-primary">
