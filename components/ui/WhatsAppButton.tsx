@@ -47,11 +47,11 @@ export function WhatsAppButton({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-md bg-[#0A5C36] text-white hover:bg-[#074729] active:scale-98 transition-all font-semibold text-sm shadow-subtle",
+        "inline-flex items-center justify-center gap-2 h-12 min-h-[48px] px-5 text-sm font-semibold rounded-md bg-[#0A5C36] text-white hover:bg-[#074729] active:scale-98 transition-all shadow-subtle border border-transparent select-none whitespace-nowrap",
         className
       )}
     >
-      <MessageSquare className="w-4 h-4 fill-current" />
+      <MessageSquare className="w-4 h-4 fill-current shrink-0" />
       <span>{label}</span>
     </a>
   );

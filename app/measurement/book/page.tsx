@@ -121,13 +121,13 @@ export default function BookMeasurementPage() {
             </div>
           </div>
 
-          <div className="pt-4 flex flex-col sm:flex-row gap-3">
-            <Link href="/designs" className="flex-1">
+          <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <Link href="/designs" className="flex-1 w-full sm:w-auto">
               <Button size="md" className="w-full">
                 Browse Catalogue While Waiting &rarr;
               </Button>
             </Link>
-            <WhatsAppButton label="Message Fitter on WhatsApp" />
+            <WhatsAppButton label="Message Fitter on WhatsApp" className="flex-1 w-full sm:w-auto" />
           </div>
         </Card>
       </div>

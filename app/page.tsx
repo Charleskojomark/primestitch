@@ -418,13 +418,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="pt-4 flex flex-wrap gap-3">
-                <Link href="/bulk">
-                  <Button size="md" rightIcon={<ArrowRight className="w-4 h-4" />}>
+              <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <Link href="/bulk" className="w-full sm:w-auto">
+                  <Button size="md" className="w-full sm:w-auto" rightIcon={<ArrowRight className="w-4 h-4" />}>
                     Open Bulk Roster Form
                   </Button>
                 </Link>
-                <WhatsAppButton label="Discuss Wedding Timeline" />
+                <WhatsAppButton label="Discuss Wedding Timeline" className="w-full sm:w-auto" />
               </div>
             </div>
 
