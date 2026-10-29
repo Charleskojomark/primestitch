@@ -29,6 +29,21 @@ export interface Fabric {
   description: string;
   priceModifier: number; // in Naira added to base
   colors: string[];
+  swatchImage?: string;
+  swatchAlt?: string;
+}
+
+export interface MediaAsset {
+  id: string;
+  name: string;
+  category: "garments" | "artisans" | "fabrics" | "stages" | "posture";
+  aspectRatio: "3/4" | "1/1" | "16/9" | "4/3";
+  dimensions: string;
+  url: string;
+  alt: string;
+  notes?: string;
+  defaultUrl: string;
+  defaultAlt: string;
 }
 
 export interface Design {

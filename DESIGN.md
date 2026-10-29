@@ -335,3 +335,5 @@ Motion in PrimeStitch reflects the precise, rhythmic mechanics of an atelier sew
 - Don't hide measurements or tracking history behind multi-level navigation drawers.
 - Don't animate layout properties (`width`, `height`, `margin`) or introduce decorative blur filters.
 
+
+

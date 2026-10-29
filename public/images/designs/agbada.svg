@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050B14"/>
+      <stop offset="60%" stop-color="#0E1B33"/>
+      <stop offset="100%" stop-color="#050B14"/>
+    </linearGradient>
+    <linearGradient id="adire" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14213d"/>
+      <stop offset="50%" stop-color="#1D2D50"/>
+      <stop offset="100%" stop-color="#0B1528"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E5A93C"/>
+      <stop offset="50%" stop-color="#C28B28"/>
+      <stop offset="100%" stop-color="#8C5E14"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#bg)"/>
+
+  <!-- Border & Specs -->
+  <line x1="40" y1="40" x2="1160" y2="40" stroke="#C28B28" stroke-dasharray="8,8" stroke-width="2" opacity="0.4"/>
+  <line x1="40" y1="1560" x2="1160" y2="1560" stroke="#C28B28" stroke-dasharray="8,8" stroke-width="2" opacity="0.4"/>
+  <text x="80" y="100" fill="#C28B28" font-family="monospace" font-size="20" letter-spacing="4">PRIMESTITCH ABA MASTER ATELIER // 3-PIECE GRANDEUR</text>
+  <text x="1120" y="100" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="18">REF: DES-AGBADA-02</text>
+
+  <!-- Agbada Wide Wings Silhouette -->
+  <g transform="translate(600, 240)">
+    <!-- Inner Buba -->
+    <path d="M -160 120 L -180 1000 L 180 1000 L 160 120 Z" fill="#0B1528" stroke="#1E293B" stroke-width="2"/>
+
+    <!-- Trousers (Sokoto) -->
+    <rect x="-150" y="1000" width="120" height="260" fill="#0E1B33" stroke="#1E293B" stroke-width="2"/>
+    <rect x="30" y="1000" width="120" height="260" fill="#0E1B33" stroke="#1E293B" stroke-width="2"/>
+
+    <!-- Grand Agbada Wings -->
+    <path d="M 0 50 C -150 40 -350 120 -500 380 C -520 420 -510 460 -460 480 L -340 520 C -280 400 -240 320 -220 280 L -250 1060 L 250 1060 L 220 280 C 240 320 280 400 340 520 L 460 480 C 510 460 520 420 500 380 C 350 120 150 40 0 50 Z" fill="url(#adire)" stroke="#C28B28" stroke-width="3"/>
+
+    <!-- Shoulder Basting pleats -->
+    <path d="M -300 240 Q -240 280 -220 380" stroke="#C28B28" stroke-dasharray="10,6" stroke-width="2" fill="none"/>
+    <path d="M -360 270 Q -290 320 -250 420" stroke="#C28B28" stroke-dasharray="10,6" stroke-width="2" fill="none"/>
+    <path d="M 300 240 Q 240 280 220 380" stroke="#C28B28" stroke-dasharray="10,6" stroke-width="2" fill="none"/>
+    <path d="M 360 270 Q 290 320 250 420" stroke="#C28B28" stroke-dasharray="10,6" stroke-width="2" fill="none"/>
+
+    <!-- Massive Regal Gold Embroidered Chest Plaque -->
+    <g transform="translate(0, 180)">
+      <circle cx="0" cy="120" r="130" fill="#0A111E" stroke="url(#gold)" stroke-width="4"/>
+      <circle cx="0" cy="120" r="105" fill="none" stroke="url(#gold)" stroke-width="2" stroke-dasharray="6,4"/>
+      <!-- Radiating Sunburst / Star Motif -->
+      <path d="M 0 20 L 15 100 L 95 120 L 15 140 L 0 220 L -15 140 L -95 120 L -15 100 Z" fill="url(#gold)"/>
+      <circle cx="0" cy="120" r="24" fill="#0A111E" stroke="url(#gold)" stroke-width="3"/>
+      <circle cx="0" cy="120" r="10" fill="url(#gold)"/>
+    </g>
+
+    <!-- Collar Cutout -->
+    <path d="M -80 50 C -40 90 40 90 80 50 Z" fill="#050B14" stroke="url(#gold)" stroke-width="3"/>
+  </g>
+
+  <!-- Typography Card -->
+  <g transform="translate(600, 1480)">
+    <rect x="-480" y="-55" width="960" height="90" rx="6" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
+    <text x="-440" y="-8" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="28">3-PIECE AGBADA GRANDEUR</text>
+    <text x="-440" y="22" fill="#94A3B8" font-family="sans-serif" font-size="16">16-Dip Adire Damask (340 GSM) // Hand-Embroidered Sovereign Starburst</text>
+    <text x="440" y="6" text-anchor="end" fill="#C28B28" font-family="monospace" font-weight="bold" font-size="30">&#8358;95,000</text>
+  </g>
+</svg>

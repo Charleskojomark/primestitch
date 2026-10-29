@@ -28,6 +28,17 @@ export default function AdminTeamPage() {
             Atelier Artisans & Field Measurement Roster
           </h1>
         </div>
+        <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
+          <Link href="/admin/orders">
+            <Button variant="outline" size="sm">Orders</Button>
+          </Link>
+          <Link href="/admin/measurements">
+            <Button variant="outline" size="sm">Bookings</Button>
+          </Link>
+          <Link href="/admin/media">
+            <Button variant="outline" size="sm">Media Assets</Button>
+          </Link>
+        </div>
       </div>
 
       {/* 1. Tailors Section */}

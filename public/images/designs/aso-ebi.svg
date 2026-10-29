@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E121E"/>
+      <stop offset="60%" stop-color="#192236"/>
+      <stop offset="100%" stop-color="#0E121E"/>
+    </linearGradient>
+    <linearGradient id="champagne" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCEFD2"/>
+      <stop offset="50%" stop-color="#E2B774"/>
+      <stop offset="100%" stop-color="#C28B28"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#bg)"/>
+  <text x="80" y="100" fill="#C28B28" font-family="monospace" font-size="20" letter-spacing="4">PRIMESTITCH CEREMONIAL ASO EBI // 20+ ROSTER HARMONY</text>
+  <text x="1120" y="100" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="18">REF: DES-ASOEBI-07</text>
+
+  <g transform="translate(600, 220)">
+    <!-- Dramatic Organza Sculptural Shoulders -->
+    <circle cx="-160" cy="140" r="90" fill="url(#champagne)" opacity="0.6"/>
+    <circle cx="160" cy="140" r="90" fill="url(#champagne)" opacity="0.6"/>
+
+    <!-- Corset / Form-Fitting Bodice -->
+    <path d="M -120 120 C -70 80 70 80 120 120 L 80 420 L -80 420 Z" fill="url(#champagne)" stroke="#8C5E14" stroke-width="2"/>
+    <line x1="-30" y1="140" x2="-20" y2="420" stroke="#8C5E14" stroke-dasharray="6,4" stroke-width="1.5"/>
+    <line x1="30" y1="140" x2="20" y2="420" stroke="#8C5E14" stroke-dasharray="6,4" stroke-width="1.5"/>
+
+    <!-- Flared Mermaid / Architectural Peplum Skirt -->
+    <path d="M -80 420 L 80 420 L 140 850 C 240 1020 300 1150 220 1180 L -220 1180 C -300 1150 -240 1020 -140 850 Z" fill="url(#champagne)" stroke="#C28B28" stroke-width="3"/>
+    
+    <!-- Skirt pleating / sheen lines -->
+    <path d="M 0 420 L 0 1180" stroke="#8C5E14" stroke-width="2" opacity="0.5"/>
+    <path d="M -60 500 Q -100 850 -140 1180" stroke="#8C5E14" stroke-width="1.5" opacity="0.4"/>
+    <path d="M 60 500 Q 100 850 140 1180" stroke="#8C5E14" stroke-width="1.5" opacity="0.4"/>
+  </g>
+
+  <!-- Typography Card -->
+  <g transform="translate(600, 1480)">
+    <rect x="-480" y="-55" width="960" height="90" rx="6" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
+    <text x="-440" y="-8" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="28">CELEBRATION ASO EBI ENSEMBLE</text>
+    <text x="-440" y="22" fill="#94A3B8" font-family="sans-serif" font-size="16">Heavy Silk Crepe &amp; Organza (290 GSM) // Sculptural Sleeves &amp; Mermaid Drape</text>
+    <text x="440" y="6" text-anchor="end" fill="#C28B28" font-family="monospace" font-weight="bold" font-size="30">&#8358;78,000</text>
+  </g>
+</svg>

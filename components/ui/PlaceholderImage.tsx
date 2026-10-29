@@ -51,6 +51,12 @@ export function PlaceholderImage({
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Reset load/error state if src changes dynamically (e.g. in Admin Media Manager)
+  React.useEffect(() => {
+    setHasError(false);
+    setIsLoaded(false);
+  }, [src]);
+
   // Pick suitable category icon
   const CategoryIcon =
     category === "avatar"

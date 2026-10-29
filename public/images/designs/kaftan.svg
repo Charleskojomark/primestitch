@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1528"/>
+      <stop offset="60%" stop-color="#14213d"/>
+      <stop offset="100%" stop-color="#0B1528"/>
+    </linearGradient>
+    <linearGradient id="fabric" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="40%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E5A93C"/>
+      <stop offset="50%" stop-color="#C28B28"/>
+      <stop offset="100%" stop-color="#8C5E14"/>
+    </linearGradient>
+    <pattern id="weave" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 0 10 L 20 10 M 10 0 L 10 20" stroke="#CBD5E1" stroke-width="0.75" opacity="0.3"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#bg)"/>
+
+  <!-- Measuring tape aesthetic border -->
+  <g opacity="0.4">
+    <line x1="40" y1="40" x2="1160" y2="40" stroke="#C28B28" stroke-dasharray="8,8" stroke-width="2"/>
+    <line x1="40" y1="1560" x2="1160" y2="1560" stroke="#C28B28" stroke-dasharray="8,8" stroke-width="2"/>
+    <line x1="40" y1="40" x2="40" y2="1560" stroke="#C28B28" stroke-dasharray="8,8" stroke-width="2"/>
+    <line x1="1160" y1="40" x2="1160" y2="1560" stroke="#C28B28" stroke-dasharray="8,8" stroke-width="2"/>
+  </g>
+
+  <!-- Tailor Watermark & Header -->
+  <text x="80" y="100" fill="#C28B28" font-family="monospace" font-size="20" letter-spacing="4">PRIMESTITCH ABA MASTER ATELIER // SPEC 3:4</text>
+  <text x="1120" y="100" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="18">REF: DES-KAFTAN-01</text>
+
+  <!-- Garment Silhouette Group -->
+  <g transform="translate(600, 200)">
+    <!-- Shadow -->
+    <path d="M -240 180 L -380 500 L -300 540 L -210 380 L -220 1150 L 220 1150 L 210 380 L 300 540 L 380 500 L 240 180 Z" fill="#000000" opacity="0.35" filter="blur(20px)"/>
+
+    <!-- Main Kaftan Body & Sleeves -->
+    <path d="M 0 50 C -70 50 -120 70 -240 160 L -380 480 L -300 520 L -200 360 L -210 1120 L -30 1120 L -30 900 L 30 900 L 30 1120 L 210 1120 L 200 360 L 300 520 L 380 480 L 240 160 C 120 70 70 50 0 50 Z" fill="url(#fabric)" stroke="#CBD5E1" stroke-width="3"/>
+    
+    <!-- Weave texture overlay -->
+    <path d="M 0 50 C -70 50 -120 70 -240 160 L -380 480 L -300 520 L -200 360 L -210 1120 L -30 1120 L -30 900 L 30 900 L 30 1120 L 210 1120 L 200 360 L 300 520 L 380 480 L 240 160 C 120 70 70 50 0 50 Z" fill="url(#weave)"/>
+
+    <!-- Basting Seams -->
+    <line x1="-200" y1="360" x2="-210" y2="1120" stroke="#C28B28" stroke-dasharray="14,8" stroke-width="3"/>
+    <line x1="200" y1="360" x2="210" y2="1120" stroke="#C28B28" stroke-dasharray="14,8" stroke-width="3"/>
+
+    <!-- Center Fold Line -->
+    <line x1="0" y1="280" x2="0" y2="1120" stroke="#94A3B8" stroke-dasharray="6,4" stroke-width="2"/>
+
+    <!-- Intricate Traditional Geometric Neckline Embroidery Plaque -->
+    <!-- Collar Band -->
+    <path d="M -70 60 C -40 85 40 85 70 60 C 50 35 -50 35 -70 60 Z" fill="url(#gold)" stroke="#8C5E14" stroke-width="2"/>
+    
+    <!-- Embroidered Placket Bib -->
+    <polygon points="-75,85 75,85 85,290 0,380 -85,290" fill="#0B1528" stroke="url(#gold)" stroke-width="4"/>
+    <polygon points="-60,100 60,100 68,275 0,350 -68,275" fill="none" stroke="url(#gold)" stroke-width="2" stroke-dasharray="8,4"/>
+    
+    <!-- Inner Geometric Knots -->
+    <path d="M 0 120 L 35 155 L 0 190 L -35 155 Z M 0 200 L 35 235 L 0 270 L -35 235 Z M 0 280 L 25 305 L 0 330 L -25 305 Z" fill="url(#gold)"/>
+    <circle cx="0" cy="155" r="5" fill="#0B1528"/>
+    <circle cx="0" cy="235" r="5" fill="#0B1528"/>
+    <circle cx="0" cy="305" r="4" fill="#0B1528"/>
+
+    <!-- Side Vent Notches -->
+    <circle cx="-210" cy="900" r="8" fill="#C28B28"/>
+    <circle cx="210" cy="900" r="8" fill="#C28B28"/>
+
+    <!-- Trousers Peeking Out -->
+    <rect x="-170" y="1120" width="130" height="240" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="2"/>
+    <rect x="40" y="1120" width="130" height="240" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="2"/>
+    <line x1="-105" y1="1120" x2="-105" y2="1360" stroke="#94A3B8" stroke-dasharray="10,6" stroke-width="2"/>
+    <line x1="105" y1="1120" x2="105" y2="1360" stroke="#94A3B8" stroke-dasharray="10,6" stroke-width="2"/>
+  </g>
+
+  <!-- Typography Card at Bottom -->
+  <g transform="translate(600, 1480)">
+    <rect x="-480" y="-55" width="960" height="90" rx="6" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
+    <text x="-440" y="-8" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="28">ARCHITECTURAL ROYAL KAFTAN</text>
+    <text x="-440" y="22" fill="#94A3B8" font-family="sans-serif" font-size="16">Imperial Guinea Brocade (280 GSM) // Hand-Embroidered Geometric Neckline</text>
+    <text x="440" y="6" text-anchor="end" fill="#C28B28" font-family="monospace" font-weight="bold" font-size="30">&#8358;55,000</text>
+  </g>
+</svg>

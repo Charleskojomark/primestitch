@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080F1B"/>
+      <stop offset="60%" stop-color="#121D30"/>
+      <stop offset="100%" stop-color="#080F1B"/>
+    </linearGradient>
+    <linearGradient id="navyPique" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#142138"/>
+      <stop offset="60%" stop-color="#0B1528"/>
+      <stop offset="100%" stop-color="#060C17"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#bg)"/>
+  <text x="80" y="100" fill="#C28B28" font-family="monospace" font-size="20" letter-spacing="4">PRIMESTITCH CORPORATE FLEET // 50+ WASH RESILIENT</text>
+  <text x="1120" y="100" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="18">REF: DES-POLO-08</text>
+
+  <g transform="translate(600, 240)">
+    <!-- Main Polo Body -->
+    <path d="M 0 60 C -90 60 -170 90 -250 160 L -330 460 L -240 480 L -190 320 L -210 980 L 210 980 L 190 320 L 240 480 L 330 460 L 250 160 C 170 90 90 60 0 60 Z" fill="url(#navyPique)" stroke="#1E293B" stroke-width="3"/>
+
+    <!-- Ribbed Non-Curling Collar -->
+    <path d="M 0 70 L -120 40 L -90 130 L 0 150 L 90 130 L 120 40 Z" fill="#060C17" stroke="#C28B28" stroke-width="2"/>
+
+    <!-- 3-Button Placket -->
+    <rect x="-25" y="130" width="50" height="240" fill="#080F1B" stroke="#1E293B" stroke-width="2"/>
+    <circle cx="0" cy="180" r="6" fill="#C28B28"/>
+    <circle cx="0" cy="240" r="6" fill="#C28B28"/>
+    <circle cx="0" cy="300" r="6" fill="#C28B28"/>
+
+    <!-- Embroidered Chest Crest Slot -->
+    <g transform="translate(-130, 260)">
+      <circle cx="0" cy="0" r="28" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
+      <path d="M -12 6 C -8 -10 8 -10 12 6 Z" fill="#C28B28"/>
+    </g>
+
+    <!-- Reinforced Side Vents with Gold Stitch -->
+    <polygon points="-210,900 -195,900 -195,980 -210,980" fill="#C28B28"/>
+    <polygon points="195,900 210,900 210,980 195,980" fill="#C28B28"/>
+  </g>
+
+  <!-- Typography Card -->
+  <g transform="translate(600, 1480)">
+    <rect x="-480" y="-55" width="960" height="90" rx="6" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
+    <text x="-440" y="-8" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="28">EXECUTIVE UNIFORM PIQUÉ POLO</text>
+    <text x="-440" y="22" fill="#94A3B8" font-family="sans-serif" font-size="16">Combed Double-Piqué Cotton (250 GSM) // Non-Curling Collar &amp; Side Vents</text>
+    <text x="440" y="6" text-anchor="end" fill="#C28B28" font-family="monospace" font-weight="bold" font-size="30">&#8358;22,000</text>
+  </g>
+</svg>

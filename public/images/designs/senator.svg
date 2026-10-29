@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A111E"/>
+      <stop offset="50%" stop-color="#111E33"/>
+      <stop offset="100%" stop-color="#0A111E"/>
+    </linearGradient>
+    <linearGradient id="senatorCloth" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#152238"/>
+      <stop offset="50%" stop-color="#0B1528"/>
+      <stop offset="100%" stop-color="#050B14"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3C667"/>
+      <stop offset="50%" stop-color="#C28B28"/>
+      <stop offset="100%" stop-color="#8C5E14"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#bg)"/>
+
+  <line x1="40" y1="40" x2="1160" y2="40" stroke="#C28B28" stroke-dasharray="8,8" stroke-width="2" opacity="0.4"/>
+  <line x1="40" y1="1560" x2="1160" y2="1560" stroke="#C28B28" stroke-dasharray="8,8" stroke-width="2" opacity="0.4"/>
+  <text x="80" y="100" fill="#C28B28" font-family="monospace" font-size="20" letter-spacing="4">PRIMESTITCH ABA MASTER ATELIER // EXECUTIVE BESPOKE</text>
+  <text x="1120" y="100" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="18">REF: DES-SENATOR-03</text>
+
+  <g transform="translate(600, 220)">
+    <!-- Senator Tunic -->
+    <path d="M 0 50 C -90 50 -160 80 -250 170 L -330 520 L -240 550 L -180 340 L -200 960 L 200 960 L 180 340 L 240 550 L 330 520 L 250 170 C 160 80 90 50 0 50 Z" fill="url(#senatorCloth)" stroke="#223354" stroke-width="3"/>
+
+    <!-- Trousers -->
+    <rect x="-160" y="960" width="120" height="380" fill="#080F1D" stroke="#1A2840" stroke-width="2"/>
+    <rect x="40" y="960" width="120" height="380" fill="#080F1D" stroke="#1A2840" stroke-width="2"/>
+    <line x1="-100" y1="960" x2="-100" y2="1340" stroke="#C28B28" stroke-dasharray="12,6" stroke-width="2"/>
+    <line x1="100" y1="960" x2="100" y2="1340" stroke="#C28B28" stroke-dasharray="12,6" stroke-width="2"/>
+
+    <!-- Mandarin Band Collar -->
+    <path d="M -65 50 L -65 25 C -40 20 40 20 65 25 L 65 50 Z" fill="#0B1528" stroke="url(#gold)" stroke-width="3"/>
+    <circle cx="0" cy="38" r="4" fill="url(#gold)"/>
+
+    <!-- Concealed Asymmetric Front Placket with Gold Detail -->
+    <rect x="-15" y="50" width="30" height="480" fill="#080E1A" stroke="#223354" stroke-width="2"/>
+    <line x1="15" y1="50" x2="15" y2="530" stroke="url(#gold)" stroke-width="2"/>
+    <circle cx="0" cy="100" r="5" fill="url(#gold)"/>
+    <circle cx="0" cy="180" r="5" fill="url(#gold)"/>
+    <circle cx="0" cy="260" r="5" fill="url(#gold)"/>
+    <circle cx="0" cy="340" r="5" fill="url(#gold)"/>
+    <circle cx="0" cy="420" r="5" fill="url(#gold)"/>
+
+    <!-- Chest Welt Pocket with Brass Pocket Square -->
+    <rect x="-140" y="160" width="90" height="12" fill="#080E1A" stroke="url(#gold)" stroke-width="2"/>
+    <polygon points="-115,160 -95,120 -80,160" fill="url(#gold)"/>
+
+    <!-- Side Seam Slits & Tailoring Basting -->
+    <line x1="-195" y1="700" x2="-195" y2="960" stroke="url(#gold)" stroke-dasharray="10,6" stroke-width="3"/>
+    <line x1="195" y1="700" x2="195" y2="960" stroke="url(#gold)" stroke-dasharray="10,6" stroke-width="3"/>
+  </g>
+
+  <!-- Typography Card -->
+  <g transform="translate(600, 1480)">
+    <rect x="-480" y="-55" width="960" height="90" rx="6" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
+    <text x="-440" y="-8" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="28">EXECUTIVE SENATOR SUIT</text>
+    <text x="-440" y="22" fill="#94A3B8" font-family="sans-serif" font-size="16">Italian Wool-Cashmere (290 GSM) // Mandarin Band Collar &amp; Concealed Placket</text>
+    <text x="440" y="6" text-anchor="end" fill="#C28B28" font-family="monospace" font-weight="bold" font-size="30">&#8358;65,000</text>
+  </g>
+</svg>

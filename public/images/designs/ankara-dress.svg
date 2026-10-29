@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#08101F"/>
+      <stop offset="60%" stop-color="#141E33"/>
+      <stop offset="100%" stop-color="#08101F"/>
+    </linearGradient>
+    <pattern id="waxPattern" width="60" height="60" patternUnits="userSpaceOnUse">
+      <rect width="60" height="60" fill="#0B1528"/>
+      <circle cx="30" cy="30" r="18" fill="#E5A93C"/>
+      <polygon points="30,5 55,30 30,55 5,30" fill="none" stroke="#0A5C36" stroke-width="4"/>
+      <circle cx="30" cy="30" r="6" fill="#0B1528"/>
+    </pattern>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FACC15"/>
+      <stop offset="100%" stop-color="#C28B28"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#bg)"/>
+  <text x="80" y="100" fill="#C28B28" font-family="monospace" font-size="20" letter-spacing="4">PRIMESTITCH CONTEMPORARY ATELIER // ARCHITECTURAL DRAPE</text>
+  <text x="1120" y="100" text-anchor="end" fill="#94A3B8" font-family="monospace" font-size="18">REF: DES-ANKARA-05</text>
+
+  <g transform="translate(600, 220)">
+    <!-- Dress Silhouette -->
+    <!-- Bodice & Bishop Sleeves -->
+    <!-- Left Sleeve -->
+    <path d="M -160 120 C -260 220 -280 440 -200 480 C -180 430 -160 280 -140 220 Z" fill="url(#waxPattern)" stroke="#C28B28" stroke-width="2"/>
+    <!-- Right Sleeve -->
+    <path d="M 160 120 C 260 220 280 440 200 480 C 180 430 160 280 140 220 Z" fill="url(#waxPattern)" stroke="#C28B28" stroke-width="2"/>
+
+    <!-- Wrap Bodice -->
+    <path d="M -150 120 L -60 360 L 60 360 L 150 120 C 80 60 -80 60 -150 120 Z" fill="url(#waxPattern)" stroke="#E5A93C" stroke-width="2"/>
+    
+    <!-- V-Neckline -->
+    <polygon points="-90,100 0,260 90,100" fill="#141E33"/>
+
+    <!-- Waist Sash / Belt -->
+    <rect x="-100" y="350" width="200" height="40" fill="url(#gold)" rx="4"/>
+    <!-- Asymmetric Sash Tails -->
+    <polygon points="40,390 90,390 120,640 60,620" fill="url(#gold)"/>
+
+    <!-- Asymmetric Fluid Skirt -->
+    <path d="M -90 390 L 90 390 L 260 1080 L -220 980 Z" fill="url(#waxPattern)" stroke="#C28B28" stroke-width="3"/>
+    
+    <!-- Hem Basting Accents -->
+    <line x1="-220" y1="980" x2="260" y2="1080" stroke="url(#gold)" stroke-dasharray="14,8" stroke-width="4"/>
+  </g>
+
+  <!-- Typography Card -->
+  <g transform="translate(600, 1480)">
+    <rect x="-480" y="-55" width="960" height="90" rx="6" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
+    <text x="-440" y="-8" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="28">ARCHITECTURAL ANKARA WRAP DRESS</text>
+    <text x="-440" y="22" fill="#94A3B8" font-family="sans-serif" font-size="16">Authenticated Holland Wax (220 GSM) // Bishop Sleeves &amp; Asymmetric Drape</text>
+    <text x="440" y="6" text-anchor="end" fill="#C28B28" font-family="monospace" font-weight="bold" font-size="30">&#8358;48,000</text>
+  </g>
+</svg>

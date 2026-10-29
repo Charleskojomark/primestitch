@@ -74,6 +74,11 @@ export default function AdminDashboardPage() {
               Team & Benches ({tailors.length})
             </Button>
           </Link>
+          <Link href="/admin/media">
+            <Button variant="outline" size="sm">
+              Media & Assets (35)
+            </Button>
+          </Link>
         </div>
       </div>
 

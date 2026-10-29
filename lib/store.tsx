@@ -12,6 +12,7 @@ import {
   MeasurementSet,
   OrderItem,
   STAGES,
+  MediaAsset,
 } from "./types";
 import {
   INITIAL_DESIGNS,
@@ -20,6 +21,7 @@ import {
   INITIAL_ORDERS,
   INITIAL_BOOKINGS,
   INITIAL_BULK_REQUESTS,
+  INITIAL_MEDIA_ASSETS,
   calculateGuaranteedDelivery,
 } from "./data";
 
@@ -77,6 +79,7 @@ interface PrimeStitchContextType {
   draftOrder: DraftOrderState;
   staffRole: "admin" | "tailor" | "measurer" | null;
   activeStaffId: string | null;
+  mediaAssets: MediaAsset[];
 
   // Actions
   updateDraftOrder: (updates: Partial<DraftOrderState>) => void;
@@ -94,6 +97,9 @@ interface PrimeStitchContextType {
   createBulkRequest: (req: Partial<BulkOrderRequest>) => BulkOrderRequest;
   saveCustomerMeasurements: (measurements: MeasurementSet) => void;
   confirmOrderMeasurements: (orderId: string, measurements: MeasurementSet) => void;
+  updateMediaAsset: (id: string, updates: Partial<MediaAsset>) => void;
+  resetMediaAsset: (id: string) => void;
+  resetAllMediaAssets: () => void;
   loginStaff: (role: "admin" | "tailor" | "measurer", staffId?: string) => void;
   logoutStaff: () => void;
   resetAllToSeed: () => void;
@@ -105,6 +111,10 @@ const STORAGE_KEY_BULK = "primestitch_bulk_v1";
 const STORAGE_KEY_DRAFT = "primestitch_draft_order_v1";
 const STORAGE_KEY_PROFILE = "primestitch_customer_profile_v1";
 const STORAGE_KEY_STAFF = "primestitch_staff_session_v1";
+const STORAGE_KEY_MEDIA = "primestitch_media_assets_v1";
+const STORAGE_KEY_DESIGNS = "primestitch_designs_v1";
+const STORAGE_KEY_TAILORS = "primestitch_tailors_v1";
+const STORAGE_KEY_MEASURERS = "primestitch_measurers_v1";
 
 const DEFAULT_DRAFT: DraftOrderState = {
   designId: "des-senator",
@@ -153,6 +163,10 @@ const PrimeStitchContext = createContext<PrimeStitchContextType | undefined>(und
 
 export function PrimeStitchProvider({ children }: { children: React.ReactNode }) {
   const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS);
+  const [designs, setDesigns] = useState<Design[]>(INITIAL_DESIGNS);
+  const [tailors, setTailors] = useState<Tailor[]>(INITIAL_TAILORS);
+  const [measurers, setMeasurers] = useState<Measurer[]>(INITIAL_MEASURERS);
+  const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>(INITIAL_MEDIA_ASSETS);
   const [bookings, setBookings] = useState<MeasurementBooking[]>(INITIAL_BOOKINGS);
   const [bulkRequests, setBulkRequests] = useState<BulkOrderRequest[]>(INITIAL_BULK_REQUESTS);
   const [customerProfile, setCustomerProfile] = useState<CustomerProfileState>(DEFAULT_PROFILE);
@@ -166,6 +180,18 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
     try {
       const storedOrders = localStorage.getItem(STORAGE_KEY_ORDERS);
       if (storedOrders) setOrders(JSON.parse(storedOrders));
+
+      const storedDesigns = localStorage.getItem(STORAGE_KEY_DESIGNS);
+      if (storedDesigns) setDesigns(JSON.parse(storedDesigns));
+
+      const storedTailors = localStorage.getItem(STORAGE_KEY_TAILORS);
+      if (storedTailors) setTailors(JSON.parse(storedTailors));
+
+      const storedMeasurers = localStorage.getItem(STORAGE_KEY_MEASURERS);
+      if (storedMeasurers) setMeasurers(JSON.parse(storedMeasurers));
+
+      const storedMedia = localStorage.getItem(STORAGE_KEY_MEDIA);
+      if (storedMedia) setMediaAssets(JSON.parse(storedMedia));
 
       const storedBookings = localStorage.getItem(STORAGE_KEY_BOOKINGS);
       if (storedBookings) setBookings(JSON.parse(storedBookings));
@@ -198,6 +224,34 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
       localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(orders));
     } catch (e) {}
   }, [orders, isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+    try {
+      localStorage.setItem(STORAGE_KEY_MEDIA, JSON.stringify(mediaAssets));
+    } catch (e) {}
+  }, [mediaAssets, isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+    try {
+      localStorage.setItem(STORAGE_KEY_DESIGNS, JSON.stringify(designs));
+    } catch (e) {}
+  }, [designs, isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+    try {
+      localStorage.setItem(STORAGE_KEY_TAILORS, JSON.stringify(tailors));
+    } catch (e) {}
+  }, [tailors, isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+    try {
+      localStorage.setItem(STORAGE_KEY_MEASURERS, JSON.stringify(measurers));
+    } catch (e) {}
+  }, [measurers, isInitialized]);
 
   useEffect(() => {
     if (!isInitialized) return;
@@ -527,12 +581,84 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
     } catch (e) {}
   };
 
+  const updateMediaAsset = (id: string, updates: Partial<MediaAsset>) => {
+    setMediaAssets((prev) =>
+      prev.map((asset) => {
+        if (asset.id !== id) return asset;
+        return { ...asset, ...updates };
+      })
+    );
+
+    // If this asset maps to a design
+    setDesigns((prev) =>
+      prev.map((des) => {
+        if (des.id === id) {
+          return {
+            ...des,
+            heroImage: updates.url !== undefined ? updates.url : des.heroImage,
+            imageAlt: updates.alt !== undefined ? updates.alt : des.imageAlt,
+          };
+        }
+        return des;
+      })
+    );
+
+    // If this asset maps to a tailor
+    setTailors((prev) =>
+      prev.map((tl) => {
+        if (tl.id === id) {
+          return {
+            ...tl,
+            avatar: updates.url !== undefined ? updates.url : tl.avatar,
+            avatarAlt: updates.alt !== undefined ? updates.alt : tl.avatarAlt,
+          };
+        }
+        return tl;
+      })
+    );
+
+    // If this asset maps to a measurer
+    setMeasurers((prev) =>
+      prev.map((ms) => {
+        if (ms.id === id) {
+          return {
+            ...ms,
+            avatar: updates.url !== undefined ? updates.url : ms.avatar,
+            avatarAlt: updates.alt !== undefined ? updates.alt : ms.avatarAlt,
+          };
+        }
+        return ms;
+      })
+    );
+  };
+
+  const resetMediaAsset = (id: string) => {
+    const initial = INITIAL_MEDIA_ASSETS.find((a) => a.id === id);
+    if (initial) {
+      updateMediaAsset(id, { url: initial.defaultUrl, alt: initial.defaultAlt });
+    }
+  };
+
+  const resetAllMediaAssets = () => {
+    setMediaAssets(INITIAL_MEDIA_ASSETS);
+    setDesigns(INITIAL_DESIGNS);
+    setTailors(INITIAL_TAILORS);
+    setMeasurers(INITIAL_MEASURERS);
+    try {
+      localStorage.removeItem(STORAGE_KEY_MEDIA);
+      localStorage.removeItem(STORAGE_KEY_DESIGNS);
+      localStorage.removeItem(STORAGE_KEY_TAILORS);
+      localStorage.removeItem(STORAGE_KEY_MEASURERS);
+    } catch (e) {}
+  };
+
   const resetAllToSeed = () => {
     setOrders(INITIAL_ORDERS);
     setBookings(INITIAL_BOOKINGS);
     setBulkRequests(INITIAL_BULK_REQUESTS);
     setCustomerProfile(DEFAULT_PROFILE);
     setDraftOrder(DEFAULT_DRAFT);
+    resetAllMediaAssets();
     try {
       localStorage.removeItem(STORAGE_KEY_ORDERS);
       localStorage.removeItem(STORAGE_KEY_BOOKINGS);
@@ -546,9 +672,10 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
     <PrimeStitchContext.Provider
       value={{
         orders,
-        designs: INITIAL_DESIGNS,
-        tailors: INITIAL_TAILORS,
-        measurers: INITIAL_MEASURERS,
+        designs,
+        tailors,
+        measurers,
+        mediaAssets,
         bookings,
         bulkRequests,
         customerProfile,
@@ -565,6 +692,9 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
         createBulkRequest,
         saveCustomerMeasurements,
         confirmOrderMeasurements,
+        updateMediaAsset,
+        resetMediaAsset,
+        resetAllMediaAssets,
         loginStaff,
         logoutStaff,
         resetAllToSeed,

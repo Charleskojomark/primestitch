@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <pattern id="p" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#F8FAFC"/>
+      <path d="M 0 20 Q 20 0 40 20 Q 20 40 0 20 Z" fill="#FFFFFF" opacity="0.15"/>
+      <circle cx="20" cy="20" r="6" fill="#C28B28" opacity="0.3"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="400" fill="url(#p)"/>
+  <!-- Basting stitch border -->
+  <rect x="15" y="15" width="370" height="370" fill="none" stroke="#C28B28" stroke-width="2" stroke-dasharray="8,6"/>
+  <!-- Spec badge -->
+  <g transform="translate(200, 320)">
+    <rect x="-180" y="-35" width="360" height="65" rx="4" fill="#0B1528" stroke="#C28B28" stroke-width="1.5"/>
+    <text x="0" y="-10" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="16">Imperial Guinea Brocade</text>
+    <text x="0" y="14" text-anchor="middle" fill="#94A3B8" font-family="monospace" font-size="12">280 GSM // Jacquard Lustre</text>
+  </g>
+</svg>

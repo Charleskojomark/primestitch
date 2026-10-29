@@ -48,6 +48,17 @@ export default function AdminMeasurementsPage() {
             Doorstep Measurement Appointments
           </h1>
         </div>
+        <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
+          <Link href="/admin/orders">
+            <Button variant="outline" size="sm">Orders</Button>
+          </Link>
+          <Link href="/admin/team">
+            <Button variant="outline" size="sm">Tailors</Button>
+          </Link>
+          <Link href="/admin/media">
+            <Button variant="outline" size="sm">Media Assets</Button>
+          </Link>
+        </div>
       </div>
 
       {toastMsg && (

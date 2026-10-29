@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="avatarBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1528"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FACC15"/>
+      <stop offset="100%" stop-color="#C28B28"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="url(#avatarBg)"/>
+
+  <!-- Workshop background atmosphere -->
+  <g opacity="0.15">
+    <line x1="0" y1="440" x2="600" y2="440" stroke="#C28B28" stroke-width="4"/>
+    <rect x="80" y="200" width="100" height="180" fill="#C28B28"/>
+    <rect x="220" y="160" width="70" height="220" fill="#C28B28"/>
+    <rect x="340" y="220" width="90" height="160" fill="#C28B28"/>
+  </g>
+
+  <!-- Artisan Silhouette -->
+  <!-- Shoulders & Garment -->
+  <path d="M 120 540 C 120 400 210 360 300 360 C 390 360 480 400 480 540 Z" fill="#080F1A" stroke="#334155" stroke-width="3"/>
+  <!-- Neck -->
+  <rect x="260" y="270" width="80" height="110" rx="10" fill="#7C471E"/>
+  <!-- Head -->
+  <ellipse cx="300" cy="220" rx="75" ry="90" fill="#7C471E"/>
+
+  <!-- Draped Yellow Measuring Tape Around Neck -->
+  <path d="M 240 290 Q 300 420 360 290" fill="none" stroke="#FFC72C" stroke-width="14" stroke-linecap="round"/>
+  <path d="M 240 290 L 225 500" fill="none" stroke="#FFC72C" stroke-width="14" stroke-linecap="round"/>
+  <path d="M 360 290 L 375 500" fill="none" stroke="#FFC72C" stroke-width="14" stroke-linecap="round"/>
+  <!-- Tape Inch Marks -->
+  <path d="M 235 340 L 245 340 M 235 380 L 245 380 M 235 420 L 245 420 M 235 460 L 245 460" stroke="#0B1528" stroke-width="2"/>
+  <path d="M 355 340 L 365 340 M 355 380 L 365 380 M 355 420 L 365 420 M 355 460 L 365 460" stroke="#0B1528" stroke-width="2"/>
+
+  <!-- Artisan Initials Monogram Badge -->
+  <circle cx="300" cy="100" r="34" fill="#0B1528" stroke="url(#gold)" stroke-width="3"/>
+  <text x="300" y="108" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="20">TA</text>
+
+  <!-- Name & Hub Overlay Box -->
+  <g transform="translate(300, 530)">
+    <rect x="-260" y="-45" width="520" height="85" rx="6" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
+    <text x="0" y="-12" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="22">Master Tunde Adeleke</text>
+    <text x="0" y="14" text-anchor="middle" fill="#94A3B8" font-family="sans-serif" font-size="14">Head Cutter // Factory Rd, Aba</text>
+    <text x="0" y="32" text-anchor="middle" fill="#FFC72C" font-family="monospace" font-size="12" letter-spacing="2">4.9 ★ // BESPOKE SUITING</text>
+  </g>
+</svg>

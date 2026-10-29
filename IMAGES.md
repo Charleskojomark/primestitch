@@ -136,3 +136,17 @@ When adding or replacing any image on PrimeStitch, ensure:
 - [x] Image has `loading="lazy"` and `decoding="async"` (enabled by default in `<PlaceholderImage />`).
 - [x] Fallback placeholder state contains proper tailoring motif icons, dimensions badge, and error tolerance.
 
+---
+
+## 4. Admin Media & Asset Manager (`/admin/media`)
+
+PrimeStitch includes an in-app **Media & Asset Management Studio** accessible to administrators at `/admin/media`:
+
+1. **Category Filtering**: Quickly filter between Garment Silhouettes (8), Artisan & Measurer Avatars (8), Fabric Swatches (8), 9 Production Milestones (9), and Posture Verification Guides (2).
+2. **Local Vector SVGs**: All 35 assets are generated and stored locally in `/public/images/` with zero latency and zero external network dependence.
+3. **Custom URL & Device File Upload**: Administrators can paste any custom CDN URL (Unsplash, Cloudinary, AWS S3) or upload photographs directly from their phone or computer via FileReader (base64 Data URL).
+4. **Descriptive Accessibility Alt Text Editor**: Edit and update WCAG 2.1 AA descriptive alt text for every single asset.
+5. **Real-Time Synchronized State**: Any asset change made in `/admin/media` persists to `localStorage` (`primestitch_media_assets_v1`) and immediately updates the consumer catalogue (`/designs`), detail view (`/designs/[id]`), order wizard (`/order`), tracking timeline (`/track/[id]`), and artisan benches.
+6. **One-Click Presets & Factory Reset**: Quickly toggle between curated studio photography presets, authentic Aba atelier vector SVGs, or reset individual or all assets back to default.
+
+

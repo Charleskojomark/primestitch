@@ -48,6 +48,17 @@ export default function AdminOrdersListPage() {
             Master Orders Management
           </h1>
         </div>
+        <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
+          <Link href="/admin/measurements">
+            <Button variant="outline" size="sm">Bookings</Button>
+          </Link>
+          <Link href="/admin/team">
+            <Button variant="outline" size="sm">Tailors</Button>
+          </Link>
+          <Link href="/admin/media">
+            <Button variant="outline" size="sm">Media Assets</Button>
+          </Link>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}
