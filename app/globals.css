@@ -1,0 +1,122 @@
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,600,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #0B1528;
+  --color-on-primary: #FFFFFF;
+  --color-secondary: #C28B28;
+  --color-on-secondary: #0B1528;
+  --color-surface: #F8FAFC;
+  --color-on-surface: #1A2232;
+  --color-surface-card: #FFFFFF;
+  --color-surface-muted: #F1F5F9;
+  --color-border-seam: #CBD5E1;
+  --color-border-subtle: #E2E8F0;
+  --color-accent-tape: #FFC72C;
+  --color-on-accent-tape: #0B1528;
+  --color-accent-emerald: #0A5C36;
+  --color-on-accent-emerald: #FFFFFF;
+  --color-text-muted: #475569;
+  --color-error: #B91C1C;
+  --color-on-error: #FFFFFF;
+
+  --font-display: 'Cabinet Grotesk', 'Space Grotesk', sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+body {
+  color: var(--color-on-surface);
+  background-color: var(--color-surface);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular figures for numbers, currency, timestamps */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Headings text-balance rule */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  font-family: var(--font-display);
+}
+
+p, span, label {
+  text-wrap: pretty;
+}
+
+/* Basting stitch divider - tailor's provisional guide seam */
+.basting-border {
+  border-style: dashed;
+  border-width: 1px;
+  border-color: var(--color-border-seam);
+}
+
+.basting-border-t {
+  border-top: 1px dashed var(--color-border-seam);
+}
+
+.basting-border-b {
+  border-bottom: 1px dashed var(--color-border-seam);
+}
+
+/* Measuring tape border ruler effect */
+.tape-measure-top {
+  position: relative;
+}
+.tape-measure-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--color-accent-tape);
+  background-image: repeating-linear-gradient(
+    90deg,
+    #0B1528,
+    #0B1528 1px,
+    transparent 1px,
+    transparent 8px
+  );
+}
+
+/* Pattern piece corner notch cutout */
+.notch-card {
+  position: relative;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Safe area support for mobile bottom drawers */
+.pb-safe {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.min-touch-target {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
