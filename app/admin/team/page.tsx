@@ -142,7 +142,7 @@ export default function AdminTeamPage() {
 
               <div className="space-y-1 text-xs">
                 <span className="font-mono text-text-muted uppercase text-[10px] block">
-                  LAGOS COVERAGE HUBS:
+                  FIELD COVERAGE REGIONS:
                 </span>
                 <p className="font-semibold text-primary">{measurer.area}</p>
               </div>

@@ -135,7 +135,7 @@ export function StatusTracker({
                 <span className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
                 Active at Bench
               </span>
-              <span className="text-text-muted text-[11px] font-mono">Lagos Atelier</span>
+              <span className="text-text-muted text-[11px] font-mono">Aba Master Atelier</span>
             </div>
           </div>
 

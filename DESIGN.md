@@ -137,7 +137,7 @@ components:
 
 PrimeStitch is a Nigerian custom-clothing platform where customers order made-to-measure outfits online, crafted by a coordinated atelier of tailors. Every order features a legally committed delivery date backed by a 9-stage tracking engine: Received, Confirmed, Cutting, Sewing, Finishing, Quality check, Ready, Dispatched, Delivered.
 
-The system solves the endemic problem of missed tailoring deadlines and opaque progress in the Nigerian bespoke clothing market. Visual design directly reflects bespoke tailoring tools: measuring tapes, basting stitches, pattern sheets, brass tailoring shears, and deep Nigerian textile heritage. The primary user interface targets smartphone users in Lagos (ages 20–45) operating on variable mobile connections under bright equatorial sunlight.
+The system solves the endemic problem of missed tailoring deadlines and opaque progress in the Nigerian bespoke clothing market. Founded and operating from Aba, Abia State—the historic capital of Nigerian tailoring and manufacturing craftsmanship—PrimeStitch combines legendary master artisan cutting with structured digital logistics to serve customers nationwide (Lagos, Abuja, Port Harcourt, South East, and across Nigeria). Visual design directly reflects bespoke tailoring tools: measuring tapes, basting stitches, pattern sheets, brass tailoring shears, and deep Nigerian textile heritage, engineered for smartphone users operating on mobile data under bright equatorial sunlight.
 
 ### Brand Voice and Tone
 

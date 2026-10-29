@@ -65,7 +65,7 @@ export interface MeasurementSet {
 export interface Tailor {
   id: string;
   name: string;
-  area: string; // Lagos area
+  area: string; // Atelier bench or regional cluster
   specialty: string;
   currentWorkload: number; // count of active garments
   maxCapacity: number;
@@ -77,7 +77,7 @@ export interface Tailor {
 export interface Measurer {
   id: string;
   name: string;
-  area: string; // Lagos coverage
+  area: string; // Field coverage regions
   avatar: string;
   phone: string;
   rating: number;

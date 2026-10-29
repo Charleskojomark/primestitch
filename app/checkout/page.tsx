@@ -258,7 +258,7 @@ export default function CheckoutPage() {
                 <span className="tabular-nums">{formatNaira(totalAmount)}</span>
               </div>
               <div className="flex justify-between text-text-muted">
-                <span>Delivery across Lagos:</span>
+                <span>Doorstep Delivery Across Nigeria:</span>
                 <span className="text-accent-emerald font-bold">FREE (Promised Date SLA)</span>
               </div>
               <div className="flex justify-between pt-2 border-t border-border-seam text-base font-bold text-primary font-display">

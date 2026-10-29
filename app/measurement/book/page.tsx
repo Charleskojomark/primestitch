@@ -25,8 +25,8 @@ export default function BookMeasurementPage() {
   const { measurers, createBooking, customerProfile } = usePrimeStitch();
 
   const [venueType, setVenueType] = useState<"home" | "office" | "event_venue">("home");
-  const [address, setAddress] = useState("14 Admiralty Way, Lekki Phase 1, Lagos");
-  const [area, setArea] = useState("Lekki Phase 1");
+  const [address, setAddress] = useState("14 Factory Road, Aba, Abia State");
+  const [area, setArea] = useState("Aba / Umuahia (Abia State)");
   const [date, setDate] = useState("2026-10-31");
   const [timeSlot, setTimeSlot] = useState("11:00 AM - 12:30 PM");
   const [customerName, setCustomerName] = useState(customerProfile.name);
@@ -71,7 +71,7 @@ export default function BookMeasurementPage() {
               Appointment Locked • {confirmedBooking.id}
             </Badge>
             <h1 className="text-2xl sm:text-3xl font-bold font-display text-primary">
-              Your Lagos Fitting is Confirmed
+              Your Doorstep Fitting is Confirmed
             </h1>
             <p className="text-xs sm:text-sm text-text-muted max-w-md mx-auto text-pretty">
               A certified PrimeStitch master fitter is assigned to your location. You will receive an SMS reminder 2 hours before arrival.
@@ -137,7 +137,7 @@ export default function BookMeasurementPage() {
           <Badge variant="tape" size="sm">
             Doorstep Bespoke Service
           </Badge>
-          <span className="text-xs font-mono text-text-muted">LAGOS METROPOLITAN FITTERS</span>
+          <span className="text-xs font-mono text-text-muted">DOORSTEP FIELD FITTERS</span>
         </div>
         <h1 className="text-3xl md:text-4xl font-extrabold font-display text-primary tracking-tight">
           Book a Professional Home or Office Measurement
@@ -179,21 +179,23 @@ export default function BookMeasurementPage() {
                 </div>
               </div>
 
-              {/* Lagos Area & Full Address */}
+              {/* Area & Full Address */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5 text-xs">
-                  <label className="font-medium text-on-surface">Lagos Area Coverage *</label>
+                  <label className="font-medium text-on-surface">Coverage Region / City *</label>
                   <select
                     value={area}
                     onChange={(e) => setArea(e.target.value)}
                     className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-mono"
                   >
-                    <option value="Lekki Phase 1">Lekki Phase 1 / Oniru</option>
-                    <option value="Ikoyi">Ikoyi / Banana Island</option>
-                    <option value="Victoria Island">Victoria Island</option>
-                    <option value="Ikeja GRA">Ikeja GRA / Maryland</option>
-                    <option value="Yaba">Yaba / Surulere</option>
-                    <option value="Ajah">Ajah / Sangotedo</option>
+                    <option value="Aba / Umuahia (Abia State)">Aba / Umuahia (Abia State)</option>
+                    <option value="Owerri (Imo State)">Owerri (Imo State)</option>
+                    <option value="Port Harcourt (Rivers State)">Port Harcourt (Rivers State)</option>
+                    <option value="Enugu / Coal City">Enugu / Coal City</option>
+                    <option value="Lekki Phase 1">Lekki / Victoria Island / Ikoyi</option>
+                    <option value="Ikeja GRA">Ikeja GRA / Mainland (Lagos)</option>
+                    <option value="Abuja FCT">Abuja FCT / Central</option>
+                    <option value="Other South East Hubs">Other South East Hubs</option>
                   </select>
                 </div>
 
@@ -204,7 +206,7 @@ export default function BookMeasurementPage() {
                     required
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    placeholder="e.g. 14 Admiralty Way, Lekki"
+                    placeholder="e.g. 14 Factory Road, Aba or 14 Admiralty Way, Lekki"
                     className="w-full h-11 px-3.5 border border-border-seam rounded-sm bg-surface-card"
                   />
                 </div>

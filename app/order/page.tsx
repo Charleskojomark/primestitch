@@ -214,8 +214,8 @@ export default function OrderPage() {
               },
               {
                 id: "booked_measurer",
-                title: "Book Lagos Measurer",
-                desc: "A master fitter visits your home/office in Lagos.",
+                title: "Book Doorstep Measurer",
+                desc: "A master fitter visits your home or workplace.",
                 icon: Scissors,
               },
               {
@@ -360,7 +360,7 @@ export default function OrderPage() {
                 <span>Mobile Fitter Direct Booking</span>
               </div>
               <p className="text-xs text-text-muted leading-relaxed">
-                A certified PrimeStitch master fitter will visit your address in Lagos equipped with professional laser and cloth measuring tapes.
+                A certified PrimeStitch master fitter will visit your address equipped with professional laser and cloth measuring tapes.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="space-y-1">
@@ -373,7 +373,7 @@ export default function OrderPage() {
                           ...draftOrder.bookingDetails,
                           venueType: e.target.value as any,
                           address: draftOrder.bookingDetails?.address || "",
-                          area: draftOrder.bookingDetails?.area || "Lekki Phase 1",
+                          area: draftOrder.bookingDetails?.area || "Aba / Abia State",
                           date: draftOrder.bookingDetails?.date || "2026-10-30",
                           timeSlot: draftOrder.bookingDetails?.timeSlot || "11:00 AM - 12:30 PM",
                         },
@@ -388,9 +388,9 @@ export default function OrderPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-mono text-text-muted block">LAGOS COVERAGE AREA:</label>
+                  <label className="font-mono text-text-muted block">COVERAGE REGION:</label>
                   <select
-                    value={draftOrder.bookingDetails?.area || "Lekki Phase 1"}
+                    value={draftOrder.bookingDetails?.area || "Aba / Abia State"}
                     onChange={(e) =>
                       updateDraftOrder({
                         bookingDetails: {
@@ -405,12 +405,14 @@ export default function OrderPage() {
                     }
                     className="w-full h-10 px-3 border border-border-seam rounded-sm bg-surface-card"
                   >
-                    <option value="Lekki Phase 1">Lekki Phase 1 / Oniru</option>
-                    <option value="Ikoyi">Ikoyi / Banana Island</option>
-                    <option value="Victoria Island">Victoria Island</option>
-                    <option value="Ikeja GRA">Ikeja GRA / Maryland</option>
-                    <option value="Yaba">Yaba / Surulere</option>
-                    <option value="Ajah">Ajah / Sangotedo</option>
+                    <option value="Aba / Abia State">Aba / Abia State</option>
+                    <option value="Owerri / Imo State">Owerri / Imo State</option>
+                    <option value="Port Harcourt">Port Harcourt (Rivers)</option>
+                    <option value="Enugu">Enugu / Coal City</option>
+                    <option value="Lekki Phase 1">Lekki / Victoria Island (Lagos)</option>
+                    <option value="Ikeja GRA">Ikeja / Mainland (Lagos)</option>
+                    <option value="Abuja FCT">Abuja FCT / Central</option>
+                    <option value="Other Regional Hubs">Other Regional Hubs</option>
                   </select>
                 </div>
               </div>
@@ -490,7 +492,7 @@ export default function OrderPage() {
               Step 3: Delivery Address & Event Timeline
             </h2>
             <p className="text-xs text-text-muted">
-              Where should our priority dispatcher deliver your outfit in Lagos?
+              Where should our priority logistics courier deliver your outfit?
             </p>
           </div>
 
@@ -520,12 +522,12 @@ export default function OrderPage() {
             </div>
 
             <div className="space-y-1.5 text-xs">
-              <label className="font-medium text-on-surface">Delivery Street Address (Lagos) *</label>
+              <label className="font-medium text-on-surface">Delivery Address & Destination City (Anywhere in Nigeria) *</label>
               <textarea
                 rows={2}
-                value={draftOrder.deliveryAddress || "Plot 14 Admiralty Way, Lekki Phase 1, Lagos"}
+                value={draftOrder.deliveryAddress || "Plot 14 Factory Road, Aba / 14 Admiralty Way, Lekki"}
                 onChange={(e) => updateDraftOrder({ deliveryAddress: e.target.value })}
-                placeholder="Street address, building number, gate code, landmarks..."
+                placeholder="Street address, building number, city, state, landmarks..."
                 className="w-full p-3 border border-border-seam rounded-sm bg-surface-card"
               />
             </div>
@@ -631,7 +633,7 @@ export default function OrderPage() {
               </div>
               <div>
                 <strong className="text-primary block font-sans">Delivery Address:</strong>
-                <span>{draftOrder.deliveryAddress || "Lagos, Nigeria"}</span>
+                <span>{draftOrder.deliveryAddress || "Nigeria (Doorstep Delivery)"}</span>
               </div>
             </div>
 

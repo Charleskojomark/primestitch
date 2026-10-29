@@ -50,7 +50,7 @@ export default function AdminDashboardPage() {
             <Badge variant="tape" size="sm">
               Atelier Command Center
             </Badge>
-            <span className="text-xs font-mono text-text-muted">LAGOS OPERATIONS</span>
+            <span className="text-xs font-mono text-text-muted">ABA ATELIER • NATIONWIDE DISPATCH</span>
           </div>
           <h1 className="text-3xl font-extrabold font-display text-primary tracking-tight mt-1">
             Production & Delivery SLA Dashboard

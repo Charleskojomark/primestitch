@@ -63,7 +63,7 @@ export default function HomePage() {
                 </Link>
                 <Link href="/measurement/book">
                   <Button variant="secondary" size="lg" className="w-full sm:w-auto">
-                    Book a Lagos Measurer
+                    Book Doorstep Measurement
                   </Button>
                 </Link>
               </div>
@@ -79,8 +79,8 @@ export default function HomePage() {
                   <span className="block text-slate-300 text-[10px] sm:text-xs leading-tight">Live Tailor Updates</span>
                 </div>
                 <div className="space-y-0.5 min-w-0">
-                  <span className="font-bold font-mono text-accent-tape text-sm sm:text-base">Lagos Wide</span>
-                  <span className="block text-slate-300 text-[10px] sm:text-xs leading-tight">Doorstep Fitting Team</span>
+                  <span className="font-bold font-mono text-accent-tape text-sm sm:text-base">Nationwide</span>
+                  <span className="block text-slate-300 text-[10px] sm:text-xs leading-tight">Doorstep Delivery SLA</span>
                 </div>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function HomePage() {
 
                     <div className="flex items-center justify-between text-[11px] text-text-muted">
                       <span>Assigned: {teaserOrder.assignedTailorName}</span>
-                      <span>Bench #3 (Lekki)</span>
+                      <span>Aba Master Atelier</span>
                     </div>
                   </div>
 
@@ -182,7 +182,7 @@ export default function HomePage() {
             <span className="font-mono text-2xl font-bold text-secondary block">02</span>
             <h3 className="font-bold text-lg font-display text-primary">Exact Measurements</h3>
             <p className="text-xs text-text-muted leading-relaxed">
-              Measure at home with our guided step-by-step tool, or book a mobile fitter to come directly to your home or office in Lagos.
+              Measure at home with our guided step-by-step tool, or book a mobile fitter to come directly to your home or office.
             </p>
           </Card>
 
@@ -254,7 +254,7 @@ export default function HomePage() {
             <div className="lg:col-span-5 bg-[#08101E] p-6 rounded-md border border-slate-700 space-y-4">
               <div className="flex items-center justify-between text-xs font-mono text-slate-400">
                 <span>ORDER PLACED TODAY</span>
-                <span>LAGOS DELIVERY</span>
+                <span>NATIONWIDE DELIVERY</span>
               </div>
 
               <div className="space-y-1">
@@ -275,7 +275,7 @@ export default function HomePage() {
                   <span>On-Time Promise Active</span>
                 </div>
                 <p className="text-[11px] text-slate-400">
-                  Includes full hand-press, 14-point audit, and protective suit bag dispatch across Lagos.
+                  Includes full hand-press, 14-point audit, and protective suit bag dispatch across Nigeria.
                 </p>
               </div>
 
@@ -439,7 +439,7 @@ export default function HomePage() {
               Need immediate advice or have fabric already?
             </h3>
             <p className="text-xs sm:text-sm text-slate-300">
-              Speak directly with our Master Tailors in Lagos. Send photos or schedule a WhatsApp video measurement.
+              Speak directly with our Master Tailors in Aba. Send photos or schedule a WhatsApp video measurement.
             </p>
           </div>
           <WhatsAppButton label="Message Atelier Desk on WhatsApp" />

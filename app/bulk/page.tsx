@@ -32,7 +32,7 @@ export default function BulkAsoEbiPage() {
   const [contactName, setContactName] = useState("Bisi Adeyemi (Chief Bridesmaid)");
   const [contactPhone, setContactPhone] = useState("+234 803 555 4920");
   const [contactEmail, setContactEmail] = useState("bisi.adeyemi@weddings.ng");
-  const [location, setLocation] = useState("Havilah Event Centre, Oniru, Victoria Island, Lagos");
+  const [location, setLocation] = useState("Havilah Event Centre, Oniru / Landmark Hotel");
   const [bookingRequested, setBookingRequested] = useState(true);
   const [submittedRequest, setSubmittedRequest] = useState<any>(null);
 
@@ -144,7 +144,7 @@ export default function BulkAsoEbiPage() {
           Aso Ebi, Bridal Trains & Corporate Fleets
         </h1>
         <p className="text-sm md:text-base text-text-muted max-w-2xl text-pretty leading-relaxed">
-          Eliminate tailoring heartbreak for your big day. We synchronize pattern cutting, manage individual fittings across Lagos, and guarantee one shared delivery date for the entire group.
+          Eliminate tailoring heartbreak for your big day. We synchronize pattern cutting at our Aba master atelier, manage individual fittings nationwide, and guarantee one shared delivery date for the entire group.
         </p>
       </div>
 
@@ -214,13 +214,13 @@ export default function BulkAsoEbiPage() {
             </div>
 
             <div className="space-y-1.5 text-xs">
-              <label className="font-medium text-on-surface">Group Fitting Location (Lagos) *</label>
+              <label className="font-medium text-on-surface">Group Fitting / Event Location *</label>
               <input
                 type="text"
                 required
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="Venue / Hotel address"
+                placeholder="Venue / Hotel address anywhere in Nigeria"
                 className="w-full h-11 px-3.5 border border-border-seam rounded-sm bg-surface-card"
               />
             </div>

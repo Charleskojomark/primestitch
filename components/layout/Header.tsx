@@ -40,7 +40,7 @@ export function Header() {
           <span className="truncate">Delivery on agreed date, or your next outfit is free.</span>
         </div>
         <div className="hidden md:flex items-center gap-4 text-slate-300 shrink-0">
-          <span>Lagos Atelier Delivery</span>
+          <span>Aba Master Atelier • Nationwide Delivery</span>
           <Link
             href={staffRole ? "/admin" : "/staff/login"}
             className="text-accent-tape hover:underline flex items-center gap-1 font-semibold"
@@ -64,7 +64,7 @@ export function Header() {
               <span className="text-secondary text-xs sm:text-sm font-normal ml-1">✂</span>
             </span>
             <span className="hidden sm:block text-[9px] font-mono tracking-widest text-text-muted uppercase mt-0.5">
-              Bespoke Nigerian Atelier
+              Handcrafted in Aba • Delivered Nationwide
             </span>
           </div>
         </Link>

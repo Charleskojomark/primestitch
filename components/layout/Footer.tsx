@@ -44,7 +44,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/measurement/book" className="hover:text-accent-tape transition-colors">
-                  Book a Lagos Home Measurement
+                  Book a Doorstep Measurement
                 </Link>
               </li>
               <li>
@@ -60,26 +60,26 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Lagos Coverage Areas */}
+          {/* Atelier Hub & Nationwide Delivery */}
           <div className="space-y-3 text-xs">
             <h4 className="font-bold text-white uppercase tracking-wider font-mono">
-              Lagos Atelier Hubs
+              Crafted in Aba • Nationwide Delivery
             </h4>
             <div className="space-y-2 text-slate-300">
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-secondary shrink-0 mt-0.5" />
                 <span>
-                  <strong>Island Atelier:</strong> Admiralty Way, Lekki Phase 1 & Ikoyi
+                  <strong>Master Atelier:</strong> Factory Road & Commercial Hub, Aba, Abia State
                 </span>
               </div>
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-secondary shrink-0 mt-0.5" />
                 <span>
-                  <strong>Mainland Atelier:</strong> Isaac John St, Ikeja GRA & Yaba
+                  <strong>Nationwide Dispatch:</strong> Lagos, Abuja, Port Harcourt, South East & Nationwide
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 pt-1">
-                Home measurers on road: Lekki, Victoria Island, Ikeja, Surulere, Yaba, Ajah.
+                Aba craftsmanship with doorstep fitters and guaranteed on-time delivery across Nigeria.
               </p>
             </div>
           </div>
