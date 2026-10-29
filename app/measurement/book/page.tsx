@@ -133,7 +133,7 @@ export default function BookMeasurementPage() {
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
       {/* Page Header */}
       <div className="space-y-3">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Badge variant="tape" size="sm">
             Doorstep Bespoke Service
           </Badge>
