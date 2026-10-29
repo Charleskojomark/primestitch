@@ -128,7 +128,7 @@ export default function ConfirmMeasurementPage() {
       </div>
 
       {/* Measurements Table Card */}
-      <Card className="p-6 space-y-6">
+      <Card className="p-4 sm:p-6 space-y-6">
         <div className="flex items-center justify-between border-b border-border-subtle pb-4">
           <div className="space-y-0.5">
             <span className="text-xs font-mono uppercase text-text-muted">
@@ -187,8 +187,8 @@ export default function ConfirmMeasurementPage() {
             size="lg"
             isLoading={isConfirming}
             onClick={handleConfirm}
-            className="w-full text-base font-bold shadow-raised"
-            rightIcon={<CheckCircle className="w-5 h-5 text-accent-tape" />}
+            className="w-full text-sm sm:text-base font-bold shadow-raised whitespace-normal py-3 h-auto text-center"
+            rightIcon={<CheckCircle className="w-5 h-5 text-accent-tape shrink-0" />}
           >
             Confirm My Measurements & Lock Delivery Date
           </Button>

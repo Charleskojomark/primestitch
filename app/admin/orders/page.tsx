@@ -96,9 +96,9 @@ export default function AdminOrdersListPage() {
       </Card>
 
       {/* Orders Table */}
-      <Card className="p-0 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
+      <Card className="p-0 overflow-hidden w-full max-w-full">
+        <div className="w-full max-w-full overflow-x-auto scroll-touch">
+          <table className="w-full min-w-[760px] text-left text-xs font-mono">
             <thead className="bg-surface-muted border-b border-border-seam uppercase text-[11px] text-text-muted">
               <tr>
                 <th className="p-3.5">Order ID</th>

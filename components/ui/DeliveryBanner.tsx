@@ -22,15 +22,15 @@ export function DeliveryBanner({
     return (
       <div
         className={cn(
-          "inline-flex items-center gap-2 bg-primary text-on-primary px-3 py-1.5 rounded-sm border border-[#1E2E4A] shadow-subtle",
+          "inline-flex items-center flex-wrap gap-1.5 sm:gap-2 bg-primary text-on-primary px-2.5 sm:px-3 py-1.5 rounded-sm border border-[#1E2E4A] shadow-subtle max-w-full text-xs",
           className
         )}
       >
-        <span className="w-2 h-2 rounded-full bg-accent-tape animate-pulse" />
-        <span className="text-xs uppercase tracking-wider text-accent-tape font-mono font-bold">
-          Guaranteed Delivery:
+        <span className="w-2 h-2 rounded-full bg-accent-tape animate-pulse shrink-0" />
+        <span className="text-[11px] sm:text-xs uppercase tracking-wider text-accent-tape font-mono font-bold shrink-0">
+          Guaranteed:
         </span>
-        <span className="text-xs font-semibold text-white font-mono tabular-nums">
+        <span className="text-[11px] sm:text-xs font-semibold text-white font-mono tabular-nums">
           {formatted}
         </span>
       </div>

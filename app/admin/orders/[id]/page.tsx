@@ -94,16 +94,16 @@ export default function AdminOrderDetailPage() {
           </p>
         </div>
 
-        <div className="text-right">
+        <div className="w-full sm:w-auto text-left sm:text-right">
           <DeliveryBanner date={order.guaranteedDeliveryDate} variant="compact" />
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Stage Controls & Tailor Assignment (7 cols) */}
-        <div className="lg:col-span-7 space-y-6">
+        <div className="lg:col-span-7 space-y-6 min-w-0">
           {/* Stage Progression Controller */}
-          <Card className="p-6 space-y-4">
+          <Card className="p-4 sm:p-6 space-y-4">
             <h2 className="text-sm font-bold font-mono uppercase tracking-wider text-primary border-b border-border-subtle pb-2">
               Advance Production Stage
             </h2>
@@ -131,8 +131,8 @@ export default function AdminOrderDetailPage() {
                 <Button
                   size="lg"
                   onClick={() => handleAdvance(nextStage)}
-                  className="w-full font-bold shadow-raised"
-                  rightIcon={<ArrowRight className="w-4 h-4" />}
+                  className="w-full font-bold shadow-raised whitespace-normal py-3 h-auto text-center"
+                  rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
                 >
                   Advance Order to Stage: {nextStage}
                 </Button>
@@ -145,22 +145,22 @@ export default function AdminOrderDetailPage() {
             )}
 
             {/* Jump to any stage selector for manual override */}
-            <div className="pt-3 border-t border-border-subtle flex items-center justify-between text-xs font-mono">
-              <span className="text-text-muted">Or override to stage:</span>
-              <div className="flex gap-1.5">
+            <div className="pt-3 border-t border-border-subtle space-y-2 text-xs font-mono">
+              <span className="text-text-muted block">Or override to stage:</span>
+              <div className="flex flex-wrap gap-1.5">
                 {STAGES.map((s) => (
                   <button
                     key={s}
                     type="button"
                     onClick={() => handleAdvance(s)}
                     disabled={s === order.status}
-                    className={`px-2 py-1 rounded-sm border text-[10px] ${
+                    className={`px-2.5 py-1.5 rounded-sm border text-[11px] min-touch-target ${
                       s === order.status
                         ? "bg-primary text-white font-bold opacity-60"
-                        : "bg-surface-card text-text-muted hover:border-primary"
+                        : "bg-surface-card text-text-muted hover:border-primary active:bg-surface-muted"
                     }`}
                   >
-                    {s.slice(0, 3)}
+                    {s}
                   </button>
                 ))}
               </div>

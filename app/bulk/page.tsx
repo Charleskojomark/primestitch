@@ -150,7 +150,7 @@ export default function BulkAsoEbiPage() {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Step 1: Occasion & Event Details */}
-        <Card className="p-6 md:p-8 space-y-6">
+        <Card className="p-4 sm:p-6 md:p-8 space-y-6">
           <div className="border-b border-border-subtle pb-4 space-y-1">
             <h2 className="text-xl font-bold font-display text-primary">
               1. Event & Timeline Details
@@ -263,7 +263,7 @@ export default function BulkAsoEbiPage() {
         </Card>
 
         {/* Step 2: Interactive Member Roster Table */}
-        <Card className="p-6 md:p-8 space-y-6">
+        <Card className="p-4 sm:p-6 md:p-8 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-subtle pb-4">
             <div>
               <h2 className="text-xl font-bold font-display text-primary flex items-center gap-2">
@@ -283,14 +283,20 @@ export default function BulkAsoEbiPage() {
               size="sm"
               onClick={addRosterMember}
               leftIcon={<Plus className="w-3.5 h-3.5" />}
+              className="w-full sm:w-auto"
             >
               Add Member Row
             </Button>
           </div>
 
+          {/* Mobile scroll hint */}
+          <div className="flex items-center gap-1.5 text-[11px] font-mono text-text-muted sm:hidden">
+            <span>&larr; Swipe table horizontally &rarr;</span>
+          </div>
+
           {/* Roster Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+          <div className="w-full max-w-full overflow-x-auto scroll-touch rounded-sm border border-border-subtle p-1">
+            <table className="w-full min-w-[580px] text-left text-xs">
               <thead>
                 <tr className="border-b border-border-seam font-mono text-text-muted uppercase text-[11px]">
                   <th className="pb-3 w-10">#</th>
@@ -379,11 +385,11 @@ export default function BulkAsoEbiPage() {
             </span>
           </div>
 
-          <div className="pt-4 border-t border-border-subtle flex flex-col sm:flex-row gap-3 items-center justify-between">
-            <div className="text-xs text-text-muted font-mono">
+          <div className="pt-4 border-t border-border-subtle flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+            <div className="text-xs text-text-muted font-mono text-center sm:text-left">
               Total garments in synchronized batch: <strong>{roster.length}</strong>
             </div>
-            <Button size="lg" type="submit" className="font-bold shadow-raised">
+            <Button size="lg" type="submit" className="w-full sm:w-auto font-bold shadow-raised text-center whitespace-normal">
               Submit Roster & Receive Synchronized Quote &rarr;
             </Button>
           </div>

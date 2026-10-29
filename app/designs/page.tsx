@@ -40,7 +40,7 @@ export default function DesignsPage() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-border-seam">
+      <div className="flex items-center gap-2 overflow-x-auto scroll-touch pb-2 scrollbar-none border-b border-border-seam w-full max-w-full">
         <Filter className="w-4 h-4 text-text-muted shrink-0 mr-1" />
         {categories.map((cat) => (
           <button

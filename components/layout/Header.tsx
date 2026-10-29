@@ -31,15 +31,15 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-surface-card border-b border-border-seam shadow-subtle">
+    <header className="sticky top-0 z-40 bg-surface-card border-b border-border-seam shadow-subtle w-full max-w-full">
       {/* Prime Promise Top Bar */}
-      <div className="bg-primary text-on-primary px-4 py-1.5 text-[11px] font-mono flex items-center justify-between border-b border-[#1A2C4B]">
-        <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent-tape animate-pulse" />
-          <span className="text-accent-tape font-bold">PRIME PROMISE:</span>
-          <span>Delivery on agreed date, or your next outfit is free.</span>
+      <div className="bg-primary text-on-primary px-3 sm:px-4 py-1.5 text-[11px] font-mono flex items-center justify-between border-b border-[#1A2C4B] overflow-hidden">
+        <div className="flex items-center gap-2 min-w-0 truncate">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent-tape animate-pulse shrink-0" />
+          <span className="text-accent-tape font-bold shrink-0">PRIME PROMISE:</span>
+          <span className="truncate">Delivery on agreed date, or your next outfit is free.</span>
         </div>
-        <div className="hidden md:flex items-center gap-4 text-slate-300">
+        <div className="hidden md:flex items-center gap-4 text-slate-300 shrink-0">
           <span>Lagos Atelier Delivery</span>
           <Link
             href={staffRole ? "/admin" : "/staff/login"}
@@ -52,16 +52,16 @@ export function Header() {
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2 sm:gap-4">
         {/* Brand Monogram & Name */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-sm bg-primary text-accent-tape flex items-center justify-center border border-primary group-hover:bg-[#16233B] transition-colors">
-            <Scissors className="w-5 h-5 -rotate-45" />
+        <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group min-w-0 shrink">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm bg-primary text-accent-tape flex items-center justify-center border border-primary group-hover:bg-[#16233B] transition-colors shrink-0">
+            <Scissors className="w-4 h-4 sm:w-5 sm:h-5 -rotate-45" />
           </div>
-          <div>
-            <span className="font-display font-extrabold text-xl tracking-tight text-primary flex items-center">
+          <div className="min-w-0">
+            <span className="font-display font-extrabold text-lg sm:text-xl tracking-tight text-primary flex items-center">
               PRIMESTITCH
-              <span className="text-secondary text-sm font-normal ml-1">✂</span>
+              <span className="text-secondary text-xs sm:text-sm font-normal ml-1">✂</span>
             </span>
             <span className="hidden sm:block text-[9px] font-mono tracking-widest text-text-muted uppercase">
               Bespoke Nigerian Atelier
@@ -91,13 +91,14 @@ export function Header() {
         </nav>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           <Link
             href="/order"
-            className="flex items-center gap-2 bg-primary text-on-primary text-xs md:text-sm font-semibold px-4 py-2.5 rounded-sm hover:bg-[#16233B] transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 bg-primary text-on-primary text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-sm hover:bg-[#16233B] transition-colors whitespace-nowrap"
           >
-            <ShoppingBag className="w-4 h-4 text-accent-tape" />
-            <span>Start Order</span>
+            <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent-tape" />
+            <span className="hidden xs:inline sm:inline">Start Order</span>
+            <span className="xs:hidden sm:hidden">Order</span>
             {draftOrder.quantity > 0 && (
               <span className="w-4 h-4 rounded-full bg-accent-tape text-on-accent-tape text-[10px] flex items-center justify-center font-bold">
                 1

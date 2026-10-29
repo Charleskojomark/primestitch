@@ -58,7 +58,7 @@ export default function DesignDetailPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6 md:py-10 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 py-6 md:py-10 pb-28 lg:pb-10 space-y-8">
       {/* Back Link */}
       <div>
         <Link

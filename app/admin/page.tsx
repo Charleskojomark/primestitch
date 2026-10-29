@@ -168,12 +168,12 @@ export default function AdminDashboardPage() {
                   <div>Tailor Assigned: <strong>{ord.assignedTailorName}</strong></div>
                 </div>
 
-                <div className="pt-2 flex justify-between items-center border-t border-error/20 text-xs">
+                <div className="pt-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-t border-error/20 text-xs">
                   <span className="text-[11px] text-error font-semibold">
                     ₦15,000 credit issued; priority rider booked
                   </span>
-                  <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`}>
-                    <Button variant="danger" size="sm">
+                  <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`} className="w-full sm:w-auto">
+                    <Button variant="danger" size="sm" className="w-full sm:w-auto">
                       Intervene on Order &rarr;
                     </Button>
                   </Link>
@@ -204,12 +204,12 @@ export default function AdminDashboardPage() {
                   <div>Tailor Assigned: <strong>{ord.assignedTailorName}</strong></div>
                 </div>
 
-                <div className="pt-2 flex justify-between items-center border-t border-amber-200 text-xs">
+                <div className="pt-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-t border-amber-200 text-xs">
                   <span className="text-[11px] text-amber-800 font-semibold">
                     Due in &lt;24 hours. Reassign or reinforce bench.
                   </span>
-                  <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`}>
-                    <Button variant="tape" size="sm">
+                  <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`} className="w-full sm:w-auto">
+                    <Button variant="tape" size="sm" className="w-full sm:w-auto">
                       Manage Stage &rarr;
                     </Button>
                   </Link>
@@ -259,9 +259,9 @@ export default function AdminDashboardPage() {
             </Link>
           </div>
 
-          <Card className="p-0 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-mono">
+          <Card className="p-0 overflow-hidden w-full max-w-full">
+            <div className="w-full max-w-full overflow-x-auto scroll-touch">
+              <table className="w-full min-w-[560px] text-left text-xs font-mono">
                 <thead className="bg-surface-muted border-b border-border-seam uppercase text-[11px] text-text-muted">
                   <tr>
                     <th className="p-3">Order</th>

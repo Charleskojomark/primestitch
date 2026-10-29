@@ -150,12 +150,12 @@ export default function TailorMobileWorkspacePage() {
                   </button>
 
                   {isExpanded && (
-                    <div className="grid grid-cols-3 gap-2 pt-2 text-xs font-mono animate-fadeIn">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-2 pt-2 text-xs font-mono animate-fadeIn">
                       {Object.entries(job.items[0].measurements)
                         .filter(([k, v]) => k !== "unit" && typeof v === "number")
                         .map(([k, v]) => (
-                          <div key={k} className="p-2 bg-surface-muted rounded-sm border border-border-subtle">
-                            <span className="text-[10px] text-text-muted uppercase block">{k}</span>
+                          <div key={k} className="p-2 bg-surface-muted rounded-sm border border-border-subtle min-w-0">
+                            <span className="text-[10px] text-text-muted uppercase block truncate">{k}</span>
                             <strong className="text-primary font-bold">{v} in</strong>
                           </div>
                         ))}
@@ -170,10 +170,10 @@ export default function TailorMobileWorkspacePage() {
                   <Button
                     size="lg"
                     onClick={() => handleMarkComplete(job.id, job.status)}
-                    className="w-full text-base font-bold shadow-raised"
-                    rightIcon={<CheckCircle className="w-5 h-5 text-accent-tape" />}
+                    className="w-full text-xs sm:text-sm md:text-base font-bold shadow-raised whitespace-normal py-3 h-auto text-center"
+                    rightIcon={<CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-accent-tape shrink-0" />}
                   >
-                    Mark Stage [{job.status}] Complete &rarr; Advance to {nextStage}
+                    Mark [{job.status}] Complete &rarr; Advance to {nextStage}
                   </Button>
                 </div>
               ) : (

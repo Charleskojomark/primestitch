@@ -93,8 +93,8 @@ export default function OrderTrackingDetailPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <WhatsAppButton orderId={order.id} label="Chat with Bench Tailor" />
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <WhatsAppButton orderId={order.id} label="Chat with Bench Tailor" className="w-full sm:w-auto" />
           </div>
         </div>
 

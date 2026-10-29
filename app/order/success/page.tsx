@@ -28,8 +28,8 @@ function SuccessContent() {
   const order = orders.find((o) => o.id === orderId) || orders[0];
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-12 md:py-16 space-y-8 animate-fadeIn">
-      <Card hasTapeTop className="p-8 text-center space-y-6">
+    <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12 md:py-16 space-y-8 animate-fadeIn">
+      <Card hasTapeTop className="p-5 sm:p-8 text-center space-y-6">
         {/* Success Icon */}
         <div className="w-16 h-16 rounded-full bg-accent-emerald text-white flex items-center justify-center mx-auto shadow-raised">
           <CheckCircle className="w-10 h-10 stroke-[2.5]" />

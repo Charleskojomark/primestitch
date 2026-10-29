@@ -19,10 +19,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-dvh flex flex-col bg-surface text-on-surface antialiased selection:bg-accent-tape selection:text-primary">
+      <body className="min-h-dvh flex flex-col bg-surface text-on-surface antialiased selection:bg-accent-tape selection:text-primary w-full max-w-full overflow-x-hidden">
         <PrimeStitchProvider>
           <Header />
-          <main className="flex-1 pb-16 md:pb-0">{children}</main>
+          <main className="flex-1 w-full max-w-full overflow-x-hidden pb-16 md:pb-0">{children}</main>
           <Footer />
           <MobileNav />
           <WhatsAppButton variant="floating" />

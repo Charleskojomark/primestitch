@@ -73,7 +73,7 @@ export function StatusTracker({
       ) : null}
 
       {/* Mode switcher (mobile-friendly pipeline vs detailed history log) */}
-      <div className="flex items-center justify-between border-b border-border-seam pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-seam pb-3">
         <div className="space-y-0.5">
           <span className="text-xs font-mono uppercase text-text-muted">
             Stage {currentIndex + 1} of 9
@@ -85,7 +85,7 @@ export function StatusTracker({
             </Badge>
           </h4>
         </div>
-        <div className="flex border border-border-seam rounded-sm overflow-hidden text-xs font-mono">
+        <div className="flex border border-border-seam rounded-sm overflow-hidden text-xs font-mono self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setViewMode("pipeline")}
@@ -114,9 +114,9 @@ export function StatusTracker({
       </div>
 
       {viewMode === "pipeline" ? (
-        <div className="space-y-6">
+        <div className="space-y-6 w-full max-w-full overflow-hidden">
           {/* Active Tailor Card */}
-          <div className="p-3.5 bg-surface-muted rounded-sm border border-border-subtle flex items-center justify-between gap-3 text-xs">
+          <div className="p-3.5 bg-surface-muted rounded-sm border border-border-subtle flex flex-col xs:flex-row items-start xs:items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-full bg-primary text-accent-tape shrink-0">
                 <Scissors className="w-3.5 h-3.5" />
@@ -130,8 +130,8 @@ export function StatusTracker({
                 </span>
               </div>
             </div>
-            <div className="text-right">
-              <span className="text-[11px] font-mono text-accent-emerald font-bold flex items-center gap-1 justify-end">
+            <div className="text-left xs:text-right">
+              <span className="text-[11px] font-mono text-accent-emerald font-bold flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
                 Active at Bench
               </span>
@@ -139,9 +139,15 @@ export function StatusTracker({
             </div>
           </div>
 
+          {/* Mobile scroll indicator */}
+          <div className="sm:hidden text-[11px] font-mono text-text-muted flex items-center justify-between px-1">
+            <span>Scroll stages horizontally</span>
+            <span>&larr; Swipe &rarr;</span>
+          </div>
+
           {/* Stepper nodes: Horizontal scroll on mobile, full width on desktop */}
-          <div className="overflow-x-auto pb-4 pt-2 -mx-2 px-2 scrollbar-none">
-            <div className="flex items-start min-w-[760px] relative justify-between">
+          <div className="w-full max-w-full overflow-x-auto pb-4 pt-2 scroll-touch scrollbar-thin">
+            <div className="flex items-start min-w-[760px] relative justify-between px-1">
               {STAGES.map((stage, idx) => {
                 const isCompleted = idx < currentIndex;
                 const isActive = idx === currentIndex;

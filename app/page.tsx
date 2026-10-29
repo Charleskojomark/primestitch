@@ -69,18 +69,18 @@ export default function HomePage() {
               </div>
 
               {/* Trust Indicators */}
-              <div className="pt-4 grid grid-cols-3 gap-2 sm:gap-4 border-t border-slate-700/60 text-xs">
-                <div className="space-y-0.5">
+              <div className="pt-4 grid grid-cols-3 gap-1.5 sm:gap-4 border-t border-slate-700/60 text-xs">
+                <div className="space-y-0.5 min-w-0">
                   <span className="font-bold font-mono text-accent-tape text-sm sm:text-base">100%</span>
-                  <span className="block text-slate-300 text-[11px] sm:text-xs">Date SLA Guarantee</span>
+                  <span className="block text-slate-300 text-[10px] sm:text-xs leading-tight">Date SLA Guarantee</span>
                 </div>
-                <div className="space-y-0.5">
+                <div className="space-y-0.5 min-w-0">
                   <span className="font-bold font-mono text-accent-tape text-sm sm:text-base">9 Stages</span>
-                  <span className="block text-slate-300 text-[11px] sm:text-xs">Live Tailor Updates</span>
+                  <span className="block text-slate-300 text-[10px] sm:text-xs leading-tight">Live Tailor Updates</span>
                 </div>
-                <div className="space-y-0.5">
+                <div className="space-y-0.5 min-w-0">
                   <span className="font-bold font-mono text-accent-tape text-sm sm:text-base">Lagos Wide</span>
-                  <span className="block text-slate-300 text-[11px] sm:text-xs">Doorstep Fitting Team</span>
+                  <span className="block text-slate-300 text-[10px] sm:text-xs leading-tight">Doorstep Fitting Team</span>
                 </div>
               </div>
             </div>

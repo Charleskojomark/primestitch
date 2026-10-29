@@ -149,15 +149,15 @@ export default function BookMeasurementPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Booking Form */}
-        <div className="lg:col-span-8">
-          <Card className="p-6 md:p-8 space-y-6">
+        <div className="lg:col-span-8 min-w-0">
+          <Card className="p-4 sm:p-6 md:p-8 space-y-6">
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Venue Selection */}
               <div className="space-y-2">
                 <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary block">
                   1. Where should we meet you?
                 </label>
-                <div className="grid grid-cols-3 gap-2 text-xs font-mono">
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-mono">
                   {[
                     { id: "home", label: "Home Fitting" },
                     { id: "office", label: "Office / Work" },
@@ -167,7 +167,7 @@ export default function BookMeasurementPage() {
                       key={v.id}
                       type="button"
                       onClick={() => setVenueType(v.id as any)}
-                      className={`min-touch-target p-3 rounded-sm border font-medium transition-all ${
+                      className={`min-touch-target p-2 sm:p-3 rounded-sm border font-medium transition-all text-center leading-tight ${
                         venueType === v.id
                           ? "bg-primary text-white border-primary font-bold shadow-subtle"
                           : "bg-surface-card text-on-surface border-border-seam hover:bg-surface-muted"

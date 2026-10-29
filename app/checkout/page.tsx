@@ -80,14 +80,14 @@ export default function CheckoutPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Paystack-Style Payment Form */}
-        <div className="lg:col-span-7 space-y-6">
-          <Card className="p-6 md:p-8 space-y-6">
+        <div className="lg:col-span-7 space-y-6 min-w-0">
+          <Card className="p-4 sm:p-6 md:p-8 space-y-6">
             {/* Paystack Channel Tabs */}
             <div className="space-y-3">
               <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary block">
                 Select Payment Method
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                 {[
                   { id: "card", label: "Debit Card", icon: CreditCard },
                   { id: "transfer", label: "Bank Transfer", icon: Building2 },
@@ -100,14 +100,14 @@ export default function CheckoutPage() {
                       key={m.id}
                       type="button"
                       onClick={() => setPaymentMethod(m.id as any)}
-                      className={`min-touch-target p-3 rounded-sm border text-xs font-mono flex flex-col items-center justify-center gap-1 transition-all ${
+                      className={`min-touch-target py-2.5 px-1 sm:p-3 rounded-sm border text-[11px] sm:text-xs font-mono flex flex-col items-center justify-center gap-1 text-center transition-all ${
                         isSelected
                           ? "bg-primary text-white border-primary font-bold shadow-subtle"
                           : "bg-surface-card text-on-surface border-border-seam hover:bg-surface-muted"
                       }`}
                     >
-                      <Icon className="w-4 h-4" />
-                      <span>{m.label}</span>
+                      <Icon className="w-4 h-4 shrink-0" />
+                      <span className="leading-tight break-words">{m.label}</span>
                     </button>
                   );
                 })}
@@ -211,13 +211,13 @@ export default function CheckoutPage() {
                   size="lg"
                   type="submit"
                   isLoading={isProcessing}
-                  className="w-full text-base font-bold shadow-raised"
-                  leftIcon={<Lock className="w-4 h-4 text-accent-tape" />}
+                  className="w-full text-sm sm:text-base font-bold shadow-raised whitespace-normal py-3.5 h-auto text-center"
+                  leftIcon={<Lock className="w-4 h-4 text-accent-tape shrink-0" />}
                 >
                   Pay {formatNaira(payableAmount)} & Lock Guaranteed Date
                 </Button>
-                <div className="flex items-center justify-center gap-2 text-[11px] text-text-muted font-mono">
-                  <ShieldCheck className="w-3.5 h-3.5 text-accent-emerald" />
+                <div className="flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-text-muted font-mono text-center">
+                  <ShieldCheck className="w-3.5 h-3.5 text-accent-emerald shrink-0" />
                   <span>256-bit TLS Encryption • Certified Nigerian Payment Gateway</span>
                 </div>
               </div>

@@ -31,11 +31,11 @@ export function WhatsAppButton({
         rel="noopener noreferrer"
         aria-label="Chat with Master Tailor on WhatsApp"
         className={cn(
-          "fixed bottom-20 right-4 z-40 flex items-center gap-2 bg-[#0A5C36] text-white px-4 py-3 rounded-full shadow-raised border-2 border-white hover:bg-[#074729] active:scale-95 transition-all text-xs font-bold",
+          "fixed bottom-20 right-3 sm:right-4 z-40 flex items-center justify-center gap-2 bg-[#0A5C36] text-white w-12 h-12 sm:w-auto sm:h-auto p-0 sm:px-4 sm:py-3 rounded-full shadow-raised border-2 border-white hover:bg-[#074729] active:scale-95 transition-all text-xs font-bold",
           className
         )}
       >
-        <MessageSquare className="w-4 h-4 fill-current" />
+        <MessageSquare className="w-5 h-5 fill-current shrink-0" />
         <span className="hidden sm:inline">WhatsApp Tailor</span>
       </a>
     );

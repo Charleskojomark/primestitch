@@ -106,34 +106,34 @@ export default function CustomerAccountPage() {
       )}
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-border-seam text-xs font-mono">
+      <div className="grid grid-cols-2 text-center text-[11px] sm:text-xs font-mono border-b border-border-seam">
         <button
           type="button"
           onClick={() => setActiveTab("measurements")}
-          className={`px-5 py-2.5 font-bold border-b-2 transition-colors ${
+          className={`px-2 sm:px-5 py-2.5 font-bold border-b-2 transition-colors ${
             activeTab === "measurements"
               ? "border-primary text-primary"
               : "border-transparent text-text-muted hover:text-primary"
           }`}
         >
-          Saved Measurements Profile
+          Measurements Profile
         </button>
         <button
           type="button"
           onClick={() => setActiveTab("orders")}
-          className={`px-5 py-2.5 font-bold border-b-2 transition-colors ${
+          className={`px-2 sm:px-5 py-2.5 font-bold border-b-2 transition-colors ${
             activeTab === "orders"
               ? "border-primary text-primary"
               : "border-transparent text-text-muted hover:text-primary"
           }`}
         >
-          My Orders History ({orders.length})
+          Order History ({orders.length})
         </button>
       </div>
 
       {/* TAB 1: SAVED MEASUREMENTS */}
       {activeTab === "measurements" && (
-        <Card className="p-6 md:p-8 space-y-6">
+        <Card className="p-4 sm:p-6 md:p-8 space-y-6">
           <div className="flex items-center justify-between border-b border-border-subtle pb-4">
             <div className="space-y-0.5">
               <span className="text-xs font-mono text-text-muted uppercase">
@@ -220,15 +220,15 @@ export default function CustomerAccountPage() {
                   Total: <strong className="text-primary tabular-nums">{formatNaira(ord.totalAmount)}</strong> • {ord.paymentStatus === "fully_paid" ? "Paid in Full" : "60% Deposit Paid"}
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Link href={`/track/${ord.id}`}>
-                    <Button variant="outline" size="sm">
+                <div className="flex flex-col xs:flex-row sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                  <Link href={`/track/${ord.id}`} className="flex-1 sm:flex-none">
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto">
                       Track Live Bench
                     </Button>
                   </Link>
 
-                  <Link href="/order" onClick={() => handleReorder(ord)}>
-                    <Button variant="primary" size="sm" leftIcon={<RotateCcw className="w-3.5 h-3.5" />}>
+                  <Link href="/order" onClick={() => handleReorder(ord)} className="flex-1 sm:flex-none">
+                    <Button variant="primary" size="sm" className="w-full sm:w-auto" leftIcon={<RotateCcw className="w-3.5 h-3.5" />}>
                       Reorder This Fit
                     </Button>
                   </Link>

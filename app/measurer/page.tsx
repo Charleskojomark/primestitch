@@ -132,13 +132,13 @@ export default function MeasurerMobileWorkspacePage() {
                   </div>
                 </div>
 
-                <div className="pt-2 mt-2 border-t border-border-subtle flex justify-between items-center text-text-muted">
+                <div className="pt-2 mt-2 border-t border-border-subtle flex flex-wrap justify-between items-center gap-1.5 text-text-muted">
                   <a
                     href={`tel:${app.customerPhone}`}
                     className="flex items-center gap-1 text-primary font-bold hover:underline"
                   >
-                    <Phone className="w-3.5 h-3.5 text-accent-tape" />
-                    <span>Call Customer: {app.customerPhone}</span>
+                    <Phone className="w-3.5 h-3.5 text-accent-tape shrink-0" />
+                    <span>Call: {app.customerPhone}</span>
                   </a>
                   <span className="capitalize">{app.venueType}</span>
                 </div>
@@ -149,7 +149,7 @@ export default function MeasurerMobileWorkspacePage() {
       </div>
 
       {/* Standard Anatomic Checklist Form */}
-      <Card className="p-6 space-y-6">
+      <Card className="p-4 sm:p-6 space-y-6">
         <div className="border-b border-border-subtle pb-4 space-y-1">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold font-display text-primary">
@@ -299,8 +299,8 @@ export default function MeasurerMobileWorkspacePage() {
               size="lg"
               type="submit"
               isLoading={isSubmitting}
-              className="w-full text-base font-bold shadow-raised"
-              rightIcon={<ArrowRight className="w-4 h-4" />}
+              className="w-full text-sm sm:text-base font-bold shadow-raised whitespace-normal py-3 h-auto text-center"
+              rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
             >
               Submit Measurements to Customer Confirmation &rarr;
             </Button>

@@ -178,13 +178,13 @@ export default function OrderPage() {
             </div>
           </div>
 
-          <div className="pt-4 flex justify-between items-center border-t border-border-subtle">
-            <Link href={`/designs/${selectedDesign.id}`}>
-              <Button variant="outline" size="sm">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3 border-t border-border-subtle">
+            <Link href={`/designs/${selectedDesign.id}`} className="w-full sm:w-auto">
+              <Button variant="outline" size="sm" className="w-full sm:w-auto">
                 Change Design / Fabric
               </Button>
             </Link>
-            <Button size="md" onClick={() => setStep(2)} rightIcon={<ChevronRight className="w-4 h-4" />}>
+            <Button size="md" onClick={() => setStep(2)} rightIcon={<ChevronRight className="w-4 h-4 shrink-0" />} className="w-full sm:w-auto">
               Proceed to Measurements
             </Button>
           </div>
@@ -254,28 +254,28 @@ export default function OrderPage() {
           {draftOrder.measurementMethod === "self" && (
             <div className="space-y-6 pt-4 border-t border-border-subtle">
               {/* Unit Toggle (Inches vs Centimeters) */}
-              <div className="flex items-center justify-between bg-surface-muted p-3 rounded-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-surface-muted p-3 rounded-sm">
                 <span className="text-xs font-mono font-bold text-primary uppercase">
                   Measurement Unit:
                 </span>
-                <div className="flex border border-border-seam rounded-sm overflow-hidden font-mono text-xs">
+                <div className="flex border border-border-seam rounded-sm overflow-hidden font-mono text-xs w-full sm:w-auto">
                   <button
                     type="button"
                     onClick={() => handleUnitToggle("in")}
-                    className={`px-3 py-1 font-bold ${
-                      unit === "in" ? "bg-primary text-white" : "bg-surface-card text-text-muted"
+                    className={`flex-1 sm:flex-initial px-3.5 py-1.5 font-bold transition-colors ${
+                      unit === "in" ? "bg-primary text-white" : "bg-surface-card text-text-muted hover:bg-slate-100"
                     }`}
                   >
-                    Inches (Default Nigerian Custom)
+                    Inches (in)
                   </button>
                   <button
                     type="button"
                     onClick={() => handleUnitToggle("cm")}
-                    className={`px-3 py-1 font-bold ${
-                      unit === "cm" ? "bg-primary text-white" : "bg-surface-card text-text-muted"
+                    className={`flex-1 sm:flex-initial px-3.5 py-1.5 font-bold transition-colors ${
+                      unit === "cm" ? "bg-primary text-white" : "bg-surface-card text-text-muted hover:bg-slate-100"
                     }`}
                   >
-                    Centimeters
+                    Centimeters (cm)
                   </button>
                 </div>
               </div>
@@ -640,7 +640,7 @@ export default function OrderPage() {
               <label className="font-bold text-primary block font-sans">
                 Select Payment Structure:
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => updateDraftOrder({ paymentTier: "deposit_60" })}
@@ -680,12 +680,12 @@ export default function OrderPage() {
             </div>
           </div>
 
-          <div className="pt-4 flex justify-between items-center border-t border-border-subtle">
-            <Button variant="outline" size="sm" onClick={() => setStep(3)}>
+          <div className="pt-4 flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3 border-t border-border-subtle">
+            <Button variant="outline" size="sm" onClick={() => setStep(3)} className="w-full sm:w-auto">
               &larr; Back to Delivery
             </Button>
-            <Link href="/checkout">
-              <Button size="lg" className="font-bold shadow-raised" rightIcon={<ShieldCheck className="w-5 h-5 text-accent-tape" />}>
+            <Link href="/checkout" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full sm:w-auto font-bold shadow-raised whitespace-normal py-3 h-auto text-center" rightIcon={<ShieldCheck className="w-5 h-5 text-accent-tape shrink-0" />}>
                 Proceed to Secure Checkout & Lock Date
               </Button>
             </Link>
