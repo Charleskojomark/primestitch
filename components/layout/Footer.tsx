@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Scissors, ShieldCheck, MapPin, Phone, MessageSquare } from "lucide-react";
+import { ShieldCheck, MapPin, Phone, MessageSquare } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 
 export function Footer() {
   return (
@@ -9,14 +10,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-700/60">
           {/* Brand Promise & Mission */}
           <div className="space-y-4 md:col-span-1">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-sm bg-accent-tape text-on-accent-tape flex items-center justify-center font-bold">
-                <Scissors className="w-4 h-4 -rotate-45" />
-              </div>
-              <span className="font-display font-extrabold text-xl text-white tracking-tight">
-                PRIMESTITCH
-              </span>
-            </div>
+            <Link href="/" className="inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-tape rounded">
+              <Logo variant="stacked" tone="light" height={54} />
+            </Link>
             <p className="text-xs text-slate-300 text-pretty leading-relaxed">
               Nigeria&apos;s made-to-measure tailoring house. Every outfit is assigned a master tailor with stage-by-stage transparency and a locked delivery date.
             </p>

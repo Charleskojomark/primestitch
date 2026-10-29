@@ -8,6 +8,7 @@ import { Search, Filter, Scissors, ArrowLeft, ArrowRight, ShieldCheck } from "lu
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { Logo } from "@/components/ui/Logo";
 import { STAGES, Stage } from "@/lib/types";
 
 export default function AdminOrdersListPage() {
@@ -37,13 +38,16 @@ export default function AdminOrdersListPage() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-seam pb-6">
         <div>
-          <Link
-            href="/admin"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-text-muted hover:text-primary transition-colors py-1"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to Admin Dashboard</span>
-          </Link>
+          <div className="flex items-center justify-between sm:justify-start gap-4">
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-text-muted hover:text-primary transition-colors py-1"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Admin Dashboard</span>
+            </Link>
+            <Logo variant="icon" tone="dark" height={22} className="opacity-80" />
+          </div>
           <h1 className="text-3xl font-extrabold font-display text-primary tracking-tight mt-1">
             Master Orders Management
           </h1>
@@ -123,7 +127,21 @@ export default function AdminOrdersListPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border-subtle">
-              {filteredOrders.map((ord) => (
+              {filteredOrders.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="p-12 text-center">
+                    <div className="space-y-3">
+                      <div className="w-12 h-12 mx-auto rounded-full bg-surface-muted flex items-center justify-center border border-border-subtle">
+                        <Logo variant="icon" tone="dark" height={24} className="opacity-40 grayscale" />
+                      </div>
+                      <p className="text-sm font-mono text-text-muted">
+                        No orders matched your search or filter parameters.
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                filteredOrders.map((ord) => (
                 <tr key={ord.id} className="hover:bg-surface-muted/50 transition-colors">
                   <td className="p-3.5">
                     <span className="font-bold text-primary block">{ord.id}</span>
@@ -172,7 +190,8 @@ export default function AdminOrdersListPage() {
                     </Link>
                   </td>
                 </tr>
-              ))}
+              ))
+            )}
             </tbody>
           </table>
         </div>

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { Logo } from "@/components/ui/Logo";
 
 export default function DesignsPage() {
   const { designs } = usePrimeStitch();
@@ -161,7 +162,10 @@ export default function DesignsPage() {
       </div>
 
       {filteredDesigns.length === 0 && (
-        <div className="text-center py-16 bg-surface-card rounded-md border border-border-seam space-y-3">
+        <div className="text-center py-16 bg-surface-card rounded-md border border-border-seam space-y-4">
+          <div className="w-14 h-14 mx-auto rounded-full bg-surface-muted flex items-center justify-center border border-border-subtle">
+            <Logo variant="icon" tone="dark" height={28} className="opacity-40 grayscale" />
+          </div>
           <p className="text-sm text-text-muted font-mono">
             No designs found in the selected category.
           </p>

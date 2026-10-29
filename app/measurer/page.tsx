@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { MeasurementInput } from "@/components/ui/MeasurementInput";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { Logo } from "@/components/ui/Logo";
 
 export default function MeasurerMobileWorkspacePage() {
   const router = useRouter();
@@ -84,9 +85,12 @@ export default function MeasurerMobileWorkspacePage() {
       {/* Fitter Mobile Header */}
       <div className="bg-primary text-white p-5 rounded-md border-b-4 border-accent-tape tape-measure-top space-y-2">
         <div className="flex items-center justify-between">
-          <Badge variant="tape" size="sm">
-            Field Fitter Mobile Hub
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Logo variant="icon" tone="light" height={24} />
+            <Badge variant="tape" size="sm">
+              Field Fitter Mobile Hub
+            </Badge>
+          </div>
           <Link href="/staff/login" className="text-xs font-mono text-slate-300 hover:underline">
             Switch Staff
           </Link>

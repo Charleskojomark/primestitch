@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { Logo } from "@/components/ui/Logo";
 
 // Curated high-resolution photography presets matching Nigerian tailoring
 const PHOTOGRAPHY_PRESETS: Record<string, { url: string; label: string }> = {
@@ -343,8 +344,10 @@ export default function AdminMediaPage() {
         </div>
 
         {filteredAssets.length === 0 ? (
-          <div className="p-12 text-center bg-surface-card border-2 border-dashed border-border-seam rounded-md space-y-2">
-            <AlertCircle className="w-8 h-8 text-text-muted mx-auto" />
+          <div className="p-12 text-center bg-surface-card border-2 border-dashed border-border-seam rounded-md space-y-3">
+            <div className="w-12 h-12 mx-auto rounded-full bg-surface-muted flex items-center justify-center border border-border-subtle">
+              <Logo variant="icon" tone="dark" height={24} className="opacity-40 grayscale" />
+            </div>
             <h3 className="font-display font-bold text-primary text-base">No assets matched your search</h3>
             <p className="text-sm text-text-muted">Try clearing the search query or switching categories.</p>
             <Button variant="outline" size="sm" onClick={() => { setSearchQuery(""); setActiveCategory("all"); }}>

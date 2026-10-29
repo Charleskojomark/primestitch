@@ -22,6 +22,7 @@ import { Card } from "@/components/ui/Card";
 import { DeliveryBanner } from "@/components/ui/DeliveryBanner";
 import { StatusTracker } from "@/components/ui/StatusTracker";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { Logo } from "@/components/ui/Logo";
 
 export default function OrderTrackingDetailPage() {
   const params = useParams();
@@ -35,7 +36,9 @@ export default function OrderTrackingDetailPage() {
   if (!order) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center space-y-4">
-        <AlertCircle className="w-12 h-12 text-error mx-auto" />
+        <div className="w-14 h-14 mx-auto rounded-full bg-surface-muted flex items-center justify-center border border-border-subtle">
+          <Logo variant="icon" tone="dark" height={28} className="opacity-40 grayscale" />
+        </div>
         <h1 className="text-2xl font-bold font-display text-primary">Order Not Found</h1>
         <p className="text-sm text-text-muted">
           We could not find an active tailoring record for "{targetId}". Please verify your order ID.
@@ -51,14 +54,17 @@ export default function OrderTrackingDetailPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-      {/* Back button */}
-      <div>
+      {/* Header bar with minimal logo */}
+      <div className="flex items-center justify-between border-b border-border-subtle pb-3">
         <Link
           href="/track"
           className="inline-flex items-center gap-1.5 text-xs font-mono text-text-muted hover:text-primary transition-colors py-1"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Look Up Another Order</span>
+        </Link>
+        <Link href="/" aria-label="PrimeStitch">
+          <Logo variant="icon" tone="dark" height={24} />
         </Link>
       </div>
 

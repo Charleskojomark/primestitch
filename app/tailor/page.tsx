@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { Logo } from "@/components/ui/Logo";
 import { STAGES, Stage } from "@/lib/types";
 
 export default function TailorMobileWorkspacePage() {
@@ -55,9 +56,12 @@ export default function TailorMobileWorkspacePage() {
       {/* Bench Header */}
       <div className="bg-primary text-white p-5 rounded-md border-b-4 border-accent-tape tape-measure-top space-y-2">
         <div className="flex items-center justify-between">
-          <Badge variant="tape" size="sm">
-            Bench #3 • {tailor.area}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Logo variant="icon" tone="light" height={24} />
+            <Badge variant="tape" size="sm">
+              Bench #3 • {tailor.area}
+            </Badge>
+          </div>
           <Link href="/staff/login" className="text-xs font-mono text-slate-300 hover:underline">
             Switch Staff
           </Link>
@@ -198,8 +202,11 @@ export default function TailorMobileWorkspacePage() {
         })}
 
         {myJobs.length === 0 && (
-          <div className="p-8 text-center bg-surface-card rounded-md border border-border-seam text-text-muted font-mono text-xs">
-            No active jobs currently assigned to your bench.
+          <div className="p-8 text-center bg-surface-card rounded-md border border-border-seam text-text-muted font-mono text-xs space-y-3">
+            <div className="w-12 h-12 mx-auto rounded-full bg-surface-muted flex items-center justify-center border border-border-subtle">
+              <Logo variant="icon" tone="dark" height={24} className="opacity-40 grayscale" />
+            </div>
+            <p>No active jobs currently assigned to your bench.</p>
           </div>
         )}
       </div>

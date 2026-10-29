@@ -8,6 +8,7 @@ import { Search, Clock, AlertCircle, ArrowRight, Scissors, CheckCircle } from "l
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { Logo } from "@/components/ui/Logo";
 
 export default function TrackLookupPage() {
   const router = useRouter();
@@ -42,6 +43,11 @@ export default function TrackLookupPage() {
     <div className="max-w-3xl mx-auto px-4 py-10 space-y-8">
       {/* Header */}
       <div className="text-center max-w-xl mx-auto space-y-3">
+        <div className="flex justify-center">
+          <Link href="/" aria-label="PrimeStitch">
+            <Logo variant="icon" tone="dark" height={32} />
+          </Link>
+        </div>
         <Badge variant="tape" size="sm">
           Live Atelier Tracking Engine
         </Badge>

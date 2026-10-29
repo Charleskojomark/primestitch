@@ -1,0 +1,66 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background: Midnight Navy #0B1528 -->
+  <rect width="1200" height="630" fill="#0B1528"/>
+
+  <!-- Subtle Tailor Pattern Grid -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#16233B" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFC72C"/>
+      <stop offset="100%" stop-color="#C28B28"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.4"/>
+
+  <!-- Top Gold Measuring Tape Accent -->
+  <rect width="1200" height="10" fill="#FFC72C"/>
+  <line x1="0" y1="10" x2="1200" y2="10" stroke="#C28B28" stroke-width="1"/>
+
+  <!-- Logo Mark + PRIMESTITCH -->
+  <g transform="translate(80, 80)">
+    <rect width="56" height="56" rx="8" fill="url(#brassGrad)"/>
+    <path d="M20 28 L36 28 M28 20 L28 36" stroke="#0B1528" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="24" cy="24" r="3" fill="#0B1528"/>
+    <circle cx="32" cy="32" r="3" fill="#0B1528"/>
+    <text x="76" y="40" fill="#FFFFFF" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="36" font-weight="900" letter-spacing="-0.02em">PRIMESTITCH</text>
+  </g>
+
+  <!-- Location & Craft Badge -->
+  <g transform="translate(730, 84)">
+    <rect width="390" height="46" rx="23" fill="#16233B" stroke="#C28B28" stroke-width="1.5"/>
+    <text x="195" y="28" fill="#FFC72C" font-family="monospace" font-size="14" font-weight="700" letter-spacing="2" text-anchor="middle">ABA MASTER ATELIER • NATIONWIDE</text>
+  </g>
+
+  <!-- Main Headline / Tagline -->
+  <text x="80" y="270" fill="#FFFFFF" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="56" font-weight="800" letter-spacing="-0.03em">
+    Your outfit, ready on the
+  </text>
+  <text x="80" y="340" fill="url(#brassGrad)" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="56" font-weight="800" letter-spacing="-0.03em">
+    day you need it.
+  </text>
+
+  <!-- Subheadline -->
+  <text x="80" y="420" fill="#CBD5E1" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="24" font-weight="400">
+    Precision made-to-measure Nigerian native wear and bespoke tailoring.
+  </text>
+  <text x="80" y="456" fill="#94A3B8" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="20" font-weight="400">
+    Every garment locked with a firm delivery guarantee and 9-stage live artisan tracking.
+  </text>
+
+  <!-- Bottom Divider Seam -->
+  <line x1="80" y1="520" x2="1120" y2="520" stroke="#334155" stroke-dasharray="6 6" stroke-width="1.5"/>
+
+  <!-- Value Props -->
+  <g transform="translate(80, 560)">
+    <circle cx="10" cy="10" r="5" fill="#FFC72C"/>
+    <text x="26" y="16" fill="#FFC72C" font-family="monospace" font-size="16" font-weight="700">LOCKED DELIVERY DATE SLA</text>
+
+    <circle cx="430" cy="10" r="5" fill="#C28B28"/>
+    <text x="446" y="16" fill="#CBD5E1" font-family="monospace" font-size="16" font-weight="500">9-STAGE LIVE PROGRESS</text>
+
+    <circle cx="810" cy="10" r="5" fill="#0A5C36"/>
+    <text x="826" y="16" fill="#CBD5E1" font-family="monospace" font-size="16" font-weight="500">DOORSTEP &amp; VIDEO FITTINGS</text>
+  </g>
+</svg>

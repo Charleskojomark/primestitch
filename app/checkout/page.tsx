@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { DeliveryBanner } from "@/components/ui/DeliveryBanner";
+import { Logo } from "@/components/ui/Logo";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -66,16 +67,21 @@ export default function CheckoutPage() {
         </Link>
       </div>
 
-      <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Badge variant="tape" size="sm">
-            Secure Atelier Checkout
-          </Badge>
-          <span className="text-xs font-mono text-text-muted">PAYSTACK SECURED</span>
+      <div className="flex items-start justify-between gap-4 border-b border-border-seam pb-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <Badge variant="tape" size="sm">
+              Secure Atelier Checkout
+            </Badge>
+            <span className="text-xs font-mono text-text-muted">PAYSTACK SECURED</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-primary tracking-tight">
+            Authorize Tailoring & Lock Delivery
+          </h1>
         </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold font-display text-primary tracking-tight">
-          Authorize Tailoring & Lock Delivery
-        </h1>
+        <Link href="/" className="shrink-0 pt-1" aria-label="PrimeStitch">
+          <Logo variant="icon" tone="dark" height={28} />
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

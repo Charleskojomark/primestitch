@@ -8,6 +8,7 @@ import { Scissors, ShieldCheck, Ruler, UserCheck, ArrowRight, Lock } from "lucid
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { Logo } from "@/components/ui/Logo";
 
 export default function StaffLoginPage() {
   const router = useRouter();
@@ -34,6 +35,11 @@ export default function StaffLoginPage() {
   return (
     <div className="max-w-xl mx-auto px-4 py-12 space-y-8 animate-fadeIn">
       <div className="text-center space-y-2">
+        <div className="flex justify-center mb-1">
+          <Link href="/" aria-label="PrimeStitch">
+            <Logo variant="icon" tone="dark" height={32} />
+          </Link>
+        </div>
         <Badge variant="tape" size="sm">
           Internal Atelier Systems
         </Badge>

@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { DeliveryBanner } from "@/components/ui/DeliveryBanner";
+import { Logo } from "@/components/ui/Logo";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 
 function SuccessContent() {
@@ -30,6 +31,13 @@ function SuccessContent() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12 md:py-16 space-y-8 animate-fadeIn">
       <Card hasTapeTop className="p-5 sm:p-8 text-center space-y-6">
+        {/* Minimal Header Logo */}
+        <div className="flex justify-center">
+          <Link href="/" aria-label="PrimeStitch">
+            <Logo variant="horizontal" tone="dark" height={26} />
+          </Link>
+        </div>
+
         {/* Success Icon */}
         <div className="w-16 h-16 rounded-full bg-accent-emerald text-white flex items-center justify-center mx-auto shadow-raised">
           <CheckCircle className="w-10 h-10 stroke-[2.5]" />

@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { Logo } from "@/components/ui/Logo";
 import { STAGES } from "@/lib/types";
 
 export default function AdminDashboardPage() {
@@ -45,16 +46,21 @@ export default function AdminDashboardPage() {
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-seam pb-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <Badge variant="tape" size="sm">
-              Atelier Command Center
-            </Badge>
-            <span className="text-xs font-mono text-text-muted">ABA ATELIER • NATIONWIDE DISPATCH</span>
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-sm bg-surface-muted flex items-center justify-center border border-border-subtle shrink-0 mt-0.5">
+            <Logo variant="icon" tone="dark" height={24} />
           </div>
-          <h1 className="text-3xl font-extrabold font-display text-primary tracking-tight mt-1">
-            Production & Delivery SLA Dashboard
-          </h1>
+          <div>
+            <div className="flex items-center gap-2">
+              <Badge variant="tape" size="sm">
+                Atelier Command Center
+              </Badge>
+              <span className="text-xs font-mono text-text-muted">ABA ATELIER • NATIONWIDE DISPATCH</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-primary tracking-tight mt-1">
+              Production & Delivery SLA Dashboard
+            </h1>
+          </div>
         </div>
 
         {/* Navigation Tabs to sub-admin views */}

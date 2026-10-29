@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { usePrimeStitch } from "@/lib/store";
+import { Logo } from "@/components/ui/Logo";
 import {
   Scissors,
   Search,
@@ -34,20 +35,18 @@ export function Header() {
     <header className="sticky top-0 z-40 bg-surface-card border-b border-border-seam shadow-subtle w-full max-w-full">
       {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2">
-        {/* Brand Monogram & Name */}
-        <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm bg-primary text-accent-tape flex items-center justify-center border border-primary group-hover:bg-[#16233B] transition-colors shrink-0">
-            <Scissors className="w-4 h-4 sm:w-5 sm:h-5 -rotate-45" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-display font-extrabold text-[15px] xs:text-base sm:text-lg md:text-xl tracking-tight text-primary flex items-center leading-none">
-              PRIMESTITCH
-              <span className="text-secondary text-xs sm:text-sm font-normal ml-1">✂</span>
-            </span>
-            <span className="hidden sm:block text-[9px] font-mono tracking-widest text-text-muted uppercase mt-0.5">
-              Handcrafted in Aba • Delivered Nationwide
-            </span>
-          </div>
+        {/* Brand Horizontal Logo */}
+        <Link
+          href="/"
+          className="flex items-center group shrink-0 min-h-[48px] min-w-[48px] -ml-2 px-2 py-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label="PrimeStitch — Return to homepage"
+        >
+          <Logo
+            variant="horizontal"
+            tone="dark"
+            priority
+            imageClassName="h-[30px] md:h-[36px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+          />
         </Link>
 
         {/* Desktop Links */}
