@@ -110,6 +110,15 @@ export function Footer() {
           <div>
             &copy; {new Date().getFullYear()} PrimeStitch Atelier Nigeria Ltd. All rights reserved.
           </div>
+          <div className="flex items-center gap-4">
+            <Link href="/terms" className="hover:text-accent-tape transition-colors">
+              Terms of Service
+            </Link>
+            <span className="text-slate-600">•</span>
+            <Link href="/privacy" className="hover:text-accent-tape transition-colors">
+              Privacy Policy
+            </Link>
+          </div>
           <div>
             "Your outfit, ready on the day you need it. No stories."
           </div>

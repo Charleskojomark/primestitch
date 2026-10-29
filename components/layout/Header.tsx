@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { usePrimeStitch } from "@/lib/store";
 import { Logo } from "@/components/ui/Logo";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import {
   Scissors,
   Search,
@@ -72,6 +73,24 @@ export function Header() {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          {/* Clerk Auth Integration */}
+          <div className="flex items-center">
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button
+                  type="button"
+                  className="hidden md:flex items-center gap-1.5 text-xs font-mono font-semibold text-primary hover:text-white hover:bg-primary py-2 px-3 rounded-sm border border-border-seam transition-colors"
+                >
+                  <User className="w-3.5 h-3.5 text-secondary" />
+                  <span>Sign In</span>
+                </button>
+              </SignInButton>
+            </SignedOut>
+          </div>
+
           <Link
             href="/order"
             className="flex items-center justify-center gap-1.5 sm:gap-2 bg-primary text-on-primary text-xs sm:text-sm font-semibold h-10 px-2.5 sm:px-4 rounded-sm hover:bg-[#16233B] transition-colors whitespace-nowrap min-w-[40px] relative"

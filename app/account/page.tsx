@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 
 export default function CustomerAccountPage() {
   const { customerProfile, orders, updateDraftOrder, resetAllToSeed } = usePrimeStitch();
@@ -49,25 +50,64 @@ export default function CustomerAccountPage() {
     });
   };
 
+  const { user, isLoaded, isSignedIn } = useUser();
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+      {/* Clerk Auth Banner / Status */}
+      <SignedOut>
+        <Card hasTapeTop className="p-4 sm:p-6 bg-surface-muted/60 border border-border-seam flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Badge variant="tape" size="sm">
+                Clerk Account Sync
+              </Badge>
+              <span className="text-xs font-mono text-text-muted">MULTI-DEVICE ACCESS</span>
+            </div>
+            <h3 className="font-bold text-primary text-base font-display">
+              Sign In to Lock & Sync Your Measurements
+            </h3>
+            <p className="text-xs text-text-muted max-w-lg">
+              Sign in with your phone or email to save your fit profile permanently, track live cutting progress, and access 1-click reorders.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+            <SignInButton mode="modal">
+              <Button variant="primary" size="sm" className="flex-1 sm:flex-none">
+                Sign In
+              </Button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+                Create Account
+              </Button>
+            </SignUpButton>
+          </div>
+        </Card>
+      </SignedOut>
+
       {/* Account Profile Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-seam pb-6">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-primary text-accent-tape flex items-center justify-center font-bold text-xl font-display shadow-subtle shrink-0">
-            {customerProfile.name.charAt(0)}
-          </div>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/account" />
+          </SignedIn>
+          <SignedOut>
+            <div className="w-14 h-14 rounded-full bg-primary text-accent-tape flex items-center justify-center font-bold text-xl font-display shadow-subtle shrink-0">
+              {customerProfile.name.charAt(0)}
+            </div>
+          </SignedOut>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold font-display text-primary">
-                {customerProfile.name}
+                {isSignedIn && user?.fullName ? user.fullName : customerProfile.name}
               </h1>
               <Badge variant="verified" size="sm">
                 Verified Fit Profile
               </Badge>
             </div>
             <p className="text-xs text-text-muted font-mono mt-0.5">
-              {customerProfile.phone} • {customerProfile.email}
+              {isSignedIn && user?.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : customerProfile.phone} • {customerProfile.email}
             </p>
           </div>
         </div>

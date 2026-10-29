@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { PrimeStitchProvider } from "@/lib/store";
 import { Header } from "@/components/layout/Header";
@@ -75,16 +76,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-dvh flex flex-col bg-surface text-on-surface antialiased selection:bg-accent-tape selection:text-primary w-full max-w-full overflow-x-hidden">
-        <PrimeStitchProvider>
-          <Header />
-          <main className="flex-1 w-full max-w-full overflow-x-hidden pb-16 md:pb-0">{children}</main>
-          <Footer />
-          <MobileNav />
-          <WhatsAppButton variant="floating" />
-        </PrimeStitchProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className="min-h-dvh flex flex-col bg-surface text-on-surface antialiased selection:bg-accent-tape selection:text-primary w-full max-w-full overflow-x-hidden">
+          <PrimeStitchProvider>
+            <Header />
+            <main className="flex-1 w-full max-w-full overflow-x-hidden pb-16 md:pb-0">{children}</main>
+            <Footer />
+            <MobileNav />
+            <WhatsAppButton variant="floating" />
+          </PrimeStitchProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
