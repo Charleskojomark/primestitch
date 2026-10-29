@@ -46,19 +46,28 @@ export default function HomePage() {
               </h1>
 
               <p className="text-base sm:text-lg text-slate-300 max-w-xl text-pretty leading-relaxed">
-                Order made-to-measure kaftans, agbadas, suits, and dresses online.
-                Every garment is crafted by a dedicated master tailor with a locked
+                Order made-to-measure Senator wears, traditional kaftans, Isiagu sets, and custom native attire online.
+                Every garment is handcrafted by certified master tailors in Aba with a locked
                 delivery date and 9-stage live progress tracking.
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                 <Link href="/designs">
-                  <Button size="lg" className="w-full sm:w-auto" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                  <Button
+                    variant="tape"
+                    size="lg"
+                    className="w-full sm:w-auto font-bold text-primary shadow-raised"
+                    rightIcon={<ArrowRight className="w-4 h-4 text-primary" />}
+                  >
                     Explore Made-to-Measure
                   </Button>
                 </Link>
                 <Link href="/measurement/book">
-                  <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-slate-500 text-white hover:bg-slate-800/60 w-full sm:w-auto font-semibold"
+                  >
                     Book Doorstep Measurement
                   </Button>
                 </Link>
@@ -217,31 +226,44 @@ export default function HomePage() {
                 We calculate delivery based on active tailor bench queue, fabric sourcing, and quality audit tolerance. No arbitrary dates.
               </p>
 
-              <div className="pt-2 space-y-2">
-                <label className="text-xs font-mono text-slate-300 block">
-                  Select Garment Type / Turnaround Tier:
+              <div className="pt-2 space-y-3">
+                <label className="text-xs font-mono font-bold text-accent-tape uppercase tracking-wider block">
+                  Select Aba Native Garment / Turnaround Tier:
                 </label>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {[
-                    { label: "Executive Shirt (5 Days)", days: 5 },
-                    { label: "Senator Suit (6 Days)", days: 6 },
-                    { label: "Royal Kaftan (7 Days)", days: 7 },
-                    { label: "3-Piece Agbada (9 Days)", days: 9 },
-                    { label: "Bespoke Suit (10 Days)", days: 10 },
-                  ].map((tier) => (
-                    <button
-                      key={tier.days}
-                      type="button"
-                      onClick={() => setCalculatorDays(tier.days)}
-                      className={`px-3 py-2 text-xs font-mono font-medium rounded-sm border transition-colors ${
-                        calculatorDays === tier.days
-                          ? "bg-accent-tape text-on-accent-tape font-bold border-accent-tape"
-                          : "bg-[#14233D] text-slate-300 border-slate-700 hover:bg-[#1E3154]"
-                      }`}
-                    >
-                      {tier.label}
-                    </button>
-                  ))}
+                    { id: "senator", label: "Executive Senator Set", days: 5 },
+                    { id: "kaftan", label: "Traditional Kaftan", days: 6 },
+                    { id: "isiagu", label: "Isiagu Ceremonial Set", days: 7 },
+                    { id: "safari", label: "Safari Native Two-Piece", days: 7 },
+                    { id: "ankara", label: "Ankara Wrap Native Dress", days: 6 },
+                    { id: "asoebi", label: "Celebration Aso Ebi Native", days: 8 },
+                  ].map((tier) => {
+                    const isSelected = calculatorDays === tier.days;
+                    return (
+                      <button
+                        key={tier.id}
+                        type="button"
+                        onClick={() => setCalculatorDays(tier.days)}
+                        className={`flex items-center justify-between px-3.5 py-2.5 text-xs font-mono rounded-sm border transition-all text-left ${
+                          isSelected
+                            ? "bg-accent-tape text-primary font-bold border-accent-tape shadow-subtle ring-2 ring-accent-tape/40"
+                            : "bg-[#14233D] text-slate-200 border-slate-700/80 hover:bg-[#1C2F52] hover:border-slate-500"
+                        }`}
+                      >
+                        <span className="truncate pr-2">{tier.label}</span>
+                        <span
+                          className={`text-[11px] shrink-0 font-bold px-1.5 py-0.5 rounded-sm ${
+                            isSelected
+                              ? "bg-primary text-accent-tape"
+                              : "bg-[#0B1528] text-slate-300"
+                          }`}
+                        >
+                          {tier.days} Days
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>

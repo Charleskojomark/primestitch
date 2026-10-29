@@ -61,8 +61,8 @@
   <!-- Typography Card -->
   <g transform="translate(600, 1480)">
     <rect x="-480" y="-55" width="960" height="90" rx="6" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
-    <text x="-440" y="-8" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="28">BESPOKE TWO-PIECE SUIT</text>
-    <text x="-440" y="22" fill="#94A3B8" font-family="sans-serif" font-size="16">Savile Row 150s Worsted Wool (320 GSM) // Hand-Canvassed Chest &amp; Pick-Stitched Lapels</text>
-    <text x="440" y="6" text-anchor="end" fill="#C28B28" font-family="monospace" font-weight="bold" font-size="30">&#8358;120,000</text>
+    <text x="-440" y="-8" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="28">SAFARI NATIVE TWO-PIECE SET</text>
+    <text x="-440" y="22" fill="#94A3B8" font-family="sans-serif" font-size="16">Structured Safari Native Cut (290 GSM) // Hand-Crafted Pockets &amp; Native Trousers</text>
+    <text x="440" y="6" text-anchor="end" fill="#C28B28" font-family="monospace" font-weight="bold" font-size="30">&#8358;85,000</text>
   </g>
 </svg>

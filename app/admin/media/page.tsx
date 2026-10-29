@@ -35,7 +35,7 @@ const PHOTOGRAPHY_PRESETS: Record<string, { url: string; label: string }> = {
   },
   "des-agbada": {
     url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200&auto=format&fit=crop&q=80",
-    label: "Ceremonial Indigo Robe",
+    label: "Isiagu Ceremonial Native Set",
   },
   "des-senator": {
     url: "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?w=1200&auto=format&fit=crop&q=80",
@@ -43,7 +43,7 @@ const PHOTOGRAPHY_PRESETS: Record<string, { url: string; label: string }> = {
   },
   "des-suit": {
     url: "https://images.unsplash.com/photo-1598808503746-f34c53b9323e?w=1200&auto=format&fit=crop&q=80",
-    label: "Savile Pure Worsted Wool",
+    label: "Safari Native Two-Piece",
   },
   "des-ankara": {
     url: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=1200&auto=format&fit=crop&q=80",

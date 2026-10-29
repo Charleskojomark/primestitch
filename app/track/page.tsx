@@ -73,7 +73,7 @@ export default function TrackLookupPage() {
                 placeholder="e.g. #PS-8492 or +234 802 334 1982"
                 className="w-full h-14 px-4 pl-12 text-base font-mono border-2 border-border-seam rounded-sm bg-surface-card text-on-surface focus:border-primary focus:outline-none transition-all"
               />
-              <Search className="w-5 h-5 text-text-muted absolute left-4 top-4.5" />
+              <Search className="w-5 h-5 text-text-muted absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
           </div>
 
@@ -85,7 +85,7 @@ export default function TrackLookupPage() {
           )}
 
           <Button size="lg" type="submit" className="w-full font-bold shadow-raised">
-            Track Progress & View Guaranteed Date &rarr;
+            Track Progress &amp; View Guaranteed Date &rarr;
           </Button>
         </form>
 

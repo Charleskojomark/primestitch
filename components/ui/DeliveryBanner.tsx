@@ -46,14 +46,14 @@ export function DeliveryBanner({
         )}
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Badge variant="tape" size="sm">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="tape" size="sm" className="whitespace-nowrap shrink-0">
                 ⚡ Prime Promise
               </Badge>
-              <span className="text-xs text-slate-300 flex items-center gap-1 font-mono">
-                <Clock className="w-3.5 h-3.5 text-accent-tape" />
-                2:00 PM WAT Scheduled Handover
+              <span className="text-xs text-slate-300 flex items-center gap-1.5 font-mono whitespace-nowrap">
+                <Clock className="w-3.5 h-3.5 text-accent-tape shrink-0" />
+                <span>2:00 PM WAT Handover</span>
               </span>
             </div>
             <h3 className="text-xl md:text-2xl font-bold font-display text-white tracking-tight">

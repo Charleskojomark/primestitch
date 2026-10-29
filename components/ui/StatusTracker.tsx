@@ -212,12 +212,12 @@ export function StatusTracker({
           </div>
 
           {/* Current Stage Highlight Box */}
-          <div className="bg-surface-card p-4 rounded-sm border-l-4 border-l-accent-tape border-y border-r border-border-seam space-y-1">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-mono text-accent-tape font-bold uppercase bg-primary px-2 py-0.5 rounded-sm">
+          <div className="bg-surface-card p-4 rounded-sm border-l-4 border-l-accent-tape border-y border-r border-border-seam space-y-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+              <span className="font-mono text-accent-tape font-bold uppercase bg-primary px-2.5 py-1 rounded-sm w-fit shrink-0 whitespace-nowrap shadow-subtle">
                 Stage {currentIndex + 1}: {currentStage}
               </span>
-              <span className="text-text-muted font-mono">
+              <span className="text-text-muted font-mono text-xs sm:text-right">
                 {stageDescriptions[currentStage]}
               </span>
             </div>
