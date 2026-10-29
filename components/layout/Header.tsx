@@ -35,19 +35,19 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-surface-card border-b border-border-seam shadow-subtle w-full max-w-full">
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 h-18 sm:h-20 min-h-[70px] flex items-center justify-between gap-2">
         {/* Brand Horizontal Logo */}
         <Link
           href="/"
-          className="flex items-center group shrink-0 min-h-[48px] min-w-[48px] -ml-2 px-2 py-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="flex items-center group shrink-0 min-h-[48px] -ml-2 px-2 py-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           aria-label="PrimeStitch — Return to homepage"
         >
           <Logo
             variant="horizontal"
             tone="dark"
             priority
-            height={48}
-            imageClassName="h-[40px] sm:h-[46px] md:h-[50px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+            height={64}
+            imageClassName="h-[52px] sm:h-[58px] md:h-[64px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
           />
         </Link>
 
