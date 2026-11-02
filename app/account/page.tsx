@@ -14,6 +14,7 @@ import {
   Scissors,
   ArrowRight,
   ShieldCheck,
+  Package,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -26,11 +27,14 @@ export default function CustomerAccountPage() {
   const [activeTab, setActiveTab] = useState<"measurements" | "orders">("measurements");
 
   // Check if last measured is older than 6 months
-  const lastMeasured = new Date(customerProfile.lastMeasuredDate);
-  const now = new Date("2026-10-29"); // Current app time
-  const diffMonths =
-    (now.getFullYear() - lastMeasured.getFullYear()) * 12 +
-    (now.getMonth() - lastMeasured.getMonth());
+  const diffMonths = customerProfile.lastMeasuredDate
+    ? (() => {
+        const last = new Date(customerProfile.lastMeasuredDate);
+        if (isNaN(last.getTime())) return 0;
+        const now = new Date();
+        return (now.getFullYear() - last.getFullYear()) * 12 + (now.getMonth() - last.getMonth());
+      })()
+    : 0;
 
   const isOlderThan6Months = diffMonths >= 6;
 
@@ -94,31 +98,25 @@ export default function CustomerAccountPage() {
           </SignedIn>
           <SignedOut>
             <div className="w-14 h-14 rounded-full bg-primary text-accent-tape flex items-center justify-center font-bold text-xl font-display shadow-subtle shrink-0">
-              {customerProfile.name.charAt(0)}
+              {customerProfile.name ? customerProfile.name.charAt(0).toUpperCase() : "U"}
             </div>
           </SignedOut>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold font-display text-primary">
-                {isSignedIn && user?.fullName ? user.fullName : customerProfile.name}
+                {isSignedIn && user?.fullName ? user.fullName : customerProfile.name || "Client Patron"}
               </h1>
               <Badge variant="verified" size="sm">
                 Verified Fit Profile
               </Badge>
             </div>
             <p className="text-xs text-text-muted font-mono mt-0.5">
-              {isSignedIn && user?.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : customerProfile.phone} • {customerProfile.email}
+              {isSignedIn && user?.primaryEmailAddress
+                ? user.primaryEmailAddress.emailAddress
+                : customerProfile.email || "Sign in to permanently sync your fit profile across devices"}
             </p>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={resetAllToSeed}
-          className="text-[11px] font-mono text-text-muted hover:text-error underline self-start sm:self-auto"
-        >
-          Reset Demo Data to Seed
-        </button>
       </div>
 
       {/* 6-Month Re-Measure Warning Banner */}
@@ -174,7 +172,7 @@ export default function CustomerAccountPage() {
       {/* TAB 1: SAVED MEASUREMENTS */}
       {activeTab === "measurements" && (
         <Card className="p-4 sm:p-6 md:p-8 space-y-6">
-          <div className="flex items-center justify-between border-b border-border-subtle pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-subtle pb-4">
             <div className="space-y-0.5">
               <span className="text-xs font-mono text-text-muted uppercase">
                 Active Anatomic Specification
@@ -183,99 +181,150 @@ export default function CustomerAccountPage() {
                 Precision Measurements (Inches)
               </h3>
             </div>
-            <span className="text-xs font-mono text-text-muted">
-              Last verified: {customerProfile.savedMeasurements.recordedAt} by{" "}
-              {customerProfile.savedMeasurements.verifiedBy}
-            </span>
+            {customerProfile.savedMeasurements.recordedAt && (
+              <span className="text-xs font-mono text-text-muted">
+                Last verified: {customerProfile.savedMeasurements.recordedAt}
+                {customerProfile.savedMeasurements.verifiedBy ? ` by ${customerProfile.savedMeasurements.verifiedBy}` : ""}
+              </span>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
-            {[
-              { label: "Chest Circumference", val: customerProfile.savedMeasurements.chest },
-              { label: "Shoulder Breadth", val: customerProfile.savedMeasurements.shoulder },
-              { label: "Sleeve Length", val: customerProfile.savedMeasurements.sleeveLength },
-              { label: "Neck Circumference", val: customerProfile.savedMeasurements.neck },
-              { label: "Waistline", val: customerProfile.savedMeasurements.waist },
-              { label: "Trouser Outseam", val: customerProfile.savedMeasurements.trouserLength },
-              { label: "Hips Circumference", val: customerProfile.savedMeasurements.hips },
-              { label: "Bicep", val: customerProfile.savedMeasurements.bicep },
-            ].map((m, i) => (
-              <div key={i} className="p-3 bg-surface-muted rounded-sm border border-border-subtle space-y-1">
-                <span className="text-[10px] text-text-muted uppercase block">{m.label}</span>
-                <span className="text-base font-bold text-primary tabular-nums">
-                  {m.val} in
-                </span>
+          {!customerProfile.savedMeasurements.chest ? (
+            <div className="py-8 text-center space-y-4">
+              <div className="w-12 h-12 mx-auto rounded-full bg-surface-muted flex items-center justify-center border border-border-subtle">
+                <Ruler className="w-6 h-6 text-text-muted/60" />
               </div>
-            ))}
-          </div>
+              <div className="space-y-1 max-w-md mx-auto">
+                <h4 className="font-bold text-primary text-sm font-display">No Saved Measurements Yet</h4>
+                <p className="text-xs text-text-muted">
+                  Your body measurements are recorded and locked whenever you place a made-to-measure order or book a doorstep fitting session.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
+                <Link href="/designs">
+                  <Button size="sm">
+                    Explore Top Designs &rarr;
+                  </Button>
+                </Link>
+                <Link href="/measurement/book">
+                  <Button variant="outline" size="sm">
+                    Book a Measurer
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
+                {[
+                  { label: "Chest Circumference", val: customerProfile.savedMeasurements.chest },
+                  { label: "Shoulder Breadth", val: customerProfile.savedMeasurements.shoulder },
+                  { label: "Sleeve Length", val: customerProfile.savedMeasurements.sleeveLength },
+                  { label: "Neck Circumference", val: customerProfile.savedMeasurements.neck },
+                  { label: "Waistline", val: customerProfile.savedMeasurements.waist },
+                  { label: "Trouser Outseam", val: customerProfile.savedMeasurements.trouserLength },
+                  { label: "Hips Circumference", val: customerProfile.savedMeasurements.hips },
+                  { label: "Bicep", val: customerProfile.savedMeasurements.bicep },
+                ].filter((m) => m.val !== undefined).map((m, i) => (
+                  <div key={i} className="p-3 bg-surface-muted rounded-sm border border-border-subtle space-y-1">
+                    <span className="text-[10px] text-text-muted uppercase block">{m.label}</span>
+                    <span className="text-base font-bold text-primary tabular-nums">
+                      {m.val} in
+                    </span>
+                  </div>
+                ))}
+              </div>
 
-          <div className="pt-4 border-t border-border-subtle flex flex-col sm:flex-row gap-3">
-            <Link href="/designs" className="flex-1">
-              <Button size="md" className="w-full">
-                Order a New Outfit With This Profile &rarr;
-              </Button>
-            </Link>
-            <Link href="/measurement/book">
-              <Button variant="outline" size="md">
-                Update Fit In-Person
-              </Button>
-            </Link>
-          </div>
+              <div className="pt-4 border-t border-border-subtle flex flex-col sm:flex-row gap-3">
+                <Link href="/designs" className="flex-1">
+                  <Button size="md" className="w-full">
+                    Order a New Outfit With This Profile &rarr;
+                  </Button>
+                </Link>
+                <Link href="/measurement/book">
+                  <Button variant="outline" size="md">
+                    Update Fit In-Person
+                  </Button>
+                </Link>
+              </div>
+            </>
+          )}
         </Card>
       )}
 
       {/* TAB 2: PAST ORDERS & REORDER */}
       {activeTab === "orders" && (
         <div className="space-y-4">
-          {orders.map((ord) => (
-            <Card key={ord.id} className="p-5 space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-subtle pb-3">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-base font-bold text-primary">
-                      {ord.id}
-                    </span>
-                    <Badge
-                      variant={ord.isLate ? "error" : ord.isAtRisk ? "tape" : "verified"}
-                      size="sm"
-                    >
-                      {ord.status}
-                    </Badge>
-                  </div>
-                  <h4 className="font-bold text-primary text-base">
-                    {ord.items[0]?.designName} ({ord.items[0]?.fabricName})
-                  </h4>
-                </div>
-
-                <div className="text-left sm:text-right text-xs font-mono">
-                  <span className="text-text-muted block">Guaranteed Delivery:</span>
-                  <strong className="text-primary font-bold">
-                    {formatDate(ord.guaranteedDeliveryDate)}
-                  </strong>
-                </div>
+          {orders.length === 0 ? (
+            <Card className="p-10 text-center space-y-4">
+              <div className="w-12 h-12 rounded-full bg-surface-muted border border-border-subtle flex items-center justify-center mx-auto text-primary">
+                <Package className="w-6 h-6" />
               </div>
-
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
-                <div className="text-text-muted">
-                  Total: <strong className="text-primary tabular-nums">{formatNaira(ord.totalAmount)}</strong> • {ord.paymentStatus === "fully_paid" ? "Paid in Full" : "60% Deposit Paid"}
-                </div>
-
-                <div className="flex flex-col xs:flex-row sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-                  <Link href={`/track/${ord.id}`} className="flex-1 sm:flex-none">
-                    <Button variant="outline" size="sm" className="w-full sm:w-auto">
-                      Track Live Bench
-                    </Button>
-                  </Link>
-
-                  <Link href="/order" onClick={() => handleReorder(ord)} className="flex-1 sm:flex-none">
-                    <Button variant="primary" size="sm" className="w-full sm:w-auto" leftIcon={<RotateCcw className="w-3.5 h-3.5" />}>
-                      Reorder This Fit
-                    </Button>
-                  </Link>
-                </div>
+              <div className="space-y-1 max-w-md mx-auto">
+                <h4 className="font-bold text-primary text-base font-display">No Orders Found</h4>
+                <p className="text-xs text-text-muted">
+                  You haven&apos;t placed any made-to-measure orders yet. Once placed, your bespoke production stages and live atelier tracking will appear here.
+                </p>
+              </div>
+              <div className="pt-2">
+                <Link href="/designs">
+                  <Button size="md">
+                    Explore Top Designs &rarr;
+                  </Button>
+                </Link>
               </div>
             </Card>
-          ))}
+          ) : (
+            orders.map((ord) => (
+              <Card key={ord.id} className="p-5 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-subtle pb-3">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-base font-bold text-primary">
+                        {ord.id}
+                      </span>
+                      <Badge
+                        variant={ord.isLate ? "error" : ord.isAtRisk ? "tape" : "verified"}
+                        size="sm"
+                      >
+                        {ord.status}
+                      </Badge>
+                    </div>
+                    <h4 className="font-bold text-primary text-base">
+                      {ord.items[0]?.designName} ({ord.items[0]?.fabricName})
+                    </h4>
+                  </div>
+
+                  <div className="text-left sm:text-right text-xs font-mono">
+                    <span className="text-text-muted block">Guaranteed Delivery:</span>
+                    <strong className="text-primary font-bold">
+                      {formatDate(ord.guaranteedDeliveryDate)}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+                  <div className="text-text-muted">
+                    Total: <strong className="text-primary tabular-nums">{formatNaira(ord.totalAmount)}</strong> • {ord.paymentStatus === "fully_paid" ? "Paid in Full" : "60% Deposit Paid"}
+                  </div>
+
+                  <div className="flex flex-col xs:flex-row sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                    <Link href={`/track/${ord.id}`} className="flex-1 sm:flex-none">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                        Track Live Bench
+                      </Button>
+                    </Link>
+
+                    <Link href="/order" onClick={() => handleReorder(ord)} className="flex-1 sm:flex-none">
+                      <Button variant="primary" size="sm" className="w-full sm:w-auto" leftIcon={<RotateCcw className="w-3.5 h-3.5" />}>
+                        Reorder This Fit
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </Card>
+            ))
+          )}
         </div>
       )}
     </div>

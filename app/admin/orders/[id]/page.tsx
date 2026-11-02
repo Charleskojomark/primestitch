@@ -29,11 +29,27 @@ export default function AdminOrderDetailPage() {
   const decodedId = decodeURIComponent(params.id as string);
   const targetId = decodedId.startsWith("#") ? decodedId : `#${decodedId}`;
 
-  const order = orders.find((o) => o.id === targetId) || orders[0];
+  const order = orders.find((o) => o.id === targetId);
 
-  const [selectedTailor, setSelectedTailor] = useState(order.assignedTailorId || tailors[0].id);
+  const [selectedTailor, setSelectedTailor] = useState(order?.assignedTailorId || tailors[0]?.id || "");
   const [stageNote, setStageNote] = useState("");
   const [successToast, setSuccessToast] = useState("");
+
+  if (!order) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-16 text-center space-y-4">
+        <h1 className="text-xl font-bold font-display text-primary">Order Not Found</h1>
+        <p className="text-xs font-mono text-text-muted">
+          Order {targetId} could not be found or has not been created yet.
+        </p>
+        <Link href="/admin/orders">
+          <Button variant="outline" size="sm">
+            &larr; Back to All Orders
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   const currentStageIndex = STAGES.indexOf(order.status);
   const nextStage = STAGES[currentStageIndex + 1] as Stage | undefined;

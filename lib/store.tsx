@@ -105,58 +105,32 @@ interface PrimeStitchContextType {
   resetAllToSeed: () => void;
 }
 
-const STORAGE_KEY_ORDERS = "primestitch_orders_v1";
-const STORAGE_KEY_BOOKINGS = "primestitch_bookings_v1";
-const STORAGE_KEY_BULK = "primestitch_bulk_v1";
-const STORAGE_KEY_DRAFT = "primestitch_draft_order_v1";
-const STORAGE_KEY_PROFILE = "primestitch_customer_profile_v1";
-const STORAGE_KEY_STAFF = "primestitch_staff_session_v1";
-const STORAGE_KEY_MEDIA = "primestitch_media_assets_v1";
-const STORAGE_KEY_DESIGNS = "primestitch_designs_v1";
-const STORAGE_KEY_TAILORS = "primestitch_tailors_v1";
-const STORAGE_KEY_MEASURERS = "primestitch_measurers_v1";
+const STORAGE_KEY_ORDERS = "primestitch_orders_v2";
+const STORAGE_KEY_BOOKINGS = "primestitch_bookings_v2";
+const STORAGE_KEY_BULK = "primestitch_bulk_v2";
+const STORAGE_KEY_DRAFT = "primestitch_draft_order_v2";
+const STORAGE_KEY_PROFILE = "primestitch_customer_profile_v2";
+const STORAGE_KEY_STAFF = "primestitch_staff_session_v2";
+const STORAGE_KEY_MEDIA = "primestitch_media_assets_v2";
+const STORAGE_KEY_DESIGNS = "primestitch_designs_v2";
+const STORAGE_KEY_TAILORS = "primestitch_tailors_v2";
+const STORAGE_KEY_MEASURERS = "primestitch_measurers_v2";
 
 const DEFAULT_DRAFT: DraftOrderState = {
-  designId: "des-senator",
-  designName: "Executive Senator Suit",
-  fabricId: "fab-cashmere-blend",
-  fabricName: "Italian Wool-Cashmere",
-  colorName: "Atelier Midnight",
-  colorHex: "#0B1528",
   quantity: 1,
-  unitPrice: 83000,
+  unitPrice: 0,
   measurementMethod: "self",
-  measurements: {
-    unit: "in",
-    chest: 40,
-    shoulder: 18.5,
-    sleeveLength: 34,
-    neck: 16,
-    waist: 34,
-    trouserLength: 41,
-  },
   paymentTier: "deposit_60",
 };
 
 const DEFAULT_PROFILE: CustomerProfileState = {
-  name: "Oluwaseun Balogun",
-  phone: "+234 802 334 1982",
-  email: "seun.balogun@fintechcorp.ng",
+  name: "",
+  phone: "",
+  email: "",
   savedMeasurements: {
     unit: "in",
-    chest: 40,
-    shoulder: 18.5,
-    sleeveLength: 34,
-    neck: 16,
-    waist: 34,
-    trouserLength: 41,
-    hips: 39,
-    bicep: 14.5,
-    wrist: 7.5,
-    recordedAt: "2026-04-12",
-    verifiedBy: "Kunle Williams",
   },
-  lastMeasuredDate: "2026-04-12", // 6+ months ago relative to Oct 2026!
+  lastMeasuredDate: "",
 };
 
 const PrimeStitchContext = createContext<PrimeStitchContextType | undefined>(undefined);

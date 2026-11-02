@@ -25,77 +25,71 @@ export default function DesignsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12 space-y-8">
       {/* Page Header */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Badge variant="tape" size="sm">
             Bespoke Portfolio
           </Badge>
-          <span className="text-xs font-mono text-text-muted">8 SIGNATURE PATTERNS</span>
+          <span className="text-xs font-mono text-text-muted">8 SIGNATURE PATTERNS · ABA ATELIER</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold font-display text-primary tracking-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-primary tracking-tight">
           Made-to-Measure Garment Catalogue
         </h1>
-        <p className="text-sm md:text-base text-text-muted max-w-2xl text-pretty">
-          Every piece is cut from individual paper patterns drafted to your anatomic measurements.
-          Select an outfit to choose authenticated fabrics, GSM weights, and view your exact guaranteed delivery date.
+        <p className="text-xs sm:text-sm text-text-muted max-w-2xl text-pretty">
+          Every piece is cut from individual paper patterns drafted to your anatomic measurements with locked delivery dates.
         </p>
       </div>
 
-      {/* Mobile-Friendly Filter Section */}
-      <div className="space-y-3 bg-surface-card p-4 sm:p-5 rounded-md border border-border-seam shadow-subtle">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-subtle pb-3">
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-secondary shrink-0" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
-              Filter by Garment Category
-            </span>
+      {/* Sleek, Compact Category Chip Rail (Single-line horizontal scroll on mobile, zero vertical bulk) */}
+      <div className="sticky top-16 z-30 bg-surface/95 backdrop-blur-md py-2 -mx-4 px-4 sm:mx-0 sm:px-0 border-y border-border-seam/80">
+        <div className="flex items-center justify-between gap-3">
+          {/* Horizontal scrollable chips */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth py-1 shrink-0 max-w-full">
+            {categories.map((cat) => {
+              const count = cat === "All" ? designs.length : designs.filter((d) => d.category === cat).length;
+              const isSelected = selectedCategory === cat;
+
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`h-9 px-3 text-xs font-mono uppercase tracking-wider rounded-full transition-all shrink-0 flex items-center gap-1.5 active:scale-95 ${
+                    isSelected
+                      ? "bg-primary text-white font-bold shadow-sm ring-1 ring-primary"
+                      : "bg-surface-card text-text-muted hover:text-primary hover:bg-surface-muted border border-border-seam"
+                  }`}
+                >
+                  <span>{cat}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                      isSelected
+                        ? "bg-accent-tape text-primary"
+                        : "bg-surface-muted text-text-muted"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
-          <div className="flex items-center gap-2 text-xs font-mono text-text-muted">
+
+          {/* Quick status counter on larger screens or clear link */}
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-text-muted shrink-0 pl-2">
             <span>
-              Showing <strong className="text-primary font-bold">{filteredDesigns.length}</strong> of {designs.length} signature designs
+              <strong className="text-primary font-bold">{filteredDesigns.length}</strong> items
             </span>
             {selectedCategory !== "All" && (
               <button
                 type="button"
                 onClick={() => setSelectedCategory("All")}
-                className="text-error hover:underline font-bold ml-1"
+                className="text-error hover:underline font-bold"
               >
-                (Clear)
+                (Reset)
               </button>
             )}
           </div>
-        </div>
-
-        {/* Category Pills: Clean flex-wrap with generous touch targets for mobile */}
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-          {categories.map((cat) => {
-            const count = cat === "All" ? designs.length : designs.filter((d) => d.category === cat).length;
-            const isSelected = selectedCategory === cat;
-
-            return (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setSelectedCategory(cat)}
-                className={`min-touch-target px-3.5 py-2 text-xs font-mono uppercase tracking-wider rounded-sm transition-all flex items-center gap-1.5 shadow-sm ${
-                  isSelected
-                    ? "bg-primary text-white font-bold ring-2 ring-primary/20 shadow-subtle"
-                    : "bg-surface text-text-muted hover:text-primary hover:bg-surface-muted border border-border-subtle"
-                }`}
-              >
-                <span>{cat}</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
-                    isSelected
-                      ? "bg-accent-tape text-primary"
-                      : "bg-surface-muted text-text-muted border border-border-subtle"
-                  }`}
-                >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
         </div>
       </div>
 

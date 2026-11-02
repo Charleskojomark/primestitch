@@ -63,26 +63,26 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Navigation Tabs to sub-admin views */}
-        <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
-          <Link href="/admin/orders">
-            <Button variant="outline" size="sm">
+        {/* Navigation Tabs to sub-admin views (responsive horizontal rail on mobile) */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 font-mono text-xs max-w-full">
+          <Link href="/admin/orders" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
               All Orders ({orders.length})
             </Button>
           </Link>
-          <Link href="/admin/measurements">
-            <Button variant="outline" size="sm">
+          <Link href="/admin/measurements" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
               Bookings ({bookings.length})
             </Button>
           </Link>
-          <Link href="/admin/team">
-            <Button variant="outline" size="sm">
+          <Link href="/admin/team" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
               Team & Benches ({tailors.length})
             </Button>
           </Link>
-          <Link href="/admin/media">
-            <Button variant="outline" size="sm">
-              Media & Assets (35)
+          <Link href="/admin/media" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
+              Media & Assets
             </Button>
           </Link>
         </div>
@@ -270,51 +270,96 @@ export default function AdminDashboardPage() {
             </Link>
           </div>
 
-          <Card className="p-0 overflow-hidden w-full max-w-full">
-            <div className="w-full max-w-full overflow-x-auto scroll-touch">
-              <table className="w-full min-w-[560px] text-left text-xs font-mono">
-                <thead className="bg-surface-muted border-b border-border-seam uppercase text-[11px] text-text-muted">
-                  <tr>
-                    <th className="p-3">Order</th>
-                    <th className="p-3">Customer</th>
-                    <th className="p-3">Outfit</th>
-                    <th className="p-3">Stage</th>
-                    <th className="p-3">Guaranteed Date</th>
-                    <th className="p-3 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border-subtle">
-                  {orders.slice(0, 6).map((ord) => (
-                    <tr key={ord.id} className="hover:bg-surface-muted/50">
-                      <td className="p-3 font-bold text-primary">{ord.id}</td>
-                      <td className="p-3 font-sans text-on-surface truncate max-w-[120px]">
-                        {ord.customerName}
-                      </td>
-                      <td className="p-3 font-sans text-text-muted truncate max-w-[140px]">
-                        {ord.items[0]?.designName}
-                      </td>
-                      <td className="p-3">
-                        <Badge
-                          variant={ord.isLate ? "error" : ord.isAtRisk ? "tape" : "neutral"}
-                          size="sm"
-                        >
-                          {ord.status}
-                        </Badge>
-                      </td>
-                      <td className="p-3 tabular-nums">{formatDate(ord.guaranteedDeliveryDate)}</td>
-                      <td className="p-3 text-right">
-                        <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`}>
-                          <span className="text-primary font-bold hover:underline">
-                            Inspect &rarr;
-                          </span>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
+          {orders.length === 0 ? (
+            <Card className="p-8 text-center space-y-3 bg-surface-card border border-border-seam">
+              <div className="w-12 h-12 mx-auto rounded-full bg-surface-muted flex items-center justify-center border border-border-subtle">
+                <Logo variant="icon" tone="dark" height={24} className="opacity-40 grayscale" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="font-bold font-display text-primary text-sm">No Active Orders Yet</h3>
+                <p className="text-xs text-text-muted max-w-sm mx-auto">
+                  When a customer places a made-to-measure order via the catalogue, it will be logged here with 9-stage tracking and SLA deadlines.
+                </p>
+              </div>
+            </Card>
+          ) : (
+            <>
+              {/* Mobile Order Cards (block md:hidden) */}
+              <div className="block md:hidden space-y-3">
+                {orders.slice(0, 6).map((ord) => (
+                  <Card key={ord.id} className="p-4 space-y-3 bg-surface-card border border-border-seam">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold font-mono text-primary text-sm">{ord.id}</span>
+                      <Badge
+                        variant={ord.isLate ? "error" : ord.isAtRisk ? "tape" : "neutral"}
+                        size="sm"
+                      >
+                        {ord.status}
+                      </Badge>
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div className="font-medium text-primary">{ord.customerName}</div>
+                      <div className="text-text-muted">{ord.items[0]?.designName} · {ord.items[0]?.fabricName}</div>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-border-subtle text-xs font-mono">
+                      <span className="text-text-muted">Due: {formatDate(ord.guaranteedDeliveryDate)}</span>
+                      <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`} className="text-primary font-bold hover:underline flex items-center gap-1">
+                        <span>Inspect</span>
+                        <span>&rarr;</span>
+                      </Link>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Desktop Table (hidden md:block) */}
+              <Card className="hidden md:block p-0 overflow-hidden w-full max-w-full">
+                <div className="w-full max-w-full overflow-x-auto scroll-touch">
+                  <table className="w-full text-left text-xs font-mono">
+                    <thead className="bg-surface-muted border-b border-border-seam uppercase text-[11px] text-text-muted">
+                      <tr>
+                        <th className="p-3">Order</th>
+                        <th className="p-3">Customer</th>
+                        <th className="p-3">Outfit</th>
+                        <th className="p-3">Stage</th>
+                        <th className="p-3">Guaranteed Date</th>
+                        <th className="p-3 text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border-subtle">
+                      {orders.slice(0, 6).map((ord) => (
+                        <tr key={ord.id} className="hover:bg-surface-muted/50">
+                          <td className="p-3 font-bold text-primary">{ord.id}</td>
+                          <td className="p-3 font-sans text-on-surface truncate max-w-[120px]">
+                            {ord.customerName}
+                          </td>
+                          <td className="p-3 font-sans text-text-muted truncate max-w-[140px]">
+                            {ord.items[0]?.designName}
+                          </td>
+                          <td className="p-3">
+                            <Badge
+                              variant={ord.isLate ? "error" : ord.isAtRisk ? "tape" : "neutral"}
+                              size="sm"
+                            >
+                              {ord.status}
+                            </Badge>
+                          </td>
+                          <td className="p-3 tabular-nums">{formatDate(ord.guaranteedDeliveryDate)}</td>
+                          <td className="p-3 text-right">
+                            <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`}>
+                              <span className="text-primary font-bold hover:underline">
+                                Inspect &rarr;
+                              </span>
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
+            </>
+          )}
         </div>
 
         {/* Right Column: Today's Measurement Appointments (4 cols) */}
@@ -328,26 +373,33 @@ export default function AdminDashboardPage() {
             </Link>
           </div>
 
-          <div className="space-y-3">
-            {bookings.slice(0, 3).map((b) => (
-              <Card key={b.id} className="p-4 space-y-2 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-primary">{b.id}</span>
-                  <Badge variant={b.status === "scheduled" ? "verified" : "error"} size="sm">
-                    {b.status}
-                  </Badge>
-                </div>
-                <div>
-                  <strong className="text-primary block font-sans text-sm">{b.customerName}</strong>
-                  <span className="text-text-muted block">{b.address} ({b.area})</span>
-                </div>
-                <div className="text-[11px] font-mono text-text-muted pt-1 border-t border-border-subtle flex justify-between">
-                  <span>Slot: {b.timeSlot}</span>
-                  <span>Fitter: {b.measurerName?.split(" ")[0]}</span>
-                </div>
-              </Card>
-            ))}
-          </div>
+          {bookings.length === 0 ? (
+            <Card className="p-6 text-center space-y-2 bg-surface-card border border-border-seam">
+              <Ruler className="w-8 h-8 mx-auto text-text-muted/60" />
+              <p className="text-xs font-mono text-text-muted">No appointments booked yet.</p>
+            </Card>
+          ) : (
+            <div className="space-y-3">
+              {bookings.slice(0, 3).map((b) => (
+                <Card key={b.id} className="p-4 space-y-2 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono font-bold text-primary">{b.id}</span>
+                    <Badge variant={b.status === "scheduled" ? "verified" : "error"} size="sm">
+                      {b.status}
+                    </Badge>
+                  </div>
+                  <div>
+                    <strong className="text-primary block font-sans text-sm">{b.customerName}</strong>
+                    <span className="text-text-muted block">{b.address} ({b.area})</span>
+                  </div>
+                  <div className="text-[11px] font-mono text-text-muted pt-1 border-t border-border-subtle flex justify-between">
+                    <span>Slot: {b.timeSlot}</span>
+                    <span>Fitter: {b.measurerName?.split(" ")[0]}</span>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

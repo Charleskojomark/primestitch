@@ -52,15 +52,15 @@ export default function AdminOrdersListPage() {
             Master Orders Management
           </h1>
         </div>
-        <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
-          <Link href="/admin/measurements">
-            <Button variant="outline" size="sm">Bookings</Button>
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 font-mono text-xs max-w-full">
+          <Link href="/admin/measurements" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">Bookings</Button>
           </Link>
-          <Link href="/admin/team">
-            <Button variant="outline" size="sm">Tailors</Button>
+          <Link href="/admin/team" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">Tailors</Button>
           </Link>
-          <Link href="/admin/media">
-            <Button variant="outline" size="sm">Media Assets</Button>
+          <Link href="/admin/media" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">Media Assets</Button>
           </Link>
         </div>
       </div>
@@ -110,92 +110,145 @@ export default function AdminOrdersListPage() {
         </div>
       </Card>
 
-      {/* Orders Table */}
-      <Card className="p-0 overflow-hidden w-full max-w-full">
-        <div className="w-full max-w-full overflow-x-auto scroll-touch">
-          <table className="w-full min-w-[760px] text-left text-xs font-mono">
-            <thead className="bg-surface-muted border-b border-border-seam uppercase text-[11px] text-text-muted">
-              <tr>
-                <th className="p-3.5">Order ID</th>
-                <th className="p-3.5">Customer & Phone</th>
-                <th className="p-3.5">Outfit & Fabric</th>
-                <th className="p-3.5">Stage</th>
-                <th className="p-3.5">Assigned Tailor</th>
-                <th className="p-3.5">Guaranteed Delivery</th>
-                <th className="p-3.5">Financials</th>
-                <th className="p-3.5 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border-subtle">
-              {filteredOrders.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="p-12 text-center">
-                    <div className="space-y-3">
-                      <div className="w-12 h-12 mx-auto rounded-full bg-surface-muted flex items-center justify-center border border-border-subtle">
-                        <Logo variant="icon" tone="dark" height={24} className="opacity-40 grayscale" />
-                      </div>
-                      <p className="text-sm font-mono text-text-muted">
-                        No orders matched your search or filter parameters.
-                      </p>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                filteredOrders.map((ord) => (
-                <tr key={ord.id} className="hover:bg-surface-muted/50 transition-colors">
-                  <td className="p-3.5">
-                    <span className="font-bold text-primary block">{ord.id}</span>
+      {/* Orders View: Responsive Cards for Mobile, Data Table for Desktop */}
+      {filteredOrders.length === 0 ? (
+        <Card className="p-12 text-center bg-surface-card border border-border-seam">
+          <div className="space-y-3">
+            <div className="w-12 h-12 mx-auto rounded-full bg-surface-muted flex items-center justify-center border border-border-subtle">
+              <Logo variant="icon" tone="dark" height={24} className="opacity-40 grayscale" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-bold font-display text-primary text-sm">No Orders Found</h3>
+              <p className="text-xs font-mono text-text-muted">
+                {orders.length === 0
+                  ? "No customer orders have been placed yet. New orders will appear here automatically."
+                  : "No orders matched your search or filter parameters."}
+              </p>
+            </div>
+          </div>
+        </Card>
+      ) : (
+        <>
+          {/* Mobile Orders Cards (block md:hidden) */}
+          <div className="block md:hidden space-y-3">
+            {filteredOrders.map((ord) => (
+              <Card key={ord.id} className="p-4 space-y-3 bg-surface-card border border-border-seam">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold font-mono text-primary text-sm">{ord.id}</span>
                     {ord.isLate ? (
-                      <Badge variant="error" size="sm">
-                        LATE
-                      </Badge>
+                      <Badge variant="error" size="sm">LATE</Badge>
                     ) : ord.isAtRisk ? (
-                      <Badge variant="tape" size="sm">
-                        AT RISK
-                      </Badge>
+                      <Badge variant="tape" size="sm">AT RISK</Badge>
                     ) : null}
-                  </td>
-                  <td className="p-3.5 font-sans">
-                    <strong className="text-primary block">{ord.customerName}</strong>
-                    <span className="text-text-muted text-[11px] font-mono">{ord.customerPhone}</span>
-                  </td>
-                  <td className="p-3.5 font-sans">
-                    <span className="font-semibold text-primary block">{ord.items[0]?.designName}</span>
-                    <span className="text-text-muted text-[11px]">{ord.items[0]?.fabricName}</span>
-                  </td>
-                  <td className="p-3.5">
-                    <Badge variant="neutral" size="sm">
-                      {ord.status}
-                    </Badge>
-                  </td>
-                  <td className="p-3.5 font-sans">
-                    <span className="text-primary font-medium">{ord.assignedTailorName}</span>
-                  </td>
-                  <td className="p-3.5 tabular-nums">
-                    <span className={ord.isLate ? "text-error font-bold" : "text-primary"}>
-                      {formatDate(ord.guaranteedDeliveryDate)}
-                    </span>
-                  </td>
-                  <td className="p-3.5 tabular-nums">
-                    <strong className="text-primary block">{formatNaira(ord.totalAmount)}</strong>
-                    <span className="text-text-muted text-[10px]">
-                      {ord.paymentStatus === "fully_paid" ? "100% Paid" : "60% Deposit"}
-                    </span>
-                  </td>
-                  <td className="p-3.5 text-right">
-                    <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`}>
-                      <Button variant="primary" size="sm">
-                        Manage &rarr;
-                      </Button>
-                    </Link>
-                  </td>
-                </tr>
-              ))
-            )}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+                  </div>
+                  <Badge variant="neutral" size="sm">
+                    {ord.status}
+                  </Badge>
+                </div>
+
+                <div className="space-y-1 text-xs">
+                  <div className="flex items-center justify-between">
+                    <strong className="text-primary font-sans text-sm">{ord.customerName}</strong>
+                    <a
+                      href={`tel:${ord.customerPhone}`}
+                      className="text-text-muted font-mono hover:text-primary underline text-[11px]"
+                    >
+                      {ord.customerPhone}
+                    </a>
+                  </div>
+                  <div className="text-text-muted">
+                    <span className="font-medium text-primary">{ord.items[0]?.designName}</span> · {ord.items[0]?.fabricName}
+                  </div>
+                  <div className="text-[11px] text-text-muted flex items-center justify-between pt-1">
+                    <span>Tailor: <strong className="text-primary">{ord.assignedTailorName}</strong></span>
+                    <span className="tabular-nums font-bold text-primary">{formatNaira(ord.totalAmount)}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-border-subtle text-xs font-mono">
+                  <span className={ord.isLate ? "text-error font-bold" : "text-text-muted"}>
+                    Due: {formatDate(ord.guaranteedDeliveryDate)}
+                  </span>
+                  <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`} className="w-auto">
+                    <Button variant="primary" size="sm">
+                      Manage &rarr;
+                    </Button>
+                  </Link>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          {/* Desktop Orders Table (hidden md:block) */}
+          <Card className="hidden md:block p-0 overflow-hidden w-full max-w-full">
+            <div className="w-full max-w-full overflow-x-auto scroll-touch">
+              <table className="w-full text-left text-xs font-mono">
+                <thead className="bg-surface-muted border-b border-border-seam uppercase text-[11px] text-text-muted">
+                  <tr>
+                    <th className="p-3.5">Order ID</th>
+                    <th className="p-3.5">Customer & Phone</th>
+                    <th className="p-3.5">Outfit & Fabric</th>
+                    <th className="p-3.5">Stage</th>
+                    <th className="p-3.5">Assigned Tailor</th>
+                    <th className="p-3.5">Guaranteed Delivery</th>
+                    <th className="p-3.5">Financials</th>
+                    <th className="p-3.5 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border-subtle">
+                  {filteredOrders.map((ord) => (
+                    <tr key={ord.id} className="hover:bg-surface-muted/50 transition-colors">
+                      <td className="p-3.5">
+                        <span className="font-bold text-primary block">{ord.id}</span>
+                        {ord.isLate ? (
+                          <Badge variant="error" size="sm">LATE</Badge>
+                        ) : ord.isAtRisk ? (
+                          <Badge variant="tape" size="sm">AT RISK</Badge>
+                        ) : null}
+                      </td>
+                      <td className="p-3.5 font-sans">
+                        <strong className="text-primary block">{ord.customerName}</strong>
+                        <span className="text-text-muted text-[11px] font-mono">{ord.customerPhone}</span>
+                      </td>
+                      <td className="p-3.5 font-sans">
+                        <span className="font-semibold text-primary block">{ord.items[0]?.designName}</span>
+                        <span className="text-text-muted text-[11px]">{ord.items[0]?.fabricName}</span>
+                      </td>
+                      <td className="p-3.5">
+                        <Badge variant="neutral" size="sm">
+                          {ord.status}
+                        </Badge>
+                      </td>
+                      <td className="p-3.5 font-sans">
+                        <span className="text-primary font-medium">{ord.assignedTailorName}</span>
+                      </td>
+                      <td className="p-3.5 tabular-nums">
+                        <span className={ord.isLate ? "text-error font-bold" : "text-primary"}>
+                          {formatDate(ord.guaranteedDeliveryDate)}
+                        </span>
+                      </td>
+                      <td className="p-3.5 tabular-nums">
+                        <strong className="text-primary block">{formatNaira(ord.totalAmount)}</strong>
+                        <span className="text-text-muted text-[10px]">
+                          {ord.paymentStatus === "fully_paid" ? "100% Paid" : "60% Deposit"}
+                        </span>
+                      </td>
+                      <td className="p-3.5 text-right">
+                        <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`}>
+                          <Button variant="primary" size="sm">
+                            Manage &rarr;
+                          </Button>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </>
+      )}
     </div>
   );
 }

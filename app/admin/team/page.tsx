@@ -28,15 +28,15 @@ export default function AdminTeamPage() {
             Atelier Artisans & Field Measurement Roster
           </h1>
         </div>
-        <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
-          <Link href="/admin/orders">
-            <Button variant="outline" size="sm">Orders</Button>
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 font-mono text-xs max-w-full">
+          <Link href="/admin/orders" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">Orders</Button>
           </Link>
-          <Link href="/admin/measurements">
-            <Button variant="outline" size="sm">Bookings</Button>
+          <Link href="/admin/measurements" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">Bookings</Button>
           </Link>
-          <Link href="/admin/media">
-            <Button variant="outline" size="sm">Media Assets</Button>
+          <Link href="/admin/media" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">Media Assets</Button>
           </Link>
         </div>
       </div>

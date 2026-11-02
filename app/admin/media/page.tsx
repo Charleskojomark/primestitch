@@ -222,25 +222,25 @@ export default function AdminMediaPage() {
           </p>
         </div>
 
-        {/* Navigation Tabs to other admin views */}
-        <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
-          <Link href="/admin">
-            <Button variant="outline" size="sm">
+        {/* Navigation Tabs to other admin views (responsive horizontal rail on mobile) */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 font-mono text-xs max-w-full">
+          <Link href="/admin" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
               SLA Dashboard
             </Button>
           </Link>
-          <Link href="/admin/orders">
-            <Button variant="outline" size="sm">
+          <Link href="/admin/orders" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
               All Orders ({orders.length})
             </Button>
           </Link>
-          <Link href="/admin/measurements">
-            <Button variant="outline" size="sm">
+          <Link href="/admin/measurements" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
               Bookings ({bookings.length})
             </Button>
           </Link>
-          <Link href="/admin/team">
-            <Button variant="outline" size="sm">
+          <Link href="/admin/team" className="shrink-0">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
               Team &amp; Benches ({tailors.length})
             </Button>
           </Link>
