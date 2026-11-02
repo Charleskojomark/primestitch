@@ -41,23 +41,62 @@ export default function DesignsPage() {
         </p>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto scroll-touch pb-2 scrollbar-none border-b border-border-seam w-full max-w-full">
-        <Filter className="w-4 h-4 text-text-muted shrink-0 mr-1" />
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            type="button"
-            onClick={() => setSelectedCategory(cat)}
-            className={`min-touch-target px-4 py-2 text-xs font-mono uppercase tracking-wider rounded-sm transition-all whitespace-nowrap ${
-              selectedCategory === cat
-                ? "bg-primary text-on-primary font-bold shadow-subtle"
-                : "bg-surface-card text-text-muted hover:text-primary hover:bg-surface-muted border border-border-subtle"
-            }`}
-          >
-            {cat} {cat === "All" ? `(${designs.length})` : `(${designs.filter((d) => d.category === cat).length})`}
-          </button>
-        ))}
+      {/* Mobile-Friendly Filter Section */}
+      <div className="space-y-3 bg-surface-card p-4 sm:p-5 rounded-md border border-border-seam shadow-subtle">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-subtle pb-3">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-secondary shrink-0" />
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
+              Filter by Garment Category
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-xs font-mono text-text-muted">
+            <span>
+              Showing <strong className="text-primary font-bold">{filteredDesigns.length}</strong> of {designs.length} signature designs
+            </span>
+            {selectedCategory !== "All" && (
+              <button
+                type="button"
+                onClick={() => setSelectedCategory("All")}
+                className="text-error hover:underline font-bold ml-1"
+              >
+                (Clear)
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Category Pills: Clean flex-wrap with generous touch targets for mobile */}
+        <div className="flex flex-wrap items-center gap-2 pt-1">
+          {categories.map((cat) => {
+            const count = cat === "All" ? designs.length : designs.filter((d) => d.category === cat).length;
+            const isSelected = selectedCategory === cat;
+
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`min-touch-target px-3.5 py-2 text-xs font-mono uppercase tracking-wider rounded-sm transition-all flex items-center gap-1.5 shadow-sm ${
+                  isSelected
+                    ? "bg-primary text-white font-bold ring-2 ring-primary/20 shadow-subtle"
+                    : "bg-surface text-text-muted hover:text-primary hover:bg-surface-muted border border-border-subtle"
+                }`}
+              >
+                <span>{cat}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                    isSelected
+                      ? "bg-accent-tape text-primary"
+                      : "bg-surface-muted text-text-muted border border-border-subtle"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Grid of Designs */}

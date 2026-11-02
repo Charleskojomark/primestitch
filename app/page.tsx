@@ -36,7 +36,19 @@ export default function HomePage() {
     <div className="space-y-16 md:space-y-24">
       {/* 1. HERO SECTION: Precise, Confident & Tailoring-Crafted */}
       <section className="relative overflow-hidden bg-primary text-on-primary pt-8 pb-16 md:py-20 tape-measure-top border-b-4 border-accent-tape">
-        <div className="max-w-7xl mx-auto px-4">
+        {/* Tailoring & Sewing Machine Background Watermark */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-end select-none opacity-25 md:opacity-30 mix-blend-screen overflow-hidden"
+        >
+          <img
+            src="/images/hero-sewing-machine.svg"
+            alt=""
+            className="w-[750px] sm:w-[880px] lg:w-[1100px] max-w-none translate-x-16 sm:translate-x-20 md:translate-x-24 translate-y-6 md:translate-y-2 object-contain"
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Column: Brand Promise */}
             <div className="lg:col-span-7 space-y-6">
@@ -59,7 +71,7 @@ export default function HomePage() {
                     className="w-full sm:w-auto font-bold text-primary shadow-raised"
                     rightIcon={<ArrowRight className="w-4 h-4 text-primary" />}
                   >
-                    Explore Made-to-Measure
+                    Explore top designs
                   </Button>
                 </Link>
                 <Link href="/measurement/book">
@@ -71,22 +83,6 @@ export default function HomePage() {
                     Book Doorstep Measurement
                   </Button>
                 </Link>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-4 grid grid-cols-3 gap-1.5 sm:gap-4 border-t border-slate-700/60 text-xs">
-                <div className="space-y-0.5 min-w-0">
-                  <span className="font-bold font-mono text-accent-tape text-sm sm:text-base">100%</span>
-                  <span className="block text-slate-300 text-[10px] sm:text-xs leading-tight">Date SLA Guarantee</span>
-                </div>
-                <div className="space-y-0.5 min-w-0">
-                  <span className="font-bold font-mono text-accent-tape text-sm sm:text-base">9 Stages</span>
-                  <span className="block text-slate-300 text-[10px] sm:text-xs leading-tight">Live Tailor Updates</span>
-                </div>
-                <div className="space-y-0.5 min-w-0">
-                  <span className="font-bold font-mono text-accent-tape text-sm sm:text-base">Nationwide</span>
-                  <span className="block text-slate-300 text-[10px] sm:text-xs leading-tight">Doorstep Delivery SLA</span>
-                </div>
               </div>
             </div>
 
@@ -174,39 +170,63 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
           {/* Step 1 */}
-          <Card className="p-6 space-y-3 border-t-4 border-t-primary relative">
-            <span className="font-mono text-2xl font-bold text-slate-300 block">01</span>
-            <h3 className="font-bold text-lg font-display text-primary">Choose Design & Fabric</h3>
-            <p className="text-xs text-text-muted leading-relaxed">
-              Select from authenticated Guinea brocades, hand-dyed Adire, Italian cashmeres, or pure suiting wools.
-            </p>
+          <Card className="p-6 space-y-3 border-t-4 border-t-primary relative overflow-hidden group hover:border-primary transition-all">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[url('/images/steps/step-01-fabric.svg')] bg-cover bg-right-bottom opacity-25 pointer-events-none group-hover:opacity-40 transition-opacity"
+            />
+            <div className="relative z-10 space-y-3">
+              <span className="font-mono text-2xl font-bold text-slate-300 block">01</span>
+              <h3 className="font-bold text-lg font-display text-primary">Choose Design & Fabric</h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Select from authenticated Guinea brocades, hand-dyed Adire, Italian cashmeres, or pure suiting wools.
+              </p>
+            </div>
           </Card>
 
           {/* Step 2 */}
-          <Card className="p-6 space-y-3 border-t-4 border-t-secondary relative">
-            <span className="font-mono text-2xl font-bold text-secondary block">02</span>
-            <h3 className="font-bold text-lg font-display text-primary">Exact Measurements</h3>
-            <p className="text-xs text-text-muted leading-relaxed">
-              Measure at home with our guided step-by-step tool, or book a mobile fitter to come directly to your home or office.
-            </p>
+          <Card className="p-6 space-y-3 border-t-4 border-t-secondary relative overflow-hidden group hover:border-secondary transition-all">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[url('/images/steps/step-02-measure.svg')] bg-cover bg-right-bottom opacity-25 pointer-events-none group-hover:opacity-40 transition-opacity"
+            />
+            <div className="relative z-10 space-y-3">
+              <span className="font-mono text-2xl font-bold text-secondary block">02</span>
+              <h3 className="font-bold text-lg font-display text-primary">Exact Measurements</h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Measure at home with our guided step-by-step tool, or book a mobile fitter to come directly to your home or office.
+              </p>
+            </div>
           </Card>
 
           {/* Step 3 */}
-          <Card className="p-6 space-y-3 border-t-4 border-t-accent-tape relative">
-            <span className="font-mono text-2xl font-bold text-accent-tape block">03</span>
-            <h3 className="font-bold text-lg font-display text-primary">Locked Delivery Date</h3>
-            <p className="text-xs text-text-muted leading-relaxed">
-              Once measurements are confirmed, our capacity engine locks your delivery date into the contract. That date is sacred.
-            </p>
+          <Card className="p-6 space-y-3 border-t-4 border-t-accent-tape relative overflow-hidden group hover:border-accent-tape transition-all">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[url('/images/steps/step-03-lock.svg')] bg-cover bg-right-bottom opacity-25 pointer-events-none group-hover:opacity-40 transition-opacity"
+            />
+            <div className="relative z-10 space-y-3">
+              <span className="font-mono text-2xl font-bold text-accent-tape block">03</span>
+              <h3 className="font-bold text-lg font-display text-primary">Locked Delivery Date</h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Once measurements are confirmed, our capacity engine locks your delivery date into the contract. That date is sacred.
+              </p>
+            </div>
           </Card>
 
           {/* Step 4 */}
-          <Card className="p-6 space-y-3 border-t-4 border-t-accent-emerald relative">
-            <span className="font-mono text-2xl font-bold text-accent-emerald block">04</span>
-            <h3 className="font-bold text-lg font-display text-primary">9-Stage Live Updates</h3>
-            <p className="text-xs text-text-muted leading-relaxed">
-              Watch your outfit progress through Cutting, Sewing, Finishing, and Quality Check. Receive WhatsApp notifications at every milestone.
-            </p>
+          <Card className="p-6 space-y-3 border-t-4 border-t-accent-emerald relative overflow-hidden group hover:border-accent-emerald transition-all">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[url('/images/steps/step-04-updates.svg')] bg-cover bg-right-bottom opacity-25 pointer-events-none group-hover:opacity-40 transition-opacity"
+            />
+            <div className="relative z-10 space-y-3">
+              <span className="font-mono text-2xl font-bold text-accent-emerald block">04</span>
+              <h3 className="font-bold text-lg font-display text-primary">9-Stage Live Updates</h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Watch your outfit progress through Cutting, Sewing, Finishing, and Quality Check. Receive WhatsApp notifications at every milestone.
+              </p>
+            </div>
           </Card>
         </div>
       </section>

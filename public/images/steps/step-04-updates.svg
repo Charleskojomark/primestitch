@@ -1,0 +1,36 @@
+<svg width="400" height="260" viewBox="0 0 400 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="stagePattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="1.5" fill="#0A5C36" fill-opacity="0.2"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="260" fill="url(#stagePattern)"/>
+
+  <!-- 9-Stage Progress Pipeline Track & Needle Watermark -->
+  <g transform="translate(180, 50)" opacity="0.22">
+    <!-- Pipeline connector line -->
+    <path d="M 10 160 C 40 100, 120 140, 170 60 L 210 20" stroke="#0A5C36" stroke-width="3" stroke-dasharray="6 4" fill="none"/>
+
+    <!-- Stage Nodes -->
+    <circle cx="30" cy="140" r="10" fill="#0A5C36"/>
+    <path d="M 26 140 L 29 143 L 35 137" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+
+    <circle cx="95" cy="120" r="10" fill="#0A5C36"/>
+    <path d="M 91 120 L 94 123 L 100 117" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+
+    <circle cx="155" cy="80" r="10" fill="#0A5C36"/>
+    <path d="M 151 80 L 154 83 L 160 77" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Final Stage Star / Check -->
+    <circle cx="205" cy="30" r="14" fill="#FFC72C" stroke="#0A5C36" stroke-width="2"/>
+    <path d="M 199 30 L 203 34 L 212 25" stroke="#0B1528" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Needle and Thread actively sewing line -->
+    <g transform="translate(140, 20) rotate(-45)">
+      <path d="M 0 0 L 80 0" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="70" cy="0" rx="4" ry="1.5" fill="#FFFFFF"/>
+      <path d="M 70 0 C 85 -20, 110 -10, 120 -30" stroke="#FFC72C" stroke-width="2" fill="none"/>
+    </g>
+  </g>
+</svg>
+

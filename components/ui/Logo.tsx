@@ -69,10 +69,10 @@ const LOGO_CONFIG: Record<
     defaultHeight: 68,
   },
   icon: {
-    darkSrc: "/brand/logo-icon-transparent.png",
+    darkSrc: "/brand/logo-icon-white-bg.png",
     lightSrc: "/brand/logo-icon-white.png",
     aspectRatio: 1, // 1:1 square
-    defaultHeight: 28,
+    defaultHeight: 32,
     minIconSize: 24,
   },
   wordmark: {

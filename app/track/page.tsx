@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { usePrimeStitch } from "@/lib/store";
 import { Search, Clock, AlertCircle, ArrowRight, Scissors, CheckCircle } from "lucide-react";
@@ -45,7 +46,14 @@ export default function TrackLookupPage() {
       <div className="text-center max-w-xl mx-auto space-y-3">
         <div className="flex justify-center">
           <Link href="/" aria-label="PrimeStitch">
-            <Logo variant="icon" tone="dark" height={32} />
+            <Image
+              src="/brand/logo-icon-white-bg.png"
+              alt="PrimeStitch"
+              width={48}
+              height={48}
+              priority
+              className="h-10 sm:h-12 w-auto object-contain hover:scale-105 transition-transform"
+            />
           </Link>
         </div>
         <Badge variant="tape" size="sm">

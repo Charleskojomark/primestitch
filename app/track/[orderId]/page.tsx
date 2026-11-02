@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { usePrimeStitch } from "@/lib/store";
 import { formatNaira, formatDate } from "@/lib/utils";
@@ -64,7 +65,14 @@ export default function OrderTrackingDetailPage() {
           <span>Look Up Another Order</span>
         </Link>
         <Link href="/" aria-label="PrimeStitch">
-          <Logo variant="icon" tone="dark" height={24} />
+          <Image
+            src="/brand/logo-icon-white-bg.png"
+            alt="PrimeStitch"
+            width={32}
+            height={32}
+            priority
+            className="h-8 w-auto object-contain hover:scale-105 transition-transform"
+          />
         </Link>
       </div>
 

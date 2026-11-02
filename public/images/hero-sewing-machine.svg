@@ -1,0 +1,109 @@
+<svg width="900" height="600" viewBox="0 0 900 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Subtle Tailoring Drafting Grid -->
+  <defs>
+    <pattern id="chalkGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1E293B" stroke-width="0.75" stroke-dasharray="2 4"/>
+    </pattern>
+    <linearGradient id="brassMetallic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFC72C" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#C28B28" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#855B14" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="needleGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#FFC72C" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="900" height="600" fill="url(#chalkGrid)" opacity="0.6"/>
+
+  <!-- Flowing Gold Basting Stitch Line -->
+  <path d="M 50 480 C 200 480, 250 350, 420 380 C 580 410, 620 220, 780 200 C 840 190, 880 230, 900 240" 
+        stroke="#FFC72C" stroke-width="2.5" stroke-dasharray="10 8" stroke-linecap="round" opacity="0.45"/>
+
+  <!-- INDUSTRIAL TAILORING SEWING MACHINE OUTLINE -->
+  <g transform="translate(180, 70)" opacity="0.35">
+    <!-- Machine Base / Bed Plate -->
+    <path d="M 40 430 L 640 430 C 650 430, 660 422, 660 410 L 660 390 L 20 390 L 20 410 C 20 422, 30 430, 40 430 Z" 
+          fill="#16233B" stroke="#C28B28" stroke-width="3"/>
+    
+    <!-- Measuring ruler on machine bed -->
+    <line x1="60" y1="395" x2="380" y2="395" stroke="#FFC72C" stroke-width="1.5" stroke-dasharray="6 3 2 3"/>
+
+    <!-- Throat plate under needle -->
+    <rect x="180" y="388" width="80" height="8" rx="2" fill="#C28B28" stroke="#FFC72C" stroke-width="1"/>
+    <!-- Feed dogs slots -->
+    <line x1="205" y1="392" x2="235" y2="392" stroke="#0B1528" stroke-width="2" stroke-dasharray="3 2"/>
+
+    <!-- Upright Column (Right Arm) -->
+    <path d="M 500 390 L 515 170 C 515 150, 495 130, 475 130 L 200 130 C 180 130, 165 145, 165 165 L 165 240 C 165 255, 175 265, 190 265 L 360 265 C 385 265, 405 285, 415 310 L 440 390 Z" 
+          fill="#0F1D33" stroke="url(#brassMetallic)" stroke-width="3.5" stroke-linejoin="round"/>
+
+    <!-- Upper Arm Decorative Brass Badge / Plaque -->
+    <rect x="260" y="155" width="160" height="42" rx="4" fill="#16233B" stroke="#FFC72C" stroke-width="1.5"/>
+    <text x="340" y="180" fill="#FFC72C" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" letter-spacing="3" text-anchor="middle">PRIMESTITCH ABA</text>
+    <text x="340" y="191" fill="#94A3B8" font-family="'JetBrains Mono', monospace" font-size="8" letter-spacing="2" text-anchor="middle">PRECISION BENCH NO. 1</text>
+
+    <!-- Handwheel / Balance Wheel on Far Right -->
+    <ellipse cx="560" cy="220" rx="26" ry="65" fill="#16233B" stroke="#FFC72C" stroke-width="3"/>
+    <ellipse cx="560" cy="220" rx="14" ry="38" fill="#0B1528" stroke="#C28B28" stroke-width="2"/>
+    <circle cx="560" cy="220" r="6" fill="#FFC72C"/>
+    <!-- Belt groove -->
+    <path d="M 560 155 C 575 155, 590 185, 590 220 C 590 255, 575 285, 560 285" stroke="#C28B28" stroke-width="2" stroke-dasharray="4 4"/>
+
+    <!-- Bobbin Winder Assembly on Top Right -->
+    <rect x="440" y="105" width="40" height="25" rx="3" fill="#16233B" stroke="#C28B28" stroke-width="1.5"/>
+    <circle cx="460" cy="112" r="6" fill="#FFC72C"/>
+
+    <!-- Spool Pin & Golden Thread Spool -->
+    <line x1="380" y1="130" x2="380" y2="70" stroke="#FFC72C" stroke-width="3" stroke-linecap="round"/>
+    <rect x="368" y="75" width="24" height="40" rx="3" fill="#FFC72C" stroke="#C28B28" stroke-width="1.5"/>
+    <!-- Thread winding lines -->
+    <line x1="368" y1="85" x2="392" y2="85" stroke="#855B14" stroke-width="1"/>
+    <line x1="368" y1="95" x2="392" y2="95" stroke="#855B14" stroke-width="1"/>
+    <line x1="368" y1="105" x2="392" y2="105" stroke="#855B14" stroke-width="1"/>
+
+    <!-- Thread Guide Trail from spool to tension disc to needle -->
+    <path d="M 380 70 C 350 40, 240 50, 210 95 L 210 130" stroke="#FFC72C" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+    <!-- Tension Regulator Dial -->
+    <circle cx="210" cy="180" r="16" fill="#16233B" stroke="#FFC72C" stroke-width="2"/>
+    <circle cx="210" cy="180" r="8" fill="#FFC72C"/>
+    <line x1="210" y1="168" x2="210" y2="174" stroke="#0B1528" stroke-width="2"/>
+
+    <!-- Thread Take-Up Lever -->
+    <path d="M 195 130 L 180 85 C 178 80, 182 75, 187 77 L 195 82 C 198 84, 199 88, 198 92 L 195 130" 
+          fill="#C28B28" stroke="#FFC72C" stroke-width="1.5"/>
+    <circle cx="184" cy="80" r="3" fill="#0B1528" stroke="#FFC72C" stroke-width="1"/>
+
+    <!-- Needle Head & Face Plate -->
+    <rect x="150" y="160" width="30" height="90" rx="2" fill="#16233B" stroke="#C28B28" stroke-width="1.5"/>
+    
+    <!-- Presser Bar & Foot -->
+    <line x1="195" y1="260" x2="195" y2="370" stroke="#94A3B8" stroke-width="4" stroke-linecap="round"/>
+    <!-- Presser Foot Shape -->
+    <path d="M 188 370 L 212 370 L 216 385 L 184 385 Z" fill="#CBD5E1" stroke="#94A3B8" stroke-width="1.5"/>
+
+    <!-- Needle Bar & Sharp Tailoring Needle -->
+    <line x1="220" y1="240" x2="220" y2="350" stroke="#E2E8F0" stroke-width="3" stroke-linecap="round"/>
+    <line x1="220" y1="350" x2="220" y2="384" stroke="url(#needleGlow)" stroke-width="2"/>
+    <circle cx="220" cy="378" r="1" fill="#FFC72C"/>
+
+    <!-- Active Thread Going Down Through Needle Eye to Seam -->
+    <path d="M 184 80 L 220 378 L 220 390 L 160 410" stroke="#FFC72C" stroke-width="1.5" stroke-dasharray="4 2"/>
+
+    <!-- Tailor Brass Shears resting nearby on table -->
+    <g transform="translate(60, 340) rotate(-25)">
+      <!-- Blade 1 -->
+      <path d="M 10 20 L 90 28 L 10 32 Z" fill="#CBD5E1" stroke="#94A3B8" stroke-width="1"/>
+      <!-- Blade 2 -->
+      <path d="M 10 32 L 90 26 L 10 38 Z" fill="#94A3B8" stroke="#64748B" stroke-width="1"/>
+      <!-- Pivot Bolt -->
+      <circle cx="35" cy="30" r="3.5" fill="#FFC72C" stroke="#C28B28" stroke-width="1"/>
+      <!-- Handles -->
+      <ellipse cx="2" cy="18" rx="8" ry="12" fill="none" stroke="#C28B28" stroke-width="3.5"/>
+      <ellipse cx="0" cy="42" rx="10" ry="14" fill="none" stroke="#C28B28" stroke-width="3.5"/>
+    </g>
+  </g>
+</svg>
+
