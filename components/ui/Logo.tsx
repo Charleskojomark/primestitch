@@ -59,14 +59,14 @@ const LOGO_CONFIG: Record<
   horizontal: {
     darkSrc: "/brand/logo-horizontal.png",
     lightSrc: "/brand/logo-horizontal-white.png",
-    aspectRatio: 733 / 340, // ~2.156
-    defaultHeight: 64,
+    aspectRatio: 663 / 195, // 3.400
+    defaultHeight: 36,
   },
   stacked: {
-    darkSrc: "/brand/logo-stacked-white-bg.png",
-    lightSrc: "/brand/logo-stacked-white-bg.png",
-    aspectRatio: 1699 / 926, // ~1.835
-    defaultHeight: 68,
+    darkSrc: "/brand/logo-stacked.png",
+    lightSrc: "/brand/logo-stacked-white.png",
+    aspectRatio: 500 / 333, // 1.502
+    defaultHeight: 64,
   },
   icon: {
     darkSrc: "/brand/logo-icon-white-bg.png",
@@ -78,7 +78,7 @@ const LOGO_CONFIG: Record<
   wordmark: {
     darkSrc: "/brand/logo-wordmark.png",
     lightSrc: "/brand/logo-wordmark-white.png",
-    aspectRatio: 757 / 330, // ~2.294
+    aspectRatio: 615 / 151, // ~4.073
     defaultHeight: 28,
   },
 };

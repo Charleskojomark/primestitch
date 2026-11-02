@@ -39,16 +39,15 @@ export function Header() {
         {/* Brand Horizontal Logo */}
         <Link
           href="/"
-          className="flex items-center group shrink-0 min-h-[48px] -ml-2 px-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-visible"
+          className="flex items-center group shrink-0 min-h-[48px] px-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           aria-label="PrimeStitch — Return to homepage"
         >
           <Logo
             variant="horizontal"
             tone="dark"
             priority
-            height={74}
-            className="overflow-visible"
-            imageClassName="h-[60px] sm:h-[68px] md:h-[74px] w-auto max-w-none -my-2 transition-transform duration-200 group-hover:scale-[1.02]"
+            height={38}
+            imageClassName="h-[34px] sm:h-[38px] w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
           />
         </Link>
 
