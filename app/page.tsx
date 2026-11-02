@@ -28,8 +28,23 @@ export default function HomePage() {
   const { designs, orders } = usePrimeStitch();
   const [calculatorDays, setCalculatorDays] = useState(7);
 
-  // Sample order for live hero teaser
-  const teaserOrder = orders.find((o) => o.id === "#PS-8492") || orders[0];
+  // Sample order for live hero teaser (shows real order if placed, or active atelier demo)
+  const teaserOrder = orders.find((o) => o.id === "#PS-8492") || orders[0] || {
+    id: "#PS-8492",
+    customerName: "Chidi Okafor",
+    guaranteedDeliveryDate: new Date(Date.now() + 6 * 86400000).toISOString(),
+    status: "Basting & First Stitch",
+    assignedTailorName: "Mazi Obinna K.",
+    items: [
+      {
+        designName: "Classic Senator Suit",
+        fabricName: "Midnight Navy Super 160s Wool",
+        colorName: "Midnight Navy",
+        quantity: 1,
+        unitPrice: 58000,
+      },
+    ],
+  };
   const calculatedPromise = calculateGuaranteedDelivery(calculatorDays);
 
   return (

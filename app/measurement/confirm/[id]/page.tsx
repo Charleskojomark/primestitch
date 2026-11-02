@@ -28,7 +28,7 @@ export default function ConfirmMeasurementPage() {
   const decodedId = decodeURIComponent(params.id as string);
   const targetId = decodedId.startsWith("#") ? decodedId : `#${decodedId}`;
 
-  const order = orders.find((o) => o.id === targetId) || orders[0];
+  const order = orders.find((o) => o.id === targetId);
 
   const [isConfirming, setIsConfirming] = useState(false);
   const [confirmedSuccess, setConfirmedSuccess] = useState(false);
@@ -36,7 +36,7 @@ export default function ConfirmMeasurementPage() {
   // Delivery date calculated starting today upon confirmation
   const deliveryCalc = calculateGuaranteedDelivery(7);
 
-  const measurements = order.items[0]?.measurements || {
+  const measurements = order?.items[0]?.measurements || {
     unit: "in" as const,
     chest: 42,
     shoulder: 19,
@@ -47,6 +47,24 @@ export default function ConfirmMeasurementPage() {
     thigh: 24,
     bicep: 15,
   };
+
+  if (!order) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center space-y-4">
+        <Card className="p-8 space-y-4">
+          <h2 className="text-xl font-bold font-display text-primary">Order Not Found</h2>
+          <p className="text-xs text-text-muted">
+            We couldn&apos;t find an active order matching {targetId}.
+          </p>
+          <div className="pt-2">
+            <Link href="/designs">
+              <Button size="md">Explore Top Designs &rarr;</Button>
+            </Link>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   const handleConfirm = () => {
     setIsConfirming(true);

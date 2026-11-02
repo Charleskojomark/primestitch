@@ -26,7 +26,16 @@ function SuccessContent() {
   const orderId = searchParams.get("orderId") || "#PS-8492";
   const { orders } = usePrimeStitch();
 
-  const order = orders.find((o) => o.id === orderId) || orders[0];
+  const fallbackOrder = {
+    id: orderId,
+    customerName: "Patron",
+    guaranteedDeliveryDate: new Date(Date.now() + 7 * 86400000).toISOString(),
+    items: [{ designName: "Bespoke Made-to-Measure Garment", fabricName: "Selected Fabric" }],
+    totalAmount: 0,
+    paymentStatus: "deposit_paid" as const,
+  };
+
+  const order = orders.find((o) => o.id === orderId) || orders[0] || fallbackOrder;
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12 md:py-16 space-y-8 animate-fadeIn">
