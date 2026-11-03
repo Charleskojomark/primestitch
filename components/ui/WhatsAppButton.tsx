@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import { MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +18,19 @@ export function WhatsAppButton({
   className,
   variant = "inline",
 }: WhatsAppButtonProps) {
+  const pathname = usePathname();
+
+  // Hide floating WhatsApp button on all admin and staff workstations to prevent UI overlap
+  if (
+    variant === "floating" &&
+    (pathname.startsWith("/admin") ||
+      pathname.startsWith("/tailor") ||
+      pathname.startsWith("/measurer") ||
+      pathname.startsWith("/staff"))
+  ) {
+    return null;
+  }
+
   const defaultText = orderId
     ? `Hello PrimeStitch! I'm inquiring about my order ${orderId}.`
     : `Hello PrimeStitch! I'd like to ask a question about made-to-measure tailoring.`;

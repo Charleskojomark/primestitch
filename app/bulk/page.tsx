@@ -21,6 +21,7 @@ import { Card } from "@/components/ui/Card";
 import { DeliveryBanner } from "@/components/ui/DeliveryBanner";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { BulkRosterItem } from "@/lib/types";
+import { INITIAL_DESIGNS } from "@/lib/data";
 
 export default function BulkAsoEbiPage() {
   const { createBulkRequest, designs } = usePrimeStitch();
@@ -69,7 +70,7 @@ export default function BulkAsoEbiPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const selDesign = designs.find((d) => d.id === designId) || designs[0];
+    const selDesign = designs.find((d) => d.id === designId) || designs[0] || INITIAL_DESIGNS[0];
     const newReq = createBulkRequest({
       groupName,
       occasion,

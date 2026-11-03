@@ -24,6 +24,7 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { MeasurementInput } from "@/components/ui/MeasurementInput";
 import { DeliveryBanner } from "@/components/ui/DeliveryBanner";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { INITIAL_DESIGNS } from "@/lib/data";
 
 export default function OrderPage() {
   const router = useRouter();
@@ -39,8 +40,9 @@ export default function OrderPage() {
     draftOrder.measurements?.unit || "in"
   );
 
+  const fallbackDesign = INITIAL_DESIGNS[0];
   const selectedDesign =
-    designs.find((d) => d.id === draftOrder.designId) || designs[0];
+    designs.find((d) => d.id === draftOrder.designId) || designs[0] || fallbackDesign;
 
   // Delivery calculation based on lead days
   const deliveryCalc = calculateGuaranteedDelivery(selectedDesign.standardLeadDays);

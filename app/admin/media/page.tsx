@@ -207,62 +207,53 @@ export default function AdminMediaPage() {
         </div>
       )}
 
-      {/* Top Header & Sub-Navigation */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-seam pb-6">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-seam pb-4">
         <div>
           <div className="flex items-center gap-2">
             <Badge variant="tape" size="sm">
-              Media &amp; Photographic Asset Registry
+              Lookbook Studio
             </Badge>
             <span className="text-xs font-mono text-text-muted">
-              IMAGES.MD SPECIFICATION // PERSISTENT OVERRIDES
+              ABA ATELIER • CATALOGUE DISPATCH
             </span>
           </div>
-          <h1 className="text-3xl font-extrabold font-display text-primary tracking-tight mt-1">
-            Media Manager &amp; Visual Studio
+          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-primary tracking-tight mt-1 text-balance">
+            Garment Studio &amp; Media
           </h1>
-          <p className="text-sm text-text-muted mt-1 max-w-2xl">
-            Manage every image across PrimeStitch. Upload custom brand photography, paste remote CDN
-            URLs, adjust accessibility alt text, or use authentic Aba atelier vector assets. Changes
-            persist to localStorage and propagate across all consumer and staff screens in real time.
+          <p className="text-xs sm:text-sm text-text-muted mt-1 text-pretty max-w-2xl">
+            Publish bespoke creations to the live catalogue with high-res photos and 360° video reels, or manage atelier visual assets.
           </p>
         </div>
-
       </div>
 
       {/* Studio View Mode Switcher */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-surface-muted p-2 rounded-md border border-border-seam">
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setActiveView("uploader")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-sm font-mono text-xs font-bold transition-all ${
-              activeView === "uploader"
-                ? "bg-primary text-white shadow-raised"
-                : "bg-surface-card text-on-surface hover:bg-white"
-            }`}
-          >
-            <UploadCloud className="w-4 h-4 text-accent-tape" />
-            <span>Publish Garment Lookbook</span>
-          </button>
+      <div className="flex items-center bg-surface-muted p-1 rounded-sm border border-border-seam w-full sm:w-auto self-start">
+        <button
+          type="button"
+          onClick={() => setActiveView("uploader")}
+          className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm font-mono text-xs font-bold transition-all min-h-[40px] ${
+            activeView === "uploader"
+              ? "bg-primary text-white shadow-subtle"
+              : "text-text-muted hover:text-primary hover:bg-surface-card"
+          }`}
+        >
+          <UploadCloud className="w-3.5 h-3.5 text-accent-tape shrink-0" />
+          <span>Publish Garment</span>
+        </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveView("registry")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-sm font-mono text-xs font-bold transition-all ${
-              activeView === "registry"
-                ? "bg-primary text-white shadow-raised"
-                : "bg-surface-card text-on-surface hover:bg-white"
-            }`}
-          >
-            <ImageIcon className="w-4 h-4 text-secondary" />
-            <span>Media Library & Assets ({filteredAssets.length})</span>
-          </button>
-        </div>
-
-        <Badge variant="verified" size="sm">
-          Atelier Media Vault Active
-        </Badge>
+        <button
+          type="button"
+          onClick={() => setActiveView("registry")}
+          className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm font-mono text-xs font-bold transition-all min-h-[40px] ${
+            activeView === "registry"
+              ? "bg-primary text-white shadow-subtle"
+              : "text-text-muted hover:text-primary hover:bg-surface-card"
+          }`}
+        >
+          <ImageIcon className="w-3.5 h-3.5 text-secondary shrink-0" />
+          <span>Asset Library ({filteredAssets.length})</span>
+        </button>
       </div>
 
       {activeView === "uploader" ? (
@@ -621,41 +612,36 @@ function GarmentLookbookUploader() {
       )}
 
       {/* Main Upload Form */}
-      <Card hasTapeTop className="p-6 sm:p-8 space-y-6">
-        <div className="border-b border-border-subtle pb-4 space-y-1">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold font-display text-primary flex items-center gap-2">
-              <UploadCloud className="w-5 h-5 text-accent-tape" />
-              <span>Publish Garment Lookbook (Photos, Video Reel, or Both)</span>
-            </h2>
-            <Badge variant="tape" size="sm">
-              Atelier Vault Active
-            </Badge>
-          </div>
-          <p className="text-xs text-text-muted">
-            Upload garment photography, short 360° video walkaround reels, or both. No complex garment names required—each outfit is assigned a clean visual style reference and published immediately.
+      <Card hasTapeTop className="p-4 sm:p-6 lg:p-8 space-y-6">
+        <div className="border-b border-border-subtle pb-3 space-y-1">
+          <h2 className="text-base sm:text-lg font-bold font-display text-primary flex items-center gap-2 text-balance">
+            <UploadCloud className="w-4 h-4 text-accent-tape shrink-0" />
+            <span>Publish Garment Lookbook</span>
+          </h2>
+          <p className="text-xs text-text-muted text-pretty">
+            Upload outfit photography, a 360° video drape reel, or both. Outfits are assigned an automatic visual style code and published immediately.
           </p>
         </div>
 
         <form onSubmit={handleUploadAndPublish} className="space-y-6">
           {/* File Dropzone Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* 1. Photo File Input */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary block">
-                  1. Garment Photography
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-baseline justify-between gap-1">
+                <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
+                  1. Outfit Photo
                 </label>
-                <span className="text-[10px] font-mono text-text-muted">Optional if uploading video</span>
+                <span className="text-[10px] font-mono text-text-muted">Optional if video uploaded</span>
               </div>
 
-              <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[200px] flex flex-col items-center justify-center">
+              <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[160px] sm:min-h-[190px] flex flex-col items-center justify-center">
                 {photoPreview ? (
                   <div className="space-y-2 w-full">
                     <img
                       src={photoPreview}
                       alt="Garment Preview"
-                      className="max-h-48 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle"
+                      className="max-h-44 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle"
                     />
                     <p className="text-[11px] font-mono text-text-muted truncate">
                       {photoFile?.name} ({(photoFile!.size / (1024 * 1024)).toFixed(2)} MB)
@@ -663,15 +649,15 @@ function GarmentLookbookUploader() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
-                      <Camera className="w-5 h-5" />
+                    <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+                      <Camera className="w-4 h-4" />
                     </div>
                     <div className="space-y-0.5">
                       <p className="text-xs font-bold text-primary font-mono">
-                        Click or drag &amp; drop outfit photo
+                        Select outfit photo
                       </p>
                       <p className="text-[11px] text-text-muted">
-                        JPG, PNG, WEBP (Recommended 3:4 portrait)
+                        JPG, PNG, WEBP (Portrait 3:4)
                       </p>
                     </div>
                   </div>
@@ -681,26 +667,27 @@ function GarmentLookbookUploader() {
                   accept="image/*"
                   onChange={handlePhotoChange}
                   className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                  aria-label="Upload outfit photo"
                 />
               </div>
             </div>
 
             {/* 2. Video Reel File Input */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-baseline justify-between gap-1">
                 <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
                   2. 360° Drape Video Reel
                 </label>
-                <span className="text-[10px] font-mono text-text-muted">Optional if uploading photo</span>
+                <span className="text-[10px] font-mono text-text-muted">Optional if photo uploaded</span>
               </div>
 
-              <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[200px] flex flex-col items-center justify-center">
+              <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[160px] sm:min-h-[190px] flex flex-col items-center justify-center">
                 {videoPreview ? (
                   <div className="space-y-2 w-full">
                     <video
                       src={videoPreview}
                       controls
-                      className="max-h-48 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle bg-black"
+                      className="max-h-44 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle bg-black"
                     />
                     <p className="text-[11px] font-mono text-text-muted truncate">
                       {videoFile?.name} ({(videoFile!.size / (1024 * 1024)).toFixed(2)} MB)
@@ -708,15 +695,15 @@ function GarmentLookbookUploader() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <div className="w-10 h-10 rounded-full bg-accent-tape/20 text-primary flex items-center justify-center mx-auto">
-                      <Film className="w-5 h-5" />
+                    <div className="w-9 h-9 rounded-full bg-accent-tape/20 text-primary flex items-center justify-center mx-auto">
+                      <Film className="w-4 h-4" />
                     </div>
                     <div className="space-y-0.5">
                       <p className="text-xs font-bold text-primary font-mono">
-                        Add motion drape / walkaround reel
+                        Add walkaround drape reel
                       </p>
                       <p className="text-[11px] text-text-muted">
-                        MP4, MOV, WEBM (10–30s walkaround clip)
+                        MP4, MOV, WEBM (10–30s walkaround)
                       </p>
                     </div>
                   </div>
@@ -726,14 +713,14 @@ function GarmentLookbookUploader() {
                   accept="video/*"
                   onChange={handleVideoChange}
                   className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                  aria-label="Upload 360 video drape reel"
                 />
               </div>
             </div>
           </div>
 
-          <div className="bg-surface-muted/60 p-3 rounded-sm border border-border-subtle text-[11px] font-mono text-text-muted flex items-center justify-between">
-            <span>Supported combinations: <strong>Photos only</strong>, <strong>Video reel only</strong>, or <strong>Both together</strong>.</span>
-            <Badge variant="verified" size="sm">Flexible Media</Badge>
+          <div className="bg-surface-muted/60 px-3.5 py-2.5 rounded-sm border border-border-subtle text-[11px] font-mono text-text-muted">
+            Flexible media: publish with <strong>photos only</strong>, <strong>video reel only</strong>, or <strong>both together</strong>.
           </div>
 
           {/* Garment Details Grid */}

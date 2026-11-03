@@ -20,19 +20,24 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { DeliveryBanner } from "@/components/ui/DeliveryBanner";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { INITIAL_DESIGNS } from "@/lib/data";
 
 export default function DesignDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { designs, updateDraftOrder } = usePrimeStitch();
 
-  const design = designs.find((d) => d.id === params.id) || designs[0];
+  const fallbackDesign = INITIAL_DESIGNS[0];
+  const design = designs.find((d) => d.id === params.id) || designs[0] || fallbackDesign;
+
+  const fabrics = design?.fabrics && design.fabrics.length > 0 ? design.fabrics : fallbackDesign.fabrics;
+  const availableColors = design?.availableColors && design.availableColors.length > 0 ? design.availableColors : fallbackDesign.availableColors;
 
   const [selectedFabricId, setSelectedFabricId] = useState<string>(
-    design.fabrics[0]?.id || ""
+    fabrics[0]?.id || ""
   );
   const [selectedColor, setSelectedColor] = useState<{ name: string; hex: string }>(
-    design.availableColors[0] || { name: "Default", hex: "#0B1528" }
+    availableColors[0] || { name: "Default", hex: "#0B1528" }
   );
   const [quantity, setQuantity] = useState<number>(1);
   
@@ -44,14 +49,16 @@ export default function DesignDetailPage() {
   );
 
   const selectedFabric =
-    design.fabrics.find((f) => f.id === selectedFabricId) || design.fabrics[0];
+    fabrics.find((f) => f.id === selectedFabricId) || fabrics[0];
 
   // Dynamic calculated price
-  const unitPrice = design.startingPrice + (selectedFabric?.priceModifier || 0);
+  const basePrice = design?.startingPrice ?? fallbackDesign.startingPrice;
+  const unitPrice = basePrice + (selectedFabric?.priceModifier || 0);
   const totalPrice = unitPrice * quantity;
 
   // Exact delivery date calculation
-  const calculatedPromise = calculateGuaranteedDelivery(design.standardLeadDays);
+  const leadDays = design?.standardLeadDays ?? fallbackDesign.standardLeadDays;
+  const calculatedPromise = calculateGuaranteedDelivery(leadDays);
 
   const handleStartOrder = () => {
     updateDraftOrder({

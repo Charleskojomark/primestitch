@@ -124,6 +124,23 @@ p, span, label {
   min-width: 48px;
 }
 
+/* Universal scrollbar hiding for horizontal chip rails and tabs */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar,
+[data-no-scrollbar]::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+.no-scrollbar,
+.scrollbar-none,
+[data-no-scrollbar] {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
 /* Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

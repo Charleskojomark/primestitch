@@ -44,7 +44,7 @@ export default function DesignsPage() {
       <div className="sticky top-16 z-30 bg-surface/95 backdrop-blur-md py-2 -mx-4 px-4 sm:mx-0 sm:px-0 border-y border-border-seam/80">
         <div className="flex items-center justify-between gap-3">
           {/* Horizontal scrollable chips */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth py-1 shrink-0 max-w-full">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth py-1 shrink-0 max-w-full">
             {categories.map((cat) => {
               const count = cat === "All" ? designs.length : designs.filter((d) => d.category === cat).length;
               const isSelected = selectedCategory === cat;

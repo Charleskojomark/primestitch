@@ -162,13 +162,34 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
       if (storedOrders) setOrders(JSON.parse(storedOrders));
 
       const storedDesigns = localStorage.getItem(STORAGE_KEY_DESIGNS);
-      if (storedDesigns) setDesigns(JSON.parse(storedDesigns));
+      if (storedDesigns) {
+        const parsed = JSON.parse(storedDesigns);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setDesigns(parsed);
+        } else {
+          setDesigns(INITIAL_DESIGNS);
+        }
+      }
 
       const storedTailors = localStorage.getItem(STORAGE_KEY_TAILORS);
-      if (storedTailors) setTailors(JSON.parse(storedTailors));
+      if (storedTailors) {
+        const parsed = JSON.parse(storedTailors);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setTailors(parsed);
+        } else {
+          setTailors(INITIAL_TAILORS);
+        }
+      }
 
       const storedMeasurers = localStorage.getItem(STORAGE_KEY_MEASURERS);
-      if (storedMeasurers) setMeasurers(JSON.parse(storedMeasurers));
+      if (storedMeasurers) {
+        const parsed = JSON.parse(storedMeasurers);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMeasurers(parsed);
+        } else {
+          setMeasurers(INITIAL_MEASURERS);
+        }
+      }
 
       const storedMedia = localStorage.getItem(STORAGE_KEY_MEDIA);
       if (storedMedia) setMediaAssets(JSON.parse(storedMedia));

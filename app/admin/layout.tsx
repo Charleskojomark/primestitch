@@ -114,13 +114,13 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-surface-muted/30 pb-16">
-      {/* Sticky Mobile & Desktop Admin Command Bar */}
-      <div className="sticky top-16 z-30 bg-surface-card border-b border-border-seam shadow-subtle">
+      {/* Admin Command Bar: Relative on mobile to prevent double sticky headers & clipping; sticky on desktop */}
+      <div className="relative border-b border-border-seam bg-surface-card shadow-subtle md:sticky md:top-16 md:z-30">
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           {/* Top Row: User identity & Logout */}
-          <div className="flex items-center justify-between py-2.5 border-b border-border-subtle/60 text-xs">
+          <div className="flex items-center justify-between py-2 border-b border-border-subtle/60 text-xs">
             <div className="flex items-center gap-2 min-w-0">
-              <Badge variant="tape" size="sm" className="shrink-0 font-bold">
+              <Badge variant="tape" size="sm" className="shrink-0 font-bold text-[10px] px-2 py-0.5">
                 OPERATIONS ADMIN
               </Badge>
               <div className="flex items-center gap-1.5 font-mono text-[11px] text-text-muted truncate">
@@ -140,8 +140,8 @@ export default function AdminLayout({
             </button>
           </div>
 
-          {/* Bottom Row: Mobile-First Scrollable Nav Tabs */}
-          <nav className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-2 -mx-1 px-1 font-mono text-xs">
+          {/* Bottom Row: Mobile-First Nav Tabs with Zero Visible Scrollbar */}
+          <nav className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar scrollbar-none py-2 -mx-1 px-1 font-mono text-xs [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
