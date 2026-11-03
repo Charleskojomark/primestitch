@@ -33,31 +33,23 @@ export default function AdminMeasurementsPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8 space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-seam pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-seam pb-4">
         <div>
           <Link
             href="/admin"
             className="inline-flex items-center gap-1.5 text-xs font-mono text-text-muted hover:text-primary transition-colors py-1"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to Admin Dashboard</span>
+            <span>Back to Dashboard</span>
           </Link>
-          <h1 className="text-3xl font-extrabold font-display text-primary tracking-tight mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-primary tracking-tight mt-1">
             Doorstep Measurement Appointments
           </h1>
-        </div>
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 font-mono text-xs max-w-full">
-          <Link href="/admin/orders" className="shrink-0">
-            <Button variant="outline" size="sm" className="whitespace-nowrap">Orders</Button>
-          </Link>
-          <Link href="/admin/team" className="shrink-0">
-            <Button variant="outline" size="sm" className="whitespace-nowrap">Tailors</Button>
-          </Link>
-          <Link href="/admin/media" className="shrink-0">
-            <Button variant="outline" size="sm" className="whitespace-nowrap">Media Assets</Button>
-          </Link>
+          <p className="text-xs text-text-muted mt-0.5">
+            Coordinate certified mobile fitters across Aba and regional corridors.
+          </p>
         </div>
       </div>
 

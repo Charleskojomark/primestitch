@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { role, staffId, passcode } = await req.json();
+    const { role, staffId, passcode, email } = await req.json();
 
     if (!role || !["admin", "tailor", "measurer"].includes(role)) {
       return NextResponse.json({ error: "Invalid role specified" }, { status: 400 });
@@ -63,7 +63,16 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ success: true, role, staffId });
+    if (email) {
+      cookieStore.set("primestitch_staff_email", email.trim(), {
+        path: "/",
+        httpOnly: false,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+
+    return NextResponse.json({ success: true, role, staffId, email });
   } catch (err: any) {
     return NextResponse.json({ error: err.message || "Failed to set session" }, { status: 500 });
   }
@@ -73,5 +82,6 @@ export async function DELETE() {
   const cookieStore = cookies();
   cookieStore.delete("primestitch_role");
   cookieStore.delete("primestitch_staff_id");
+  cookieStore.delete("primestitch_staff_email");
   return NextResponse.json({ success: true });
 }

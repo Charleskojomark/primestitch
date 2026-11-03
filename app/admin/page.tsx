@@ -43,106 +43,89 @@ export default function AdminDashboardPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8 space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-seam pb-6">
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-sm bg-surface-muted flex items-center justify-center border border-border-subtle shrink-0 mt-0.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-seam pb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-sm bg-surface-card flex items-center justify-center border border-border-subtle shrink-0 shadow-subtle">
             <Logo variant="icon" tone="dark" height={24} />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <Badge variant="tape" size="sm">
-                Atelier Command Center
+                Atelier Command
               </Badge>
-              <span className="text-xs font-mono text-text-muted">ABA ATELIER • NATIONWIDE DISPATCH</span>
+              <span className="text-[10px] sm:text-xs font-mono text-text-muted">ABA ATELIER • NATIONWIDE</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-primary tracking-tight mt-1">
-              Production & Delivery SLA Dashboard
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold font-display text-primary tracking-tight mt-0.5">
+              Production &amp; SLA Dashboard
             </h1>
           </div>
         </div>
 
-        {/* Navigation Tabs to sub-admin views (responsive horizontal rail on mobile) */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 font-mono text-xs max-w-full">
-          <Link href="/admin/orders" className="shrink-0">
-            <Button variant="outline" size="sm" className="whitespace-nowrap">
-              All Orders ({orders.length})
-            </Button>
-          </Link>
-          <Link href="/admin/measurements" className="shrink-0">
-            <Button variant="outline" size="sm" className="whitespace-nowrap">
-              Bookings ({bookings.length})
-            </Button>
-          </Link>
-          <Link href="/admin/team" className="shrink-0">
-            <Button variant="outline" size="sm" className="whitespace-nowrap">
-              Team & Benches ({tailors.length})
-            </Button>
-          </Link>
-          <Link href="/admin/media" className="shrink-0">
-            <Button variant="outline" size="sm" className="whitespace-nowrap">
-              Media & Assets
-            </Button>
-          </Link>
+        <div className="flex items-center gap-2 self-start sm:self-auto text-xs font-mono">
+          <span className="text-accent-emerald font-bold flex items-center gap-1.5 bg-accent-emerald/10 px-2.5 py-1 rounded-sm border border-accent-emerald/20 text-[11px]">
+            <span className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
+            Live Pipeline Active
+          </span>
         </div>
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         {/* On-Time Delivery Rate */}
-        <Card className="p-5 space-y-2 border-t-4 border-t-accent-emerald">
+        <Card className="p-3.5 sm:p-5 space-y-1.5 border-t-4 border-t-accent-emerald shadow-subtle">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-text-muted">On-Time SLA Rate</span>
-            <TrendingUp className="w-4 h-4 text-accent-emerald" />
+            <span className="text-[10px] sm:text-xs font-mono uppercase text-text-muted">On-Time SLA</span>
+            <TrendingUp className="w-4 h-4 text-accent-emerald shrink-0" />
           </div>
-          <div className="text-3xl font-extrabold font-mono text-primary tabular-nums">
+          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-primary tabular-nums">
             {onTimeRate}%
           </div>
-          <span className="text-[11px] text-accent-emerald font-semibold block">
-            Target: &gt;98% guaranteed handover
+          <span className="text-[10px] sm:text-[11px] text-accent-emerald font-semibold block truncate">
+            Target: &gt;98% handover
           </span>
         </Card>
 
         {/* Active In-Production */}
-        <Card className="p-5 space-y-2 border-t-4 border-t-primary">
+        <Card className="p-3.5 sm:p-5 space-y-1.5 border-t-4 border-t-primary shadow-subtle">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-text-muted">Active On Bench</span>
-            <Scissors className="w-4 h-4 text-primary -rotate-45" />
+            <span className="text-[10px] sm:text-xs font-mono uppercase text-text-muted">Active On Bench</span>
+            <Scissors className="w-4 h-4 text-primary -rotate-45 shrink-0" />
           </div>
-          <div className="text-3xl font-extrabold font-mono text-primary tabular-nums">
+          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-primary tabular-nums">
             {orders.filter((o) => o.status !== "Delivered").length}
           </div>
-          <span className="text-[11px] text-text-muted font-mono block">
-            Across 5 master tailors
+          <span className="text-[10px] sm:text-[11px] text-text-muted font-mono block truncate">
+            Across 5 master benches
           </span>
         </Card>
 
         {/* At Risk Orders */}
-        <Card className="p-5 space-y-2 border-t-4 border-t-accent-tape">
+        <Card className="p-3.5 sm:p-5 space-y-1.5 border-t-4 border-t-accent-tape shadow-subtle">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-text-muted">At-Risk Orders</span>
-            <AlertTriangle className="w-4 h-4 text-amber-600" />
+            <span className="text-[10px] sm:text-xs font-mono uppercase text-text-muted">At-Risk</span>
+            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
           </div>
-          <div className="text-3xl font-extrabold font-mono text-amber-700 tabular-nums">
+          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-amber-700 tabular-nums">
             {atRiskOrders.length}
           </div>
-          <span className="text-[11px] text-amber-700 font-semibold block">
-            Bench attention required
+          <span className="text-[10px] sm:text-[11px] text-amber-700 font-semibold block truncate">
+            Due &lt;24 hours
           </span>
         </Card>
 
-        {/* Late Orders - Highlighted in ERROR COLOR */}
-        <Card className="p-5 space-y-2 border-t-4 border-t-error bg-error/5">
+        {/* Late Orders */}
+        <Card className="p-3.5 sm:p-5 space-y-1.5 border-t-4 border-t-error bg-error/5 shadow-subtle">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-error font-bold">Late Orders SLA</span>
-            <AlertCircle className="w-4 h-4 text-error" />
+            <span className="text-[10px] sm:text-xs font-mono uppercase text-error font-bold">Late Orders</span>
+            <AlertCircle className="w-4 h-4 text-error shrink-0" />
           </div>
-          <div className="text-3xl font-extrabold font-mono text-error tabular-nums">
+          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-error tabular-nums">
             {lateOrders.length}
           </div>
-          <span className="text-[11px] text-error font-bold block">
-            Automatic credit triggered
+          <span className="text-[10px] sm:text-[11px] text-error font-bold block truncate">
+            Auto-credit alert
           </span>
         </Card>
       </div>
@@ -232,23 +215,29 @@ export default function AdminDashboardPage() {
       )}
 
       {/* 9 Stages Visual Distribution */}
-      <Card className="p-6 space-y-4">
-        <h2 className="text-sm font-bold font-mono uppercase tracking-wider text-primary">
-          Orders By Production Stage (Active Pipeline)
-        </h2>
+      <Card className="p-4 sm:p-6 space-y-3 shadow-subtle">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs sm:text-sm font-bold font-mono uppercase tracking-wider text-primary">
+            Orders By Production Stage (Active Pipeline)
+          </h2>
+          <span className="text-[10px] font-mono text-text-muted hidden sm:inline">
+            Stages 1 to 9 Handover
+          </span>
+        </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-2">
-          {STAGES.map((stg) => {
+        {/* Responsive: Swipeable rail on mobile, neat 9-col grid on desktop */}
+        <div className="flex items-stretch gap-2 overflow-x-auto scroll-touch no-scrollbar pb-1 md:grid md:grid-cols-9">
+          {STAGES.map((stg, idx) => {
             const count = stageCounts[stg] || 0;
             return (
               <div
                 key={stg}
-                className="p-3 bg-surface-muted rounded-sm border border-border-subtle text-center space-y-1"
+                className="p-2.5 sm:p-3 bg-surface-muted rounded-sm border border-border-subtle text-center space-y-1 shrink-0 w-24 sm:w-auto min-w-[85px]"
               >
-                <span className="text-[10px] font-mono uppercase text-text-muted block truncate">
-                  {stg}
+                <span className="text-[9px] font-mono uppercase text-text-muted block truncate font-bold">
+                  {idx + 1}. {stg}
                 </span>
-                <span className="text-xl font-bold font-mono text-primary tabular-nums">
+                <span className="text-lg sm:text-xl font-bold font-mono text-primary tabular-nums block">
                   {count}
                 </span>
               </div>

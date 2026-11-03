@@ -292,6 +292,7 @@ export const INITIAL_TAILORS: Tailor[] = [
   {
     id: "tl-01",
     name: "Master Tunde Adeleke",
+    email: "tunde.adeleke@primestitch.com",
     area: "Aba Master Atelier (Factory Road)",
     specialty: "Bespoke Suiting & Agbada Architecture",
     currentWorkload: 8,
@@ -305,6 +306,7 @@ export const INITIAL_TAILORS: Tailor[] = [
   {
     id: "tl-02",
     name: "Chidi Okafor",
+    email: "chidi.okafor@primestitch.com",
     area: "Aba Artisan Cluster (Ariaria)",
     specialty: "Senator Cuts & Pattern Drafting",
     currentWorkload: 6,
@@ -318,6 +320,7 @@ export const INITIAL_TAILORS: Tailor[] = [
   {
     id: "tl-03",
     name: "Amina Bello",
+    email: "amina.bello@primestitch.com",
     area: "Aba Heritage Studio (Eziukwu)",
     specialty: "Hand Embroidery & Structural Dresses",
     currentWorkload: 9,
@@ -331,6 +334,7 @@ export const INITIAL_TAILORS: Tailor[] = [
   {
     id: "tl-04",
     name: "Femi Balogun",
+    email: "femi.balogun@primestitch.com",
     area: "Aba Industrial Bench (Umungasi)",
     specialty: "Traditional Kaftans & Seam Construction",
     currentWorkload: 4,
@@ -344,6 +348,7 @@ export const INITIAL_TAILORS: Tailor[] = [
   {
     id: "tl-05",
     name: "Segun Ogundimu",
+    email: "segun.ogundimu@primestitch.com",
     area: "Aba Express Unit (Brass Junction)",
     specialty: "Corporate Uniforms & Rapid Finishing",
     currentWorkload: 7,
@@ -360,6 +365,7 @@ export const INITIAL_MEASURERS: Measurer[] = [
   {
     id: "ms-01",
     name: "Folake Davies",
+    email: "folake.davies@primestitch.com",
     area: "Aba, Umuahia & Owerri Hub",
     avatar: "/images/measurers/ms-folake.svg",
     avatarAlt: "Portrait of Certified Doorstep Measurer Folake Davies with laser measuring rule and fabric samples in the South East",
@@ -371,6 +377,7 @@ export const INITIAL_MEASURERS: Measurer[] = [
   {
     id: "ms-02",
     name: "Kunle Williams",
+    email: "kunle.williams@primestitch.com",
     area: "Port Harcourt & Enugu Corridors",
     avatar: "/images/measurers/ms-kunle.svg",
     avatarAlt: "Portrait of Doorstep Master Fitter Kunle Williams on client fitting appointment in Port Harcourt",
@@ -382,6 +389,7 @@ export const INITIAL_MEASURERS: Measurer[] = [
   {
     id: "ms-03",
     name: "Zainab Alabi",
+    email: "zainab.alabi@primestitch.com",
     area: "Lagos & Western Dispatch",
     avatar: "/images/measurers/ms-zainab.svg",
     avatarAlt: "Portrait of Mobile Fitter Zainab Alabi holding cloth measuring tape on doorstep fitting in Lagos",

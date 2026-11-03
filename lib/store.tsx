@@ -79,6 +79,7 @@ interface PrimeStitchContextType {
   draftOrder: DraftOrderState;
   staffRole: "admin" | "tailor" | "measurer" | null;
   activeStaffId: string | null;
+  staffEmail: string | null;
   mediaAssets: MediaAsset[];
 
   // Actions
@@ -101,8 +102,11 @@ interface PrimeStitchContextType {
   resetMediaAsset: (id: string) => void;
   resetAllMediaAssets: () => void;
   addNewDesign: (design: Design) => void;
-  loginStaff: (role: "admin" | "tailor" | "measurer", staffId?: string) => void;
+  loginStaff: (role: "admin" | "tailor" | "measurer", staffId?: string, email?: string) => void;
   logoutStaff: () => void;
+  linkStaffEmail: (role: "admin" | "tailor" | "measurer", staffId: string, email: string) => void;
+  updateTailorEmail: (tailorId: string, email: string) => void;
+  updateMeasurerEmail: (measurerId: string, email: string) => void;
   resetAllToSeed: () => void;
 }
 
@@ -148,6 +152,7 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
   const [draftOrder, setDraftOrder] = useState<DraftOrderState>(DEFAULT_DRAFT);
   const [staffRole, setStaffRole] = useState<"admin" | "tailor" | "measurer" | null>(null);
   const [activeStaffId, setActiveStaffId] = useState<string | null>(null);
+  const [staffEmail, setStaffEmail] = useState<string | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Hydrate from localStorage once mounted
@@ -185,6 +190,7 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
         const staffObj = JSON.parse(storedStaff);
         setStaffRole(staffObj.role);
         setActiveStaffId(staffObj.staffId);
+        if (staffObj.email) setStaffEmail(staffObj.email);
       }
     } catch (e) {
       console.warn("Failed to parse localStorage data", e);
@@ -589,31 +595,78 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
     );
   };
 
-  const loginStaff = (role: "admin" | "tailor" | "measurer", staffId?: string) => {
+  const updateTailorEmail = (tailorId: string, email: string) => {
+    setTailors((prev) =>
+      prev.map((t) => (t.id === tailorId ? { ...t, email: email.trim() } : t))
+    );
+  };
+
+  const updateMeasurerEmail = (measurerId: string, email: string) => {
+    setMeasurers((prev) =>
+      prev.map((m) => (m.id === measurerId ? { ...m, email: email.trim() } : m))
+    );
+  };
+
+  const linkStaffEmail = (role: "admin" | "tailor" | "measurer", staffId: string, email: string) => {
+    const cleanEmail = email.trim();
+    setStaffEmail(cleanEmail);
+
+    if (role === "tailor") {
+      updateTailorEmail(staffId, cleanEmail);
+    } else if (role === "measurer") {
+      updateMeasurerEmail(staffId, cleanEmail);
+    }
+
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY_STAFF);
+      const parsed = stored ? JSON.parse(stored) : {};
+      localStorage.setItem(
+        STORAGE_KEY_STAFF,
+        JSON.stringify({ ...parsed, role, staffId, email: cleanEmail })
+      );
+    } catch (e) {}
+
+    // Persist to server session cookies
+    fetch("/api/auth/staff-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role, staffId, email: cleanEmail }),
+    }).catch(() => {});
+  };
+
+  const loginStaff = (role: "admin" | "tailor" | "measurer", staffId?: string, email?: string) => {
     const finalStaffId = staffId || (role === "tailor" ? "tl-01" : role === "measurer" ? "ms-01" : "admin-01");
     setStaffRole(role);
     setActiveStaffId(finalStaffId);
+    if (email) {
+      setStaffEmail(email.trim());
+      if (role === "tailor") updateTailorEmail(finalStaffId, email);
+      if (role === "measurer") updateMeasurerEmail(finalStaffId, email);
+    }
+
     try {
       localStorage.setItem(
         STORAGE_KEY_STAFF,
         JSON.stringify({
           role,
           staffId: finalStaffId,
+          email: email?.trim(),
         })
       );
     } catch (e) {}
 
-    // Set HTTP session cookie for Next.js Middleware RBAC
+    // Set HTTP session cookie for server authorization
     fetch("/api/auth/staff-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ role, staffId: finalStaffId }),
+      body: JSON.stringify({ role, staffId: finalStaffId, email: email?.trim() }),
     }).catch(() => {});
   };
 
   const logoutStaff = () => {
     setStaffRole(null);
     setActiveStaffId(null);
+    setStaffEmail(null);
     try {
       localStorage.removeItem(STORAGE_KEY_STAFF);
     } catch (e) {}
@@ -729,6 +782,7 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
         draftOrder,
         staffRole,
         activeStaffId,
+        staffEmail,
         updateDraftOrder,
         resetDraftOrder,
         createOrderFromDraft,
@@ -745,6 +799,9 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
         addNewDesign,
         loginStaff,
         logoutStaff,
+        linkStaffEmail,
+        updateTailorEmail,
+        updateMeasurerEmail,
         resetAllToSeed,
       }}
     >

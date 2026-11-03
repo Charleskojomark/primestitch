@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import { usePrimeStitch } from "@/lib/store";
-import { Scissors, ShieldCheck, Ruler, Lock, AlertCircle, ArrowRight, KeyRound } from "lucide-react";
+import { Scissors, ShieldCheck, Ruler, Lock, AlertCircle, ArrowRight, KeyRound, Mail, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
@@ -13,7 +14,8 @@ import { Logo } from "@/components/ui/Logo";
 export default function StaffLoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { loginStaff, staffRole, logoutStaff, tailors, measurers } = usePrimeStitch();
+  const { user } = useUser();
+  const { loginStaff, staffRole, staffEmail, logoutStaff, tailors, measurers } = usePrimeStitch();
 
   const redirectTarget = searchParams.get("redirect");
   const authError = searchParams.get("error");
@@ -23,25 +25,49 @@ export default function StaffLoginPage() {
     defaultRole || "admin"
   );
   const [selectedStaffId, setSelectedStaffId] = useState<string>("admin-01");
+  const [email, setEmail] = useState<string>("");
   const [passcode, setPasscode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
+  // Sync default staff ID and email
   useEffect(() => {
     if (defaultRole) {
       setSelectedRole(defaultRole);
-      if (defaultRole === "admin") setSelectedStaffId("admin-01");
-      if (defaultRole === "tailor") setSelectedStaffId(tailors[0]?.id || "tl-01");
-      if (defaultRole === "measurer") setSelectedStaffId(measurers[0]?.id || "ms-01");
     }
-  }, [defaultRole, tailors, measurers]);
+  }, [defaultRole]);
+
+  useEffect(() => {
+    // Auto-detect email from Clerk or current staff
+    if (user?.primaryEmailAddress?.emailAddress) {
+      setEmail(user.primaryEmailAddress.emailAddress);
+    } else if (staffEmail) {
+      setEmail(staffEmail);
+    } else if (selectedRole === "tailor") {
+      const currentTailor = tailors.find((t) => t.id === selectedStaffId);
+      if (currentTailor?.email) setEmail(currentTailor.email);
+    } else if (selectedRole === "measurer") {
+      const currentMeasurer = measurers.find((m) => m.id === selectedStaffId);
+      if (currentMeasurer?.email) setEmail(currentMeasurer.email);
+    } else if (selectedRole === "admin") {
+      setEmail("admin@primestitch.com");
+    }
+  }, [selectedRole, selectedStaffId, user, staffEmail, tailors, measurers]);
 
   const handleRoleSelect = (role: "admin" | "tailor" | "measurer") => {
     setSelectedRole(role);
     setLoginError(null);
-    if (role === "admin") setSelectedStaffId("admin-01");
-    if (role === "tailor") setSelectedStaffId(tailors[0]?.id || "tl-01");
-    if (role === "measurer") setSelectedStaffId(measurers[0]?.id || "ms-01");
+    if (role === "admin") {
+      setSelectedStaffId("admin-01");
+    } else if (role === "tailor") {
+      const firstTailor = tailors[0];
+      setSelectedStaffId(firstTailor?.id || "tl-01");
+      if (firstTailor?.email) setEmail(firstTailor.email);
+    } else if (role === "measurer") {
+      const firstMeasurer = measurers[0];
+      setSelectedStaffId(firstMeasurer?.id || "ms-01");
+      if (firstMeasurer?.email) setEmail(firstMeasurer.email);
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -50,6 +76,11 @@ export default function StaffLoginPage() {
 
     if (!passcode.trim()) {
       setLoginError("Please enter the authorization passcode for this workspace.");
+      return;
+    }
+
+    if (!email.trim() || !email.includes("@")) {
+      setLoginError("Please enter a valid staff email address to link to this session.");
       return;
     }
 
@@ -63,6 +94,7 @@ export default function StaffLoginPage() {
           role: selectedRole,
           staffId: selectedStaffId,
           passcode: passcode.trim(),
+          email: email.trim(),
         }),
       });
 
@@ -74,8 +106,8 @@ export default function StaffLoginPage() {
         return;
       }
 
-      // Set local store state
-      loginStaff(selectedRole, selectedStaffId);
+      // Set local store state with linked email
+      loginStaff(selectedRole, selectedStaffId, email.trim());
 
       // Redirect to intended destination or role dashboard
       if (redirectTarget) {
@@ -95,21 +127,21 @@ export default function StaffLoginPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-12 space-y-8 animate-fadeIn">
+    <div className="max-w-xl mx-auto px-4 py-8 sm:py-12 space-y-6 sm:space-y-8 animate-fadeIn">
       <div className="text-center space-y-2">
         <div className="flex justify-center mb-1">
           <Link href="/" aria-label="PrimeStitch">
-            <Logo variant="icon" tone="dark" height={32} />
+            <Logo variant="icon" tone="dark" height={36} />
           </Link>
         </div>
         <Badge variant="tape" size="sm">
           Internal Atelier Workspace
         </Badge>
-        <h1 className="text-3xl font-extrabold font-display text-primary tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-primary tracking-tight">
           Staff Operational Access
         </h1>
-        <p className="text-xs sm:text-sm text-text-muted">
-          Authorized personnel only. Enter your atelier credentials to manage order pipelines, update cutting benches, or record measurements.
+        <p className="text-xs sm:text-sm text-text-muted max-w-md mx-auto">
+          Authorized personnel only. Link your staff email and enter your atelier passcode to access pipelines, cutting benches, or measurements.
         </p>
       </div>
 
@@ -135,7 +167,7 @@ export default function StaffLoginPage() {
         </div>
       )}
 
-      <Card hasTapeTop className="p-6 md:p-8 space-y-6 shadow-card">
+      <Card hasTapeTop className="p-5 sm:p-8 space-y-6 shadow-card">
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-3">
             <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary block">
@@ -169,7 +201,7 @@ export default function StaffLoginPage() {
                   <div
                     key={r.id}
                     onClick={() => handleRoleSelect(r.id as any)}
-                    className={`p-4 rounded-sm border cursor-pointer transition-all select-none ${
+                    className={`p-3.5 sm:p-4 rounded-sm border cursor-pointer transition-all select-none ${
                       isSelected
                         ? "bg-primary text-white border-primary shadow-subtle ring-2 ring-primary/20"
                         : "bg-surface-card text-on-surface border-border-seam hover:border-slate-400"
@@ -194,8 +226,12 @@ export default function StaffLoginPage() {
               </label>
               <select
                 value={selectedStaffId}
-                onChange={(e) => setSelectedStaffId(e.target.value)}
-                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-mono"
+                onChange={(e) => {
+                  setSelectedStaffId(e.target.value);
+                  const matched = tailors.find((t) => t.id === e.target.value);
+                  if (matched?.email) setEmail(matched.email);
+                }}
+                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-mono text-xs"
               >
                 {tailors.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -213,8 +249,12 @@ export default function StaffLoginPage() {
               </label>
               <select
                 value={selectedStaffId}
-                onChange={(e) => setSelectedStaffId(e.target.value)}
-                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-mono"
+                onChange={(e) => {
+                  setSelectedStaffId(e.target.value);
+                  const matched = measurers.find((m) => m.id === e.target.value);
+                  if (matched?.email) setEmail(matched.email);
+                }}
+                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-mono text-xs"
               >
                 {measurers.map((m) => (
                   <option key={m.id} value={m.id}>
@@ -225,14 +265,39 @@ export default function StaffLoginPage() {
             </div>
           )}
 
+          {/* Staff Email Linking Input */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-secondary" />
+                <span>2. Staff Email Address (Linked Identity):</span>
+              </label>
+              <span className="text-[10px] font-mono text-accent-emerald font-bold">Email Linked</span>
+            </div>
+            <div className="relative">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="e.g. tailor@primestitch.com or your email"
+                className="w-full h-12 pl-10 pr-4 border border-border-seam rounded-sm bg-surface-card font-mono text-xs text-primary focus:outline-none focus:border-primary"
+              />
+              <Mail className="w-4 h-4 text-text-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+            <p className="text-[11px] text-text-muted font-mono">
+              All notifications and operational actions will be tied to this verified staff email.
+            </p>
+          </div>
+
           {/* Passcode Security Input */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
                 <KeyRound className="w-3.5 h-3.5 text-secondary" />
-                <span>2. Staff Authorization Passcode:</span>
+                <span>3. Staff Authorization Passcode:</span>
               </label>
-              <span className="text-[11px] font-mono text-text-muted">Security Guard Active</span>
+              <span className="text-[10px] font-mono text-text-muted">Security Guard Active</span>
             </div>
             <div className="relative">
               <input
@@ -254,7 +319,7 @@ export default function StaffLoginPage() {
             size="lg"
             type="submit"
             disabled={isSubmitting}
-            className="w-full font-bold shadow-raised"
+            className="w-full font-bold shadow-raised min-h-[46px]"
             rightIcon={<ArrowRight className="w-4 h-4" />}
           >
             {isSubmitting ? "Verifying Authorization..." : `Enter ${selectedRole.toUpperCase()} Workspace`}
@@ -262,9 +327,10 @@ export default function StaffLoginPage() {
         </form>
 
         {staffRole && (
-          <div className="pt-4 border-t border-border-subtle flex items-center justify-between text-xs font-mono">
+          <div className="pt-4 border-t border-border-subtle flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-mono">
             <span className="text-text-muted">
-              Active Session: <strong className="text-primary uppercase">{staffRole}</strong>
+              Active: <strong className="text-primary uppercase">{staffRole}</strong>
+              {staffEmail && <span className="ml-1 text-primary">({staffEmail})</span>}
             </span>
             <button
               type="button"

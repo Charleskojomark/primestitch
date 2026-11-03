@@ -85,6 +85,7 @@ export interface MeasurementSet {
 export interface Tailor {
   id: string;
   name: string;
+  email?: string; // Linked staff email
   area: string; // Atelier bench or regional cluster
   specialty: string;
   currentWorkload: number; // count of active garments
@@ -99,6 +100,7 @@ export interface Tailor {
 export interface Measurer {
   id: string;
   name: string;
+  email?: string; // Linked staff email
   area: string; // Field coverage regions
   avatar: string;
   avatarAlt?: string;
