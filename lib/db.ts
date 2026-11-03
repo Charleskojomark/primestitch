@@ -340,8 +340,28 @@ export async function getDesigns() {
     videoUrl: d.video_url || undefined,
     standardLeadDays: Number(d.standard_lead_days || 7),
     featured: d.featured !== false,
-    fabrics: d.fabrics || [],
-    availableColors: d.available_colors || [],
+    fabrics: Array.isArray(d.fabrics)
+      ? d.fabrics
+      : typeof d.fabrics === "string"
+      ? (() => {
+          try {
+            return JSON.parse(d.fabrics);
+          } catch {
+            return [];
+          }
+        })()
+      : [],
+    availableColors: Array.isArray(d.available_colors)
+      ? d.available_colors
+      : typeof d.available_colors === "string"
+      ? (() => {
+          try {
+            return JSON.parse(d.available_colors);
+          } catch {
+            return [];
+          }
+        })()
+      : [],
     createdAt: d.created_at,
   }));
 }

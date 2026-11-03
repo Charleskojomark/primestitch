@@ -121,7 +121,7 @@ export default function AdminMediaPage() {
   >("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [savedNotification, setSavedNotification] = useState<string | null>(null);
-  const [activeView, setActiveView] = useState<"uploader" | "registry">("uploader");
+  const [activeView, setActiveView] = useState<"batch" | "single" | "registry">("batch");
 
   const categories = [
     { id: "all", label: "All Assets", count: mediaAssets.length, icon: FolderOpen },
@@ -231,25 +231,38 @@ export default function AdminMediaPage() {
         </div>
       </div>
 
-      {/* Studio View Mode Switcher */}
+      {/* Studio View Mode Switcher: Single clean row */}
       <div className="flex items-center bg-surface-muted p-1 rounded-sm border border-border-seam w-full sm:w-auto self-start">
         <button
           type="button"
-          onClick={() => setActiveView("uploader")}
-          className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm font-mono text-xs font-bold transition-all min-h-[40px] ${
-            activeView === "uploader"
+          onClick={() => setActiveView("batch")}
+          className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-sm font-mono text-xs font-bold transition-all min-h-[38px] ${
+            activeView === "batch"
               ? "bg-primary text-white shadow-subtle"
               : "text-text-muted hover:text-primary hover:bg-surface-card"
           }`}
         >
           <UploadCloud className="w-3.5 h-3.5 text-accent-tape shrink-0" />
-          <span>Publish Garment</span>
+          <span>Batch Upload</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveView("single")}
+          className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-sm font-mono text-xs font-bold transition-all min-h-[38px] ${
+            activeView === "single"
+              ? "bg-primary text-white shadow-subtle"
+              : "text-text-muted hover:text-primary hover:bg-surface-card"
+          }`}
+        >
+          <Camera className="w-3.5 h-3.5 text-secondary shrink-0" />
+          <span>Single Outfit</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveView("registry")}
-          className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm font-mono text-xs font-bold transition-all min-h-[40px] ${
+          className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-sm font-mono text-xs font-bold transition-all min-h-[38px] ${
             activeView === "registry"
               ? "bg-primary text-white shadow-subtle"
               : "text-text-muted hover:text-primary hover:bg-surface-card"
@@ -260,8 +273,10 @@ export default function AdminMediaPage() {
         </button>
       </div>
 
-      {activeView === "uploader" ? (
-        <GarmentLookbookUploader />
+      {activeView === "batch" ? (
+        <GarmentLookbookUploader mode="batch" />
+      ) : activeView === "single" ? (
+        <GarmentLookbookUploader mode="single" />
       ) : (
         <>
           {/* Controls & Quick Action Bar */}
@@ -439,11 +454,8 @@ const DEFAULT_COLORS_LIST = [
   { name: "Shears Brass Gold", hex: "#C28B28" },
 ];
 
-function GarmentLookbookUploader() {
+function GarmentLookbookUploader({ mode }: { mode: "batch" | "single" }) {
   const { designs, addNewDesign, addNewDesigns } = usePrimeStitch();
-
-  // Mode: "batch" | "single"
-  const [uploadMode, setUploadMode] = useState<"batch" | "single">("batch");
 
   // Single mode states
   const [photoFile, setPhotoFile] = useState<File | null>(null);
@@ -741,38 +753,6 @@ function GarmentLookbookUploader() {
 
   return (
     <div className="space-y-6">
-      {/* Upload Mode Switcher Header */}
-      <div className="flex items-center gap-2 border-b border-border-seam pb-3">
-        <button
-          type="button"
-          onClick={() => setUploadMode("batch")}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-sm font-mono text-xs font-bold transition-all ${
-            uploadMode === "batch"
-              ? "bg-primary text-white shadow-subtle"
-              : "bg-surface-card text-text-muted hover:text-primary border border-border-subtle"
-          }`}
-        >
-          <UploadCloud className="w-3.5 h-3.5 text-accent-tape" />
-          <span>Batch Upload Outfits (Multi-Photo &amp; Video)</span>
-          <span className="text-[10px] bg-accent-tape text-primary font-bold px-1.5 py-0.2 rounded-full">
-            Cloudinary &amp; DB Sync
-          </span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setUploadMode("single")}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-sm font-mono text-xs font-bold transition-all ${
-            uploadMode === "single"
-              ? "bg-primary text-white shadow-subtle"
-              : "bg-surface-card text-text-muted hover:text-primary border border-border-subtle"
-          }`}
-        >
-          <Camera className="w-3.5 h-3.5 text-secondary" />
-          <span>Single Outfit Upload</span>
-        </button>
-      </div>
-
       {/* Upload Success Banner (Single Mode) */}
       {uploadedDesign && (
         <Card className="p-4 sm:p-5 border-2 border-accent-emerald bg-accent-emerald/5 space-y-3 animate-fadeIn">
@@ -848,12 +828,12 @@ function GarmentLookbookUploader() {
       )}
 
       {/* ======================= BATCH UPLOAD SURFACE ======================= */}
-      {uploadMode === "batch" && (
+      {mode === "batch" && (
         <Card hasTapeTop className="p-4 sm:p-6 lg:p-8 space-y-6">
           <div className="border-b border-border-subtle pb-3 space-y-1">
             <h2 className="text-base sm:text-lg font-bold font-display text-primary flex items-center gap-2 text-balance">
               <UploadCloud className="w-4 h-4 text-accent-tape shrink-0" />
-              <span>Batch Upload Garment Lookbook (Photos &amp; Video Reels)</span>
+              <span>Batch Garment Lookbook</span>
             </h2>
             <p className="text-xs text-text-muted text-pretty">
               Select multiple photos and video files at once. All items are uploaded directly to Cloudinary and registered into the Neon PostgreSQL database with auto-generated visual style references.
@@ -1059,12 +1039,12 @@ function GarmentLookbookUploader() {
       )}
 
       {/* ======================= SINGLE OUTFIT SURFACE ======================= */}
-      {uploadMode === "single" && (
+      {mode === "single" && (
         <Card hasTapeTop className="p-4 sm:p-6 lg:p-8 space-y-6">
           <div className="border-b border-border-subtle pb-3 space-y-1">
             <h2 className="text-base sm:text-lg font-bold font-display text-primary flex items-center gap-2 text-balance">
               <UploadCloud className="w-4 h-4 text-accent-tape shrink-0" />
-              <span>Publish Single Garment Lookbook</span>
+              <span>Single Garment Lookbook</span>
             </h2>
             <p className="text-xs text-text-muted text-pretty">
               Upload outfit photography, a 360° video drape reel, or both. Outfit is assigned an automatic visual style code and published immediately.

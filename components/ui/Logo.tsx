@@ -63,9 +63,9 @@ const LOGO_CONFIG: Record<
     defaultHeight: 36,
   },
   stacked: {
-    darkSrc: "/brand/logo-stacked-white-bg.png",
-    lightSrc: "/brand/logo-stacked-white-bg.png",
-    aspectRatio: 1699 / 926, // 1.8348 exact file aspect ratio
+    darkSrc: "/brand/logo-stacked.png",
+    lightSrc: "/brand/logo-stacked-white.png",
+    aspectRatio: 500 / 333, // 1.502 exact file aspect ratio
     defaultHeight: 56,
   },
   icon: {

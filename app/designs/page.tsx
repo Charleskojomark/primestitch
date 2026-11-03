@@ -163,17 +163,23 @@ export default function DesignsPage() {
                   {/* Fabric Swatch preview options */}
                   <div className="pt-2 border-t border-border-subtle space-y-1.5">
                     <span className="text-[10px] font-mono uppercase text-text-muted block">
-                      Fabric Options ({design.fabrics.length}):
+                      Fabric Options ({Array.isArray(design.fabrics) ? design.fabrics.length : 0}):
                     </span>
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      {design.fabrics.map((fab) => (
-                        <span
-                          key={fab.id}
-                          className="text-[10px] bg-surface-muted px-2 py-0.5 rounded-sm border border-border-subtle text-on-surface font-mono"
-                        >
-                          {fab.gsm} GSM • {fab.name.split(" ")[0]}
+                      {Array.isArray(design.fabrics) && design.fabrics.length > 0 ? (
+                        design.fabrics.map((fab) => (
+                          <span
+                            key={fab.id}
+                            className="text-[10px] bg-surface-muted px-2 py-0.5 rounded-sm border border-border-subtle text-on-surface font-mono"
+                          >
+                            {fab.gsm} GSM • {fab.name?.split(" ")[0] || "Cotton"}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-[10px] text-text-muted font-mono">
+                          Premium Nigerian &amp; Imported Suitings
                         </span>
-                      ))}
+                      )}
                     </div>
                   </div>
 

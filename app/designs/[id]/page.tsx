@@ -30,8 +30,8 @@ export default function DesignDetailPage() {
   const fallbackDesign = INITIAL_DESIGNS[0];
   const design = designs.find((d) => d.id === params.id) || designs[0] || fallbackDesign;
 
-  const fabrics = design?.fabrics && design.fabrics.length > 0 ? design.fabrics : fallbackDesign.fabrics;
-  const availableColors = design?.availableColors && design.availableColors.length > 0 ? design.availableColors : fallbackDesign.availableColors;
+  const fabrics = Array.isArray(design?.fabrics) && design.fabrics.length > 0 ? design.fabrics : fallbackDesign.fabrics;
+  const availableColors = Array.isArray(design?.availableColors) && design.availableColors.length > 0 ? design.availableColors : fallbackDesign.availableColors;
 
   const [selectedFabricId, setSelectedFabricId] = useState<string>(
     fabrics[0]?.id || ""

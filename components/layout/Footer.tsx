@@ -11,13 +11,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-700/60">
           {/* Brand Promise & Mission */}
           <div className="space-y-4 md:col-span-1">
-            <Link href="/" className="inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-tape rounded">
-              <Image
-                src="/brand/logo-stacked-white-bg.png"
-                alt="PrimeStitch — Tailored. On time."
-                width={125}
-                height={68}
-                className="h-[60px] sm:h-[68px] w-auto object-contain rounded-sm"
+            <Link href="/" className="inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-tape rounded" aria-label="PrimeStitch Home">
+              <Logo
+                variant="stacked"
+                tone="light"
+                height={52}
+                imageClassName="h-[46px] sm:h-[52px] w-auto object-contain"
               />
             </Link>
             <p className="text-xs text-slate-300 text-pretty leading-relaxed">

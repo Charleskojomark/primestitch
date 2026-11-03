@@ -68,21 +68,25 @@ export default function AdminTeamPage() {
       </div>
 
       {/* Admin Email Account Card */}
-      <Card className="p-4 sm:p-5 border-l-4 border-l-primary bg-surface-card shadow-subtle flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-5 h-5 text-secondary" />
+      <Card className="p-4 sm:p-5 border-l-4 border-l-primary bg-surface-card shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 overflow-hidden">
+        <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
+            <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-secondary" />
           </div>
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2">
-              <h3 className="font-bold text-sm text-primary">Operations Admin Account</h3>
-              <Badge variant="verified" size="sm">Primary Administrator</Badge>
+          <div className="space-y-1 min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <h3 className="font-bold text-sm text-primary font-display">Operations Admin</h3>
+              <Badge variant="verified" size="sm" className="text-[10px] px-1.5 py-0.2 shrink-0">
+                Primary Administrator
+              </Badge>
             </div>
-            <p className="text-xs font-mono text-text-muted flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-secondary" />
-              <span>Linked Email: </span>
-              <strong className="text-primary">{staffEmail || "admin@primestitch.com"}</strong>
-            </p>
+            <div className="flex items-center gap-1.5 font-mono text-xs text-text-muted min-w-0">
+              <Mail className="w-3.5 h-3.5 text-secondary shrink-0" />
+              <span className="text-text-muted shrink-0 text-[11px]">Email:</span>
+              <strong className="text-primary truncate text-[11px] sm:text-xs">
+                {staffEmail || "admin@primestitch.com"}
+              </strong>
+            </div>
           </div>
         </div>
 
@@ -97,10 +101,10 @@ export default function AdminTeamPage() {
               "admin"
             )
           }
-          className="w-full sm:w-auto font-mono text-xs"
-          rightIcon={<Edit2 className="w-3.5 h-3.5" />}
+          className="self-start sm:self-auto font-mono text-xs h-8 px-3 shrink-0"
+          rightIcon={<Edit2 className="w-3 h-3" />}
         >
-          Update Admin Email
+          Edit Email
         </Button>
       </Card>
 
@@ -179,8 +183,8 @@ export default function AdminTeamPage() {
                 </div>
 
                 {/* Linked Email Bar */}
-                <div className="pt-2 border-t border-border-subtle flex items-center justify-between text-xs font-mono">
-                  <div className="flex items-center gap-1.5 text-text-muted truncate max-w-[180px]">
+                <div className="pt-2 border-t border-border-subtle flex items-center justify-between text-xs font-mono gap-2">
+                  <div className="flex items-center gap-1.5 text-text-muted truncate min-w-0 flex-1">
                     <Mail className="w-3.5 h-3.5 text-secondary shrink-0" />
                     <span className="truncate">{tailor.email || "No email linked"}</span>
                   </div>
@@ -189,7 +193,7 @@ export default function AdminTeamPage() {
                     onClick={() => handleOpenEdit(tailor.id, tailor.name, tailor.email || "", "tailor")}
                     className="text-[11px] text-primary font-bold hover:underline shrink-0"
                   >
-                    {tailor.email ? "Edit Email" : "+ Link Email"}
+                    {tailor.email ? "Edit" : "+ Link"}
                   </button>
                 </div>
               </Card>
@@ -248,8 +252,8 @@ export default function AdminTeamPage() {
               </div>
 
               {/* Linked Email Bar */}
-              <div className="pt-2 border-t border-border-subtle flex items-center justify-between text-xs font-mono">
-                <div className="flex items-center gap-1.5 text-text-muted truncate max-w-[180px]">
+              <div className="pt-2 border-t border-border-subtle flex items-center justify-between text-xs font-mono gap-2">
+                <div className="flex items-center gap-1.5 text-text-muted truncate min-w-0 flex-1">
                   <Mail className="w-3.5 h-3.5 text-secondary shrink-0" />
                   <span className="truncate">{measurer.email || "No email linked"}</span>
                 </div>
@@ -258,7 +262,7 @@ export default function AdminTeamPage() {
                   onClick={() => handleOpenEdit(measurer.id, measurer.name, measurer.email || "", "measurer")}
                   className="text-[11px] text-primary font-bold hover:underline shrink-0"
                 >
-                  {measurer.email ? "Edit Email" : "+ Link Email"}
+                  {measurer.email ? "Edit" : "+ Link"}
                 </button>
               </div>
             </Card>

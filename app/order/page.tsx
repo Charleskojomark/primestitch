@@ -45,9 +45,9 @@ export default function OrderPage() {
     designs.find((d) => d.id === draftOrder.designId) || designs[0] || fallbackDesign;
 
   // Delivery calculation based on lead days
-  const deliveryCalc = calculateGuaranteedDelivery(selectedDesign.standardLeadDays);
+  const deliveryCalc = calculateGuaranteedDelivery(selectedDesign?.standardLeadDays || 7);
 
-  const itemTotal = (draftOrder.unitPrice || selectedDesign.startingPrice) * (draftOrder.quantity || 1);
+  const itemTotal = (draftOrder.unitPrice || selectedDesign?.startingPrice || 55000) * (draftOrder.quantity || 1);
 
   // Measurement updates handler
   const handleMeasurementChange = (field: string, val: number) => {
@@ -161,7 +161,7 @@ export default function OrderPage() {
                 <div className="p-2.5 bg-surface-muted rounded-sm border border-border-subtle">
                   <span className="text-text-muted block text-[10px]">SELECTED FABRIC:</span>
                   <span className="font-bold text-primary">
-                    {draftOrder.fabricName || selectedDesign.fabrics[0].name}
+                    {draftOrder.fabricName || selectedDesign?.fabrics?.[0]?.name || "Bespoke Suiting Fabric"}
                   </span>
                 </div>
                 <div className="p-2.5 bg-surface-muted rounded-sm border border-border-subtle">
@@ -646,7 +646,7 @@ export default function OrderPage() {
                   {draftOrder.designName || selectedDesign.name}
                 </span>
                 <span className="block text-text-muted">
-                  {draftOrder.fabricName || selectedDesign.fabrics[0].name} • {draftOrder.colorName}
+                  {draftOrder.fabricName || selectedDesign?.fabrics?.[0]?.name || "Bespoke Suiting Fabric"} • {draftOrder.colorName || "Atelier Midnight"}
                 </span>
               </div>
               <span className="font-mono text-sm font-bold text-primary tabular-nums">
