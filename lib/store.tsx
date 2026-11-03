@@ -160,7 +160,16 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
   useEffect(() => {
     try {
       const storedOrders = localStorage.getItem(STORAGE_KEY_ORDERS);
-      if (storedOrders) setOrders(JSON.parse(storedOrders));
+      if (storedOrders) {
+        const parsed = JSON.parse(storedOrders);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setOrders(parsed);
+        } else {
+          setOrders(INITIAL_ORDERS);
+        }
+      } else {
+        setOrders(INITIAL_ORDERS);
+      }
 
       const storedDesigns = localStorage.getItem(STORAGE_KEY_DESIGNS);
       if (storedDesigns) {
@@ -196,7 +205,16 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
       if (storedMedia) setMediaAssets(JSON.parse(storedMedia));
 
       const storedBookings = localStorage.getItem(STORAGE_KEY_BOOKINGS);
-      if (storedBookings) setBookings(JSON.parse(storedBookings));
+      if (storedBookings) {
+        const parsed = JSON.parse(storedBookings);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setBookings(parsed);
+        } else {
+          setBookings(INITIAL_BOOKINGS);
+        }
+      } else {
+        setBookings(INITIAL_BOOKINGS);
+      }
 
       const storedBulk = localStorage.getItem(STORAGE_KEY_BULK);
       if (storedBulk) setBulkRequests(JSON.parse(storedBulk));

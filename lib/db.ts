@@ -52,6 +52,21 @@ export async function getOrders() {
         unitPrice: Number(it.unit_price),
         measurements: it.measurements,
       })),
+    history: histories
+      .filter((h: any) => h.order_id === o.id)
+      .map((h: any) => ({
+        stage: h.stage,
+        timestamp: h.timestamp
+          ? new Date(h.timestamp).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : "Recent",
+        note: h.notes || "Stage milestone verified",
+        actorName: "Master Atelier",
+      })),
     statusHistory: histories
       .filter((h: any) => h.order_id === o.id)
       .map((h: any) => ({
@@ -108,6 +123,19 @@ export async function getOrderById(id: string) {
       quantity: it.quantity,
       unitPrice: Number(it.unit_price),
       measurements: it.measurements,
+    })),
+    history: history.map((h: any) => ({
+      stage: h.stage,
+      timestamp: h.timestamp
+        ? new Date(h.timestamp).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "Recent",
+      note: h.notes || "Stage milestone verified",
+      actorName: "Master Atelier",
     })),
     statusHistory: history.map((h: any) => ({
       stage: h.stage,

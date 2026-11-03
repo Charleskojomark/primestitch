@@ -279,12 +279,20 @@ export default function AdminDashboardPage() {
                   <Card key={ord.id} className="p-4 space-y-3 bg-surface-card border border-border-seam">
                     <div className="flex items-center justify-between">
                       <span className="font-bold font-mono text-primary text-sm">{ord.id}</span>
-                      <Badge
-                        variant={ord.isLate ? "error" : ord.isAtRisk ? "tape" : "neutral"}
-                        size="sm"
-                      >
-                        {ord.status}
-                      </Badge>
+                      {ord.status === "Quality check" ? (
+                        <span className="text-[10px] font-mono font-bold bg-accent-tape text-primary px-2 py-0.5 rounded-sm shadow-subtle border border-accent-tape">
+                          In Review
+                        </span>
+                      ) : ord.status === "Delivered" ? (
+                        <Badge variant="verified" size="sm">Delivered</Badge>
+                      ) : (
+                        <Badge
+                          variant={ord.isLate ? "error" : ord.isAtRisk ? "tape" : "neutral"}
+                          size="sm"
+                        >
+                          {ord.status}
+                        </Badge>
+                      )}
                     </div>
                     <div className="space-y-1 text-xs">
                       <div className="font-medium text-primary">{ord.customerName}</div>
@@ -326,12 +334,20 @@ export default function AdminDashboardPage() {
                             {ord.items[0]?.designName}
                           </td>
                           <td className="p-3">
-                            <Badge
-                              variant={ord.isLate ? "error" : ord.isAtRisk ? "tape" : "neutral"}
-                              size="sm"
-                            >
-                              {ord.status}
-                            </Badge>
+                            {ord.status === "Quality check" ? (
+                              <span className="text-[10px] font-mono font-bold bg-accent-tape text-primary px-2 py-0.5 rounded-sm shadow-subtle border border-accent-tape whitespace-nowrap">
+                                In Review
+                              </span>
+                            ) : ord.status === "Delivered" ? (
+                              <Badge variant="verified" size="sm">Delivered</Badge>
+                            ) : (
+                              <Badge
+                                variant={ord.isLate ? "error" : ord.isAtRisk ? "tape" : "neutral"}
+                                size="sm"
+                              >
+                                {ord.status}
+                              </Badge>
+                            )}
                           </td>
                           <td className="p-3 tabular-nums">{formatDate(ord.guaranteedDeliveryDate)}</td>
                           <td className="p-3 text-right">

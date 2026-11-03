@@ -244,16 +244,16 @@ export default function AdminOrderDetailPage() {
             </h2>
 
             <div className="space-y-3 relative pl-4 before:content-[''] before:absolute before:left-1 before:top-2 before:bottom-2 before:w-[1px] before:border-l before:border-dashed before:border-border-seam text-xs">
-              {order.history.map((h, i) => (
+              {(order.history || (order as any).statusHistory || []).map((h: any, i: number) => (
                 <div key={i} className="relative space-y-0.5">
                   <span className="absolute -left-[19px] top-1.5 w-2 h-2 rounded-full bg-accent-emerald ring-2 ring-white" />
                   <div className="flex items-center justify-between font-mono">
                     <strong className="text-primary font-bold">{h.stage}</strong>
                     <span className="text-[10px] text-text-muted">{h.timestamp}</span>
                   </div>
-                  <p className="text-on-surface text-pretty">{h.note}</p>
+                  <p className="text-on-surface text-pretty">{h.note || h.notes}</p>
                   <span className="text-[10px] text-text-muted font-mono block">
-                    By {h.actorName}
+                    By {h.actorName || "Master Atelier Staff"}
                   </span>
                 </div>
               ))}

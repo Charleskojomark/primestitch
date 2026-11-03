@@ -14,11 +14,22 @@ import { STAGES, Stage } from "@/lib/types";
 export default function AdminOrdersListPage() {
   const { orders } = usePrimeStitch();
 
+  const [quickFilter, setQuickFilter] = useState<"all" | "review" | "completed" | "production">("all");
   const [selectedStage, setSelectedStage] = useState<string>("All");
   const [selectedPayment, setSelectedPayment] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  // Counts for quick filters
+  const countInReview = orders.filter((o) => o.status === "Quality check").length;
+  const countCompleted = orders.filter((o) => o.status === "Delivered").length;
+  const countInProduction = orders.filter((o) => ["Cutting", "Sewing", "Finishing"].includes(o.status)).length;
+
   const filteredOrders = orders.filter((o) => {
+    // Quick filter check
+    if (quickFilter === "review" && o.status !== "Quality check") return false;
+    if (quickFilter === "completed" && o.status !== "Delivered") return false;
+    if (quickFilter === "production" && !["Cutting", "Sewing", "Finishing"].includes(o.status)) return false;
+
     const matchesStage = selectedStage === "All" || o.status === selectedStage;
     const matchesPayment =
       selectedPayment === "All" ||
@@ -32,6 +43,15 @@ export default function AdminOrdersListPage() {
 
     return matchesStage && matchesPayment && matchesQuery;
   });
+
+  const getDaysAgoText = (dateStr: string) => {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "";
+    const diffDays = Math.floor((Date.now() - d.getTime()) / (1000 * 60 * 60 * 24));
+    if (diffDays <= 0) return "Started today";
+    if (diffDays === 1) return "Started yesterday";
+    return `Started ${diffDays} days ago`;
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
@@ -52,6 +72,81 @@ export default function AdminOrdersListPage() {
             Real-time tracking of all active atelier orders and locked delivery dates.
           </p>
         </div>
+      </div>
+
+      {/* Quick Status Segment Tabs */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scrollbar-none pb-1">
+        <button
+          type="button"
+          onClick={() => {
+            setQuickFilter("all");
+            setSelectedStage("All");
+          }}
+          className={`h-9 px-3.5 rounded-sm font-mono text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+            quickFilter === "all"
+              ? "bg-primary text-white shadow-subtle"
+              : "bg-surface-card text-text-muted hover:text-primary border border-border-seam"
+          }`}
+        >
+          <span>All Orders</span>
+          <span className="text-[10px] bg-surface-muted/30 px-1.5 py-0.2 rounded-full">
+            {orders.length}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setQuickFilter("review");
+            setSelectedStage("All");
+          }}
+          className={`h-9 px-3.5 rounded-sm font-mono text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+            quickFilter === "review"
+              ? "bg-accent-tape text-primary shadow-subtle font-extrabold ring-1 ring-accent-tape"
+              : "bg-surface-card text-amber-800 hover:text-amber-900 border border-amber-300"
+          }`}
+        >
+          <span>⭐ In Review (Passed Finishing)</span>
+          <span className="text-[10px] bg-primary text-white px-1.5 py-0.2 rounded-full font-mono">
+            {countInReview}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setQuickFilter("completed");
+            setSelectedStage("All");
+          }}
+          className={`h-9 px-3.5 rounded-sm font-mono text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+            quickFilter === "completed"
+              ? "bg-accent-emerald text-white shadow-subtle"
+              : "bg-surface-card text-accent-emerald hover:text-emerald-800 border border-emerald-300"
+          }`}
+        >
+          <span>✓ Completed &amp; Delivered</span>
+          <span className="text-[10px] bg-emerald-900 text-white px-1.5 py-0.2 rounded-full font-mono">
+            {countCompleted}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setQuickFilter("production");
+            setSelectedStage("All");
+          }}
+          className={`h-9 px-3.5 rounded-sm font-mono text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+            quickFilter === "production"
+              ? "bg-secondary text-white shadow-subtle"
+              : "bg-surface-card text-text-muted hover:text-primary border border-border-seam"
+          }`}
+        >
+          <span>✂ Active on Benches</span>
+          <span className="text-[10px] bg-surface-muted/30 px-1.5 py-0.2 rounded-full">
+            {countInProduction}
+          </span>
+        </button>
       </div>
 
       {/* Filter and Search Bar */}
@@ -131,24 +226,34 @@ export default function AdminOrdersListPage() {
                       <Badge variant="tape" size="sm">AT RISK</Badge>
                     ) : null}
                   </div>
-                  <Badge variant="neutral" size="sm">
-                    {ord.status}
-                  </Badge>
+                  {ord.status === "Quality check" ? (
+                    <span className="text-[10px] font-mono font-bold bg-accent-tape text-primary px-2 py-0.5 rounded-sm shadow-subtle border border-accent-tape">
+                      IN QA REVIEW
+                    </span>
+                  ) : ord.status === "Delivered" ? (
+                    <Badge variant="verified" size="sm">DELIVERED</Badge>
+                  ) : (
+                    <Badge variant="neutral" size="sm">
+                      {ord.status}
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="space-y-1 text-xs">
                   <div className="flex items-center justify-between">
                     <strong className="text-primary font-sans text-sm">{ord.customerName}</strong>
-                    <a
-                      href={`tel:${ord.customerPhone}`}
-                      className="text-text-muted font-mono hover:text-primary underline text-[11px]"
-                    >
-                      {ord.customerPhone}
-                    </a>
+                    <span className="text-text-muted font-mono text-[10px]">
+                      {getDaysAgoText(ord.createdAt)}
+                    </span>
                   </div>
                   <div className="text-text-muted">
                     <span className="font-medium text-primary">{ord.items[0]?.designName}</span> · {ord.items[0]?.fabricName}
                   </div>
+                  {ord.notes && (
+                    <div className="text-[11px] text-primary/80 bg-surface-muted p-1.5 rounded border border-border-subtle font-sans leading-tight">
+                      {ord.notes}
+                    </div>
+                  )}
                   <div className="text-[11px] text-text-muted flex items-center justify-between pt-1">
                     <span>Tailor: <strong className="text-primary">{ord.assignedTailorName}</strong></span>
                     <span className="tabular-nums font-bold text-primary">{formatNaira(ord.totalAmount)}</span>
@@ -157,11 +262,11 @@ export default function AdminOrdersListPage() {
 
                 <div className="flex items-center justify-between pt-2 border-t border-border-subtle text-xs font-mono">
                   <span className={ord.isLate ? "text-error font-bold" : "text-text-muted"}>
-                    Due: {formatDate(ord.guaranteedDeliveryDate)}
+                    Agreed SLA: <strong className="text-primary">{formatDate(ord.guaranteedDeliveryDate)}</strong>
                   </span>
                   <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`} className="w-auto">
                     <Button variant="primary" size="sm">
-                      Manage &rarr;
+                      Inspect &rarr;
                     </Button>
                   </Link>
                 </div>
@@ -176,8 +281,8 @@ export default function AdminOrdersListPage() {
                 <thead className="bg-surface-muted border-b border-border-seam uppercase text-[11px] text-text-muted">
                   <tr>
                     <th className="p-3.5">Order ID</th>
-                    <th className="p-3.5">Customer & Phone</th>
-                    <th className="p-3.5">Outfit & Fabric</th>
+                    <th className="p-3.5">Customer &amp; Location</th>
+                    <th className="p-3.5">Outfit &amp; Fabric</th>
                     <th className="p-3.5">Stage</th>
                     <th className="p-3.5">Assigned Tailor</th>
                     <th className="p-3.5">Guaranteed Delivery</th>
@@ -190,6 +295,9 @@ export default function AdminOrdersListPage() {
                     <tr key={ord.id} className="hover:bg-surface-muted/50 transition-colors">
                       <td className="p-3.5">
                         <span className="font-bold text-primary block">{ord.id}</span>
+                        <span className="text-[10px] text-text-muted font-mono block">
+                          {getDaysAgoText(ord.createdAt)}
+                        </span>
                         {ord.isLate ? (
                           <Badge variant="error" size="sm">LATE</Badge>
                         ) : ord.isAtRisk ? (
@@ -199,23 +307,34 @@ export default function AdminOrdersListPage() {
                       <td className="p-3.5 font-sans">
                         <strong className="text-primary block">{ord.customerName}</strong>
                         <span className="text-text-muted text-[11px] font-mono">{ord.customerPhone}</span>
+                        <span className="text-text-muted text-[10px] block truncate max-w-[160px]">{ord.deliveryArea}</span>
                       </td>
                       <td className="p-3.5 font-sans">
                         <span className="font-semibold text-primary block">{ord.items[0]?.designName}</span>
                         <span className="text-text-muted text-[11px]">{ord.items[0]?.fabricName}</span>
                       </td>
                       <td className="p-3.5">
-                        <Badge variant="neutral" size="sm">
-                          {ord.status}
-                        </Badge>
+                        {ord.status === "Quality check" ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-accent-tape text-primary px-2 py-0.5 rounded-sm shadow-subtle border border-accent-tape whitespace-nowrap">
+                            <span>⭐</span>
+                            <span>IN REVIEW</span>
+                          </span>
+                        ) : ord.status === "Delivered" ? (
+                          <Badge variant="verified" size="sm">DELIVERED</Badge>
+                        ) : (
+                          <Badge variant="neutral" size="sm">
+                            {ord.status}
+                          </Badge>
+                        )}
                       </td>
                       <td className="p-3.5 font-sans">
                         <span className="text-primary font-medium">{ord.assignedTailorName}</span>
                       </td>
                       <td className="p-3.5 tabular-nums">
-                        <span className={ord.isLate ? "text-error font-bold" : "text-primary"}>
+                        <span className={ord.isLate ? "text-error font-bold" : "text-primary font-semibold block"}>
                           {formatDate(ord.guaranteedDeliveryDate)}
                         </span>
+                        <span className="text-[10px] text-text-muted font-mono">Agreed Handover</span>
                       </td>
                       <td className="p-3.5 tabular-nums">
                         <strong className="text-primary block">{formatNaira(ord.totalAmount)}</strong>
@@ -226,7 +345,7 @@ export default function AdminOrdersListPage() {
                       <td className="p-3.5 text-right">
                         <Link href={`/admin/orders/${encodeURIComponent(ord.id)}`}>
                           <Button variant="primary" size="sm">
-                            Manage &rarr;
+                            Inspect &rarr;
                           </Button>
                         </Link>
                       </td>
