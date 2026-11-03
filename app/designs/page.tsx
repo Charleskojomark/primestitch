@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePrimeStitch } from "@/lib/store";
 import { formatNaira, calculateGuaranteedDelivery, formatDate } from "@/lib/utils";
-import { Layers, Filter, Clock, ArrowRight, ShieldCheck } from "lucide-react";
+import { Layers, Filter, Clock, ArrowRight, ShieldCheck, Film } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
@@ -122,13 +122,20 @@ export default function DesignsPage() {
                       {design.category}
                     </Badge>
                   </div>
-                  {design.featured && (
+                  {design.videoUrl ? (
+                    <div className="absolute top-2.5 right-2.5 z-10">
+                      <Badge variant="brass" size="sm" className="flex items-center gap-1 shadow-subtle bg-accent-tape text-primary font-bold">
+                        <Film className="w-3 h-3 text-primary" />
+                        <span>Video Reel</span>
+                      </Badge>
+                    </div>
+                  ) : design.featured ? (
                     <div className="absolute top-2.5 right-2.5 z-10">
                       <Badge variant="brass" size="sm">
                         Featured
                       </Badge>
                     </div>
-                  )}
+                  ) : null}
 
                   {/* Guaranteed Date Overlay on image bottom */}
                   <div className="absolute bottom-0 left-0 right-0 z-10 bg-primary/95 text-white p-2.5 text-[11px] font-mono flex items-center justify-between border-t border-accent-tape">
@@ -145,8 +152,8 @@ export default function DesignsPage() {
                 {/* Content */}
                 <div className="p-4 space-y-3">
                   <div className="space-y-1">
-                    <h2 className="font-bold text-lg font-display text-primary group-hover:text-secondary transition-colors">
-                      {design.name}
+                    <h2 className="font-bold text-base sm:text-lg font-display text-primary group-hover:text-secondary transition-colors">
+                      {design.styleCode ? `${design.category} · ${design.styleCode}` : design.name}
                     </h2>
                     <p className="text-xs text-text-muted line-clamp-2 leading-relaxed">
                       {design.description}

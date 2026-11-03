@@ -13,6 +13,8 @@ import {
   Clock,
   Sparkles,
   ShoppingBag,
+  Film,
+  Camera,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -33,6 +35,7 @@ export default function DesignDetailPage() {
     design.availableColors[0] || { name: "Default", hex: "#0B1528" }
   );
   const [quantity, setQuantity] = useState<number>(1);
+  const [mediaView, setMediaView] = useState<"photo" | "video">("photo");
 
   const selectedFabric =
     design.fabrics.find((f) => f.id === selectedFabricId) || design.fabrics[0];
@@ -72,20 +75,70 @@ export default function DesignDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-        {/* Left Column: Image Gallery & Fabric details */}
-        <div className="lg:col-span-6 space-y-6">
+        {/* Left Column: Image/Video Gallery & Fabric details */}
+        <div className="lg:col-span-6 space-y-4">
+          {/* Media view toggles if video is available */}
+          {design.videoUrl && (
+            <div className="flex items-center gap-2 font-mono text-xs">
+              <button
+                type="button"
+                onClick={() => setMediaView("photo")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm border transition-colors ${
+                  mediaView === "photo"
+                    ? "bg-primary text-white border-primary font-bold shadow-subtle"
+                    : "bg-surface-card text-on-surface border-border-seam hover:bg-surface-muted"
+                }`}
+              >
+                <Camera className="w-3.5 h-3.5" />
+                <span>Garment Photos</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setMediaView("video")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm border transition-colors ${
+                  mediaView === "video"
+                    ? "bg-accent-tape text-primary border-accent-tape font-bold shadow-subtle"
+                    : "bg-surface-card text-on-surface border-border-seam hover:bg-surface-muted"
+                }`}
+              >
+                <Film className="w-3.5 h-3.5 text-primary" />
+                <span>360° Video Drape Reel</span>
+              </button>
+            </div>
+          )}
+
           <div className="relative">
-            <PlaceholderImage
-              src={design.heroImage}
-              alt={design.imageAlt || `${design.name} bespoke garment silhouette`}
-              aspectRatio="3/4"
-              label={design.name}
-              dimensionsBadge={design.imageDimensions || "1200 × 1600 px (3:4)"}
-              category="garment"
-              showBadge
-              className="rounded-md border border-border-seam shadow-card"
-            />
-            <div className="absolute top-4 left-4 z-10">
+            {mediaView === "video" && design.videoUrl ? (
+              <div className="rounded-md border border-border-seam shadow-card bg-black overflow-hidden aspect-[3/4] flex items-center justify-center relative">
+                <video
+                  src={design.videoUrl}
+                  controls
+                  autoPlay
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-4 left-4 z-10 pointer-events-none">
+                  <Badge variant="tape" size="sm">
+                    Live Video Drape
+                  </Badge>
+                </div>
+              </div>
+            ) : (
+              <PlaceholderImage
+                src={design.heroImage}
+                alt={design.imageAlt || `${design.name} bespoke garment silhouette`}
+                aspectRatio="3/4"
+                label={design.styleCode || design.name}
+                dimensionsBadge={design.imageDimensions || "1200 × 1600 px (3:4)"}
+                category="garment"
+                showBadge
+                className="rounded-md border border-border-seam shadow-card"
+              />
+            )}
+
+            <div className="absolute top-4 left-4 z-10 pointer-events-none">
               <Badge variant="tape" size="md">
                 {design.category}
               </Badge>
@@ -103,11 +156,18 @@ export default function DesignDetailPage() {
         {/* Right Column: Customization Controls */}
         <div className="lg:col-span-6 space-y-6">
           <div className="space-y-2 border-b border-border-subtle pb-4">
-            <span className="text-xs font-mono uppercase tracking-wider text-text-muted">
-              PrimeStitch Bespoke
-            </span>
+            <div className="flex items-center gap-2">
+              <Badge variant="verified" size="sm">
+                Aba Master Atelier
+              </Badge>
+              {design.styleCode && (
+                <span className="text-xs font-mono font-bold text-accent-tape">
+                  {design.styleCode}
+                </span>
+              )}
+            </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-primary tracking-tight">
-              {design.name}
+              {design.styleCode ? `${design.category} · ${design.styleCode}` : design.name}
             </h1>
             <p className="text-sm text-text-muted text-pretty leading-relaxed">
               {design.description}

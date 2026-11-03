@@ -26,35 +26,56 @@ export default function BookMeasurementPage() {
   const { measurers, createBooking, customerProfile } = usePrimeStitch();
 
   const [venueType, setVenueType] = useState<"home" | "office" | "event_venue">("home");
-  const [address, setAddress] = useState("14 Factory Road, Aba, Abia State");
-  const [area, setArea] = useState("Aba / Umuahia (Abia State)");
-  const [date, setDate] = useState("2026-10-31");
+  const [abaLandmark, setAbaLandmark] = useState("Factory Road / Commercial Avenue (Atelier Hub)");
+  const [address, setAddress] = useState("Near Factory Road, Aba, Abia State");
+  const [area, setArea] = useState("Aba (Abia State)");
+  const [date, setDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split("T")[0];
+  });
   const [timeSlot, setTimeSlot] = useState("11:00 AM - 12:30 PM");
   const [customerName, setCustomerName] = useState(customerProfile.name);
   const [customerPhone, setCustomerPhone] = useState(customerProfile.phone);
   const [notes, setNotes] = useState("");
   const [confirmedBooking, setConfirmedBooking] = useState<any>(null);
 
+  const ABA_BUS_STOPS = [
+    "Factory Road / Commercial Avenue (Atelier Hub)",
+    "Brass Junction / Aba-Owerri Road",
+    "Osisioma Flyover / PH Expressway Junction",
+    "Ariaria International Market / Faulks Road",
+    "Bata Junction / Railway Crossing",
+    "Ogbor Hill / Waterside / Opobo Road",
+    "Milverton Avenue / Park Corridor",
+    "Abayi / Umungasi / Tonimas Corridor",
+    "Eziukwu / Jubilee Road Market Zone",
+    "Azikiwe Road / Post Office Area",
+    "Ekeakpara / Industrial Layout",
+    "Other Aba Landmark / Street",
+  ];
+
   // Pick suitable measurer based on area
   const matchedMeasurer =
-    measurers.find((m) => m.area.toLowerCase().includes(area.toLowerCase().split(" ")[0])) ||
+    measurers.find((m) => m.area.toLowerCase().includes("aba")) ||
     measurers[0];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const finalAddress = `${address} (Nearest Landmark: ${abaLandmark})`;
     const newBooking = createBooking({
       customerName,
       customerPhone,
       venueType,
-      address,
-      area,
+      address: finalAddress,
+      area: "Aba, Abia State",
       date,
       timeSlot,
       measurerId: matchedMeasurer.id,
       measurerName: matchedMeasurer.name,
       measurerPhone: matchedMeasurer.phone,
       sessionFee: 5000,
-      notes,
+      notes: notes ? `${notes} • Bus stop/landmark: ${abaLandmark}` : `Nearest landmark: ${abaLandmark}`,
     });
     setConfirmedBooking(newBooking);
   };
@@ -184,36 +205,44 @@ export default function BookMeasurementPage() {
                 </div>
               </div>
 
-              {/* Area & Full Address */}
+              {/* Major Aba Bus Stop / Landmark Selector */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5 text-xs">
-                  <label className="font-medium text-on-surface">Coverage Region / City *</label>
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold text-primary font-mono uppercase tracking-wider">
+                      Major Aba Bus Stop / Landmark *
+                    </label>
+                    <Badge variant="tape" size="sm">Aba, Abia State</Badge>
+                  </div>
                   <select
-                    value={area}
-                    onChange={(e) => setArea(e.target.value)}
-                    className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-mono"
+                    value={abaLandmark}
+                    onChange={(e) => setAbaLandmark(e.target.value)}
+                    className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-mono text-xs font-semibold text-primary"
                   >
-                    <option value="Aba / Umuahia (Abia State)">Aba / Umuahia (Abia State)</option>
-                    <option value="Owerri (Imo State)">Owerri (Imo State)</option>
-                    <option value="Port Harcourt (Rivers State)">Port Harcourt (Rivers State)</option>
-                    <option value="Enugu / Coal City">Enugu / Coal City</option>
-                    <option value="Lekki Phase 1">Lekki / Victoria Island / Ikoyi</option>
-                    <option value="Ikeja GRA">Ikeja GRA / Mainland (Lagos)</option>
-                    <option value="Abuja FCT">Abuja FCT / Central</option>
-                    <option value="Other South East Hubs">Other South East Hubs</option>
+                    {ABA_BUS_STOPS.map((stop) => (
+                      <option key={stop} value={stop}>
+                        {stop}
+                      </option>
+                    ))}
                   </select>
+                  <p className="text-[11px] text-text-muted">
+                    Our certified Aba master fitter will meet you in this vicinity with anatomical laser rules and fabric swatches.
+                  </p>
                 </div>
 
                 <div className="space-y-1.5 text-xs">
-                  <label className="font-medium text-on-surface">Street Address & Landmark *</label>
+                  <label className="font-medium text-on-surface">Specific Street / House / Compound *</label>
                   <input
                     type="text"
                     required
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    placeholder="e.g. 14 Factory Road, Aba or 14 Admiralty Way, Lekki"
+                    placeholder="e.g. Flat 3, 14 Factory Road, or Suite 5 Commercial Ave"
                     className="w-full h-11 px-3.5 border border-border-seam rounded-sm bg-surface-card"
                   />
+                  <p className="text-[11px] text-text-muted">
+                    Specific doorway or compound instructions for the fitter.
+                  </p>
                 </div>
               </div>
 

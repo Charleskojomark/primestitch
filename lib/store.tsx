@@ -100,6 +100,7 @@ interface PrimeStitchContextType {
   updateMediaAsset: (id: string, updates: Partial<MediaAsset>) => void;
   resetMediaAsset: (id: string) => void;
   resetAllMediaAssets: () => void;
+  addNewDesign: (design: Design) => void;
   loginStaff: (role: "admin" | "tailor" | "measurer", staffId?: string) => void;
   logoutStaff: () => void;
   resetAllToSeed: () => void;
@@ -694,6 +695,10 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
     } catch (e) {}
   };
 
+  const addNewDesign = (newDesign: Design) => {
+    setDesigns((prev) => [newDesign, ...prev]);
+  };
+
   const resetAllToSeed = () => {
     setOrders(INITIAL_ORDERS);
     setBookings(INITIAL_BOOKINGS);
@@ -737,6 +742,7 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
         updateMediaAsset,
         resetMediaAsset,
         resetAllMediaAssets,
+        addNewDesign,
         loginStaff,
         logoutStaff,
         resetAllToSeed,

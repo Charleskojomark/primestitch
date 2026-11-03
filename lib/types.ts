@@ -50,12 +50,15 @@ export interface Design {
   id: string;
   slug: string;
   name: string;
+  styleCode?: string; // Reference code e.g. "Style #01"
   category: "Traditional" | "Formal" | "Contemporary" | "Corporate" | "Events";
   startingPrice: number;
   description: string;
   heroImage: string;
   imageAlt?: string;
   imageDimensions?: string;
+  videoUrl?: string; // Cloudinary video clip URL
+  additionalImages?: string[];
   fabrics: Fabric[];
   availableColors: { name: string; hex: string }[];
   standardLeadDays: number;

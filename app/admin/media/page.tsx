@@ -19,6 +19,10 @@ import {
   CheckCircle2,
   AlertCircle,
   FolderOpen,
+  UploadCloud,
+  Film,
+  Play,
+  CheckCircle,
 } from "lucide-react";
 import { usePrimeStitch } from "@/lib/store";
 import { MediaAsset } from "@/lib/types";
@@ -27,6 +31,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { Logo } from "@/components/ui/Logo";
+import { formatNaira } from "@/lib/utils";
 
 // Curated high-resolution photography presets matching Nigerian tailoring
 const PHOTOGRAPHY_PRESETS: Record<string, { url: string; label: string }> = {
@@ -112,6 +117,7 @@ export default function AdminMediaPage() {
   >("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [savedNotification, setSavedNotification] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<"uploader" | "registry">("uploader");
 
   const categories = [
     { id: "all", label: "All Assets", count: mediaAssets.length, icon: FolderOpen },
@@ -247,7 +253,46 @@ export default function AdminMediaPage() {
         </div>
       </div>
 
-      {/* Controls & Quick Action Bar */}
+      {/* Studio View Mode Switcher */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-surface-muted p-2 rounded-md border border-border-seam">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setActiveView("uploader")}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-sm font-mono text-xs font-bold transition-all ${
+              activeView === "uploader"
+                ? "bg-primary text-white shadow-raised"
+                : "bg-surface-card text-on-surface hover:bg-white"
+            }`}
+          >
+            <UploadCloud className="w-4 h-4 text-accent-tape" />
+            <span>Upload Garment Lookbook (Cloudinary)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveView("registry")}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-sm font-mono text-xs font-bold transition-all ${
+              activeView === "registry"
+                ? "bg-primary text-white shadow-raised"
+                : "bg-surface-card text-on-surface hover:bg-white"
+            }`}
+          >
+            <ImageIcon className="w-4 h-4 text-secondary" />
+            <span>Static Asset Registry ({filteredAssets.length})</span>
+          </button>
+        </div>
+
+        <Badge variant="verified" size="sm">
+          Cloudinary: sq0fcvzp Active
+        </Badge>
+      </div>
+
+      {activeView === "uploader" ? (
+        <CloudinaryGarmentUploader />
+      ) : (
+        <>
+          {/* Controls & Quick Action Bar */}
       <div className="bg-surface-card border border-border-subtle rounded-md p-4 sm:p-6 space-y-4 shadow-subtle">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Search Input */}
@@ -373,6 +418,8 @@ export default function AdminMediaPage() {
           </div>
         )}
       </div>
+      </>
+      )}
 
       {/* Footer Info Box */}
       <div className="border border-border-seam bg-primary/5 rounded-md p-5 space-y-2 font-mono text-xs text-text-muted">
@@ -388,6 +435,423 @@ export default function AdminMediaPage() {
           alt text describing the subject, weave, and cut.
         </p>
       </div>
+    </div>
+  );
+}
+
+// Cloudinary Garment Lookbook Uploader Component
+function CloudinaryGarmentUploader() {
+  const { designs, addNewDesign } = usePrimeStitch();
+
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
+
+  const [category, setCategory] = useState<"Traditional" | "Formal" | "Contemporary" | "Corporate" | "Events">("Traditional");
+  const [garmentCut, setGarmentCut] = useState("Senator 2-Piece");
+  const [styleCode, setStyleCode] = useState(() => `Style #${String(designs.length + 1).padStart(2, "0")}`);
+  const [startingPrice, setStartingPrice] = useState(55000);
+  const [description, setDescription] = useState("Handcrafted in Aba with concealed placket and locked delivery SLA.");
+
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<string>("");
+  const [uploadedDesign, setUploadedDesign] = useState<any>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPhotoFile(file);
+      setPhotoPreview(URL.createObjectURL(file));
+      setErrorMessage(null);
+    }
+  };
+
+  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setVideoFile(file);
+      setVideoPreview(URL.createObjectURL(file));
+      setErrorMessage(null);
+    }
+  };
+
+  const handleUploadAndPublish = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!photoFile) {
+      setErrorMessage("Please select at least one garment photo.");
+      return;
+    }
+
+    setIsUploading(true);
+    setErrorMessage(null);
+    setUploadStatus("Uploading high-res photo to Cloudinary (cloud: sq0fcvzp)...");
+
+    try {
+      // 1. Upload Photo to Cloudinary via server route /api/upload
+      const photoFormData = new FormData();
+      photoFormData.append("file", photoFile);
+      photoFormData.append("folder", "primestitch/garments");
+      photoFormData.append("resource_type", "image");
+
+      const photoRes = await fetch("/api/upload", {
+        method: "POST",
+        body: photoFormData,
+      });
+
+      const photoData = await photoRes.json();
+      if (!photoRes.ok) {
+        throw new Error(photoData.error || "Failed to upload photo to Cloudinary");
+      }
+
+      let videoUrl: string | undefined = undefined;
+
+      // 2. Upload Video Reel if provided
+      if (videoFile) {
+        setUploadStatus("Uploading 360° video reel to Cloudinary...");
+        const videoFormData = new FormData();
+        videoFormData.append("file", videoFile);
+        videoFormData.append("folder", "primestitch/videos");
+        videoFormData.append("resource_type", "video");
+
+        const videoRes = await fetch("/api/upload", {
+          method: "POST",
+          body: videoFormData,
+        });
+
+        const videoData = await videoRes.json();
+        if (!videoRes.ok) {
+          throw new Error(videoData.error || "Failed to upload video to Cloudinary");
+        }
+        videoUrl = videoData.url;
+      }
+
+      setUploadStatus("Publishing design to catalogue...");
+
+      const newId = `des-cloud-${Date.now()}`;
+      const newDesign = {
+        id: newId,
+        slug: `${garmentCut.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${styleCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+        name: `${garmentCut} (${styleCode})`,
+        styleCode,
+        category,
+        startingPrice: Number(startingPrice),
+        description,
+        heroImage: photoData.url,
+        imageAlt: `${garmentCut} ${styleCode} handcrafted in Aba atelier`,
+        imageDimensions: "1200 × 1600 px (3:4)",
+        videoUrl,
+        standardLeadDays: 7,
+        featured: true,
+        fabrics: [
+          {
+            id: "fab-cashmere-wool",
+            name: "Super 160s Cashmere-Wool",
+            gsm: 280,
+            weave: "Fine Twill Weave",
+            description: "Breathable, wrinkle-resistant premium wool blend.",
+            priceModifier: 0,
+            colors: ["#0B1528", "#1A2232", "#FFFFFF", "#C28B28"],
+          },
+          {
+            id: "fab-atiku",
+            name: "Lustre Atiku Cotton",
+            gsm: 240,
+            weave: "Jacquard Weave",
+            description: "Soft starch finish for crisp native silhouettes.",
+            priceModifier: 5000,
+            colors: ["#FFFFFF", "#0B1528", "#E2E8F0"],
+          },
+        ],
+        availableColors: [
+          { name: "Atelier Midnight Navy", hex: "#0B1528" },
+          { name: "Chalk White", hex: "#FFFFFF" },
+          { name: "Charcoal Slate", hex: "#1E293B" },
+          { name: "Shears Brass Gold", hex: "#C28B28" },
+        ],
+      };
+
+      addNewDesign(newDesign);
+      setUploadedDesign(newDesign);
+      setIsUploading(false);
+      setUploadStatus("");
+
+      // Clear file inputs for next upload
+      setPhotoFile(null);
+      setPhotoPreview(null);
+      setVideoFile(null);
+      setVideoPreview(null);
+      setStyleCode(`Style #${String(designs.length + 2).padStart(2, "0")}`);
+    } catch (err: any) {
+      setIsUploading(false);
+      setErrorMessage(err.message || "Upload process failed");
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Upload Status / Success Banner */}
+      {uploadedDesign && (
+        <Card className="p-5 border-2 border-accent-emerald bg-accent-emerald/5 space-y-3 animate-fadeIn">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-accent-emerald" />
+              <h4 className="font-bold text-base text-primary font-display">
+                Garment Published to Cloudinary &amp; Live Catalogue!
+              </h4>
+            </div>
+            <Badge variant="verified" size="sm">
+              Cloudinary CDN Active
+            </Badge>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono bg-white p-3 rounded-sm border border-border-subtle">
+            <div>
+              <span className="text-text-muted">Assigned Reference: </span>
+              <strong className="text-primary">{uploadedDesign.category} · {uploadedDesign.styleCode}</strong>
+              <span className="mx-2">•</span>
+              <span className="text-text-muted">Price: </span>
+              <strong className="text-primary">{formatNaira(uploadedDesign.startingPrice)}</strong>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Link href={`/designs/${uploadedDesign.id}`} target="_blank">
+                <Button size="sm" variant="primary" rightIcon={<ExternalLink className="w-3.5 h-3.5" />}>
+                  View in Customer Catalogue &rarr;
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {errorMessage && (
+        <div className="p-4 bg-error/10 border border-error/30 rounded-sm text-xs font-mono text-error flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
+
+      {/* Main Upload Form */}
+      <Card hasTapeTop className="p-6 sm:p-8 space-y-6">
+        <div className="border-b border-border-subtle pb-4 space-y-1">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold font-display text-primary flex items-center gap-2">
+              <UploadCloud className="w-5 h-5 text-accent-tape" />
+              <span>Upload New Garment (Photos &amp; Video Reel)</span>
+            </h2>
+            <Badge variant="tape" size="sm">
+              Cloudinary sq0fcvzp
+            </Badge>
+          </div>
+          <p className="text-xs text-text-muted">
+            Upload your garment photos and short video reels without inventing complicated names. The system assigns a visual style code and publishes it immediately to the customer catalogue.
+          </p>
+        </div>
+
+        <form onSubmit={handleUploadAndPublish} className="space-y-6">
+          {/* File Dropzone Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* 1. Photo File Input */}
+            <div className="space-y-2">
+              <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary block">
+                1. Garment Photo (Required) *
+              </label>
+
+              <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[200px] flex flex-col items-center justify-center">
+                {photoPreview ? (
+                  <div className="space-y-2 w-full">
+                    <img
+                      src={photoPreview}
+                      alt="Garment Preview"
+                      className="max-h-48 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle"
+                    />
+                    <p className="text-[11px] font-mono text-text-muted truncate">
+                      {photoFile?.name} ({(photoFile!.size / (1024 * 1024)).toFixed(2)} MB)
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+                      <Camera className="w-5 h-5" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-xs font-bold text-primary font-mono">
+                        Click or drag &amp; drop garment photo
+                      </p>
+                      <p className="text-[11px] text-text-muted">
+                        JPG, PNG, WEBP (Recommended 3:4 portrait)
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                />
+              </div>
+            </div>
+
+            {/* 2. Video Reel File Input (Optional) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
+                  2. 360° Video Reel (Optional)
+                </label>
+                <Badge variant="brass" size="sm">Video Lookbook</Badge>
+              </div>
+
+              <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[200px] flex flex-col items-center justify-center">
+                {videoPreview ? (
+                  <div className="space-y-2 w-full">
+                    <video
+                      src={videoPreview}
+                      controls
+                      className="max-h-48 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle bg-black"
+                    />
+                    <p className="text-[11px] font-mono text-text-muted truncate">
+                      {videoFile?.name} ({(videoFile!.size / (1024 * 1024)).toFixed(2)} MB)
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="w-10 h-10 rounded-full bg-accent-tape/20 text-primary flex items-center justify-center mx-auto">
+                      <Film className="w-5 h-5" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-xs font-bold text-primary font-mono">
+                        Add short video reel (drape / walkaround)
+                      </p>
+                      <p className="text-[11px] text-text-muted">
+                        MP4, MOV, WEBM (10–30s mobile clip)
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="video/*"
+                  onChange={handleVideoChange}
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Garment Details Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-border-subtle">
+            {/* Category */}
+            <div className="space-y-1.5 text-xs font-mono">
+              <label className="font-bold text-primary block uppercase">
+                Garment Category *
+              </label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value as any)}
+                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card"
+              >
+                <option value="Traditional">Traditional (Kaftan / Agbada / Isiagu)</option>
+                <option value="Formal">Formal (Executive Senator / 2-Piece)</option>
+                <option value="Contemporary">Contemporary (Modern Native Cut)</option>
+                <option value="Corporate">Corporate (Clean Work Native)</option>
+                <option value="Events">Events (Celebration / Wedding Attire)</option>
+              </select>
+            </div>
+
+            {/* Garment Cut Silhouette */}
+            <div className="space-y-1.5 text-xs font-mono">
+              <label className="font-bold text-primary block uppercase">
+                Cut Silhouette *
+              </label>
+              <select
+                value={garmentCut}
+                onChange={(e) => setGarmentCut(e.target.value)}
+                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card"
+              >
+                <option value="Senator 2-Piece">Senator 2-Piece Suit</option>
+                <option value="Architectural Kaftan">Architectural Grand Kaftan</option>
+                <option value="Ceremonial Agbada">Ceremonial 3-Piece Agbada</option>
+                <option value="Isiagu Celebration Set">Isiagu Ceremonial Set</option>
+                <option value="Safari Native Cut">Safari 2-Piece Native</option>
+                <option value="Casual Linen Native">Casual Linen Native</option>
+              </select>
+            </div>
+
+            {/* Visual Style Reference Code (No forced name needed!) */}
+            <div className="space-y-1.5 text-xs font-mono">
+              <label className="font-bold text-primary block uppercase">
+                Visual Reference Code *
+              </label>
+              <input
+                type="text"
+                required
+                value={styleCode}
+                onChange={(e) => setStyleCode(e.target.value)}
+                placeholder="e.g. Style #09"
+                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-bold text-primary"
+              />
+            </div>
+          </div>
+
+          {/* Pricing & Description */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="space-y-1.5 text-xs font-mono">
+              <label className="font-bold text-primary block uppercase">
+                Starting Base Price (₦) *
+              </label>
+              <input
+                type="number"
+                required
+                value={startingPrice}
+                onChange={(e) => setStartingPrice(Number(e.target.value))}
+                min={20000}
+                step={1000}
+                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-bold text-primary"
+              />
+            </div>
+
+            <div className="sm:col-span-2 space-y-1.5 text-xs font-mono">
+              <label className="font-bold text-primary block uppercase">
+                Tailoring Highlights &amp; Notes
+              </label>
+              <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="e.g. Handcrafted in Aba with concealed chest placket and locked delivery SLA."
+                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card"
+              />
+            </div>
+          </div>
+
+          {/* Submit Action Button */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border-subtle">
+            <div className="text-xs font-mono text-text-muted">
+              {isUploading ? (
+                <span className="text-secondary font-bold animate-pulse flex items-center gap-1.5">
+                  <UploadCloud className="w-4 h-4 animate-bounce" />
+                  {uploadStatus}
+                </span>
+              ) : (
+                <span>Uploads directly to Cloudinary: <strong className="text-primary font-bold">sq0fcvzp</strong></span>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              size="lg"
+              disabled={isUploading}
+              className="w-full sm:w-auto font-bold shadow-raised px-8"
+              rightIcon={<UploadCloud className="w-4 h-4 text-accent-tape" />}
+            >
+              {isUploading ? "Uploading to Cloudinary..." : "Upload & Publish to Catalogue"}
+            </Button>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 }
