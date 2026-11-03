@@ -324,7 +324,7 @@ export default function AdminDashboardPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border-subtle">
-                      {orders.slice(0, 6).map((ord) => (
+                      {orders.slice(0, 10).map((ord) => (
                         <tr key={ord.id} className="hover:bg-surface-muted/50">
                           <td className="p-3 font-bold text-primary">{ord.id}</td>
                           <td className="p-3 font-sans text-on-surface truncate max-w-[120px]">

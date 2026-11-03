@@ -114,8 +114,8 @@ export default function AdminLayout({
 
   return (
     <div className="bg-surface-muted/30 pb-6 sm:pb-8">
-      {/* Admin Command Bar: Relative on mobile to prevent double sticky headers & clipping; sticky on desktop */}
-      <div className="relative border-b border-border-seam bg-surface-card shadow-subtle md:sticky md:top-16 md:z-30">
+      {/* Admin Command Bar: Natural document flow to prevent sticky collision or clipping on any screen */}
+      <div className="relative border-b border-border-seam bg-surface-card shadow-subtle">
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           {/* Top Row: User identity & Logout */}
           <div className="flex items-center justify-between py-2 border-b border-border-subtle/60 text-xs">
