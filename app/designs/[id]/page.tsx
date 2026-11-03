@@ -35,7 +35,13 @@ export default function DesignDetailPage() {
     design.availableColors[0] || { name: "Default", hex: "#0B1528" }
   );
   const [quantity, setQuantity] = useState<number>(1);
-  const [mediaView, setMediaView] = useState<"photo" | "video">("photo");
+  
+  // Determine media presence
+  const hasVideo = Boolean(design.videoUrl);
+  const hasPhoto = Boolean(design.heroImage && !design.heroImage.endsWith(".mp4") && design.heroImage !== design.videoUrl);
+  const [mediaView, setMediaView] = useState<"photo" | "video">(() => 
+    hasVideo && !hasPhoto ? "video" : "photo"
+  );
 
   const selectedFabric =
     design.fabrics.find((f) => f.id === selectedFabricId) || design.fabrics[0];
@@ -77,8 +83,8 @@ export default function DesignDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         {/* Left Column: Image/Video Gallery & Fabric details */}
         <div className="lg:col-span-6 space-y-4">
-          {/* Media view toggles if video is available */}
-          {design.videoUrl && (
+          {/* Media view toggles if both photo and video exist */}
+          {hasPhoto && hasVideo && (
             <div className="flex items-center gap-2 font-mono text-xs">
               <button
                 type="button"
@@ -108,8 +114,18 @@ export default function DesignDetailPage() {
             </div>
           )}
 
+          {/* If video only, show dedicated lookbook indicator */}
+          {!hasPhoto && hasVideo && (
+            <div className="flex items-center gap-2 font-mono text-xs">
+              <Badge variant="brass" size="sm" className="flex items-center gap-1.5 py-1 px-2.5">
+                <Film className="w-3.5 h-3.5" />
+                <span>Atelier 360° Video Lookbook</span>
+              </Badge>
+            </div>
+          )}
+
           <div className="relative">
-            {mediaView === "video" && design.videoUrl ? (
+            {(mediaView === "video" || !hasPhoto) && design.videoUrl ? (
               <div className="rounded-md border border-border-seam shadow-card bg-black overflow-hidden aspect-[3/4] flex items-center justify-center relative">
                 <video
                   src={design.videoUrl}
@@ -121,7 +137,7 @@ export default function DesignDetailPage() {
                 />
                 <div className="absolute top-4 left-4 z-10 pointer-events-none">
                   <Badge variant="tape" size="sm">
-                    Live Video Drape
+                    360° Drape Reel
                   </Badge>
                 </div>
               </div>

@@ -266,7 +266,7 @@ export default function AdminMediaPage() {
             }`}
           >
             <UploadCloud className="w-4 h-4 text-accent-tape" />
-            <span>Upload Garment Lookbook (Cloudinary)</span>
+            <span>Publish Garment Lookbook</span>
           </button>
 
           <button
@@ -279,17 +279,17 @@ export default function AdminMediaPage() {
             }`}
           >
             <ImageIcon className="w-4 h-4 text-secondary" />
-            <span>Static Asset Registry ({filteredAssets.length})</span>
+            <span>Media Library & Assets ({filteredAssets.length})</span>
           </button>
         </div>
 
         <Badge variant="verified" size="sm">
-          Cloudinary: sq0fcvzp Active
+          Atelier Media Vault Active
         </Badge>
       </div>
 
       {activeView === "uploader" ? (
-        <CloudinaryGarmentUploader />
+        <GarmentLookbookUploader />
       ) : (
         <>
           {/* Controls & Quick Action Bar */}
@@ -439,8 +439,8 @@ export default function AdminMediaPage() {
   );
 }
 
-// Cloudinary Garment Lookbook Uploader Component
-function CloudinaryGarmentUploader() {
+// Garment Lookbook Studio Uploader Component
+function GarmentLookbookUploader() {
   const { designs, addNewDesign } = usePrimeStitch();
 
   const [photoFile, setPhotoFile] = useState<File | null>(null);
@@ -479,37 +479,42 @@ function CloudinaryGarmentUploader() {
 
   const handleUploadAndPublish = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!photoFile) {
-      setErrorMessage("Please select at least one garment photo.");
+    if (!photoFile && !videoFile) {
+      setErrorMessage("Please select at least one garment photo or video reel to publish.");
       return;
     }
 
     setIsUploading(true);
     setErrorMessage(null);
-    setUploadStatus("Uploading high-res photo to Cloudinary (cloud: sq0fcvzp)...");
+    setUploadStatus("Processing media assets...");
 
     try {
-      // 1. Upload Photo to Cloudinary via server route /api/upload
-      const photoFormData = new FormData();
-      photoFormData.append("file", photoFile);
-      photoFormData.append("folder", "primestitch/garments");
-      photoFormData.append("resource_type", "image");
-
-      const photoRes = await fetch("/api/upload", {
-        method: "POST",
-        body: photoFormData,
-      });
-
-      const photoData = await photoRes.json();
-      if (!photoRes.ok) {
-        throw new Error(photoData.error || "Failed to upload photo to Cloudinary");
-      }
-
+      let heroImage = "";
       let videoUrl: string | undefined = undefined;
 
-      // 2. Upload Video Reel if provided
+      // 1. Upload Photo if selected
+      if (photoFile) {
+        setUploadStatus("Uploading high-resolution garment photography...");
+        const photoFormData = new FormData();
+        photoFormData.append("file", photoFile);
+        photoFormData.append("folder", "primestitch/garments");
+        photoFormData.append("resource_type", "image");
+
+        const photoRes = await fetch("/api/upload", {
+          method: "POST",
+          body: photoFormData,
+        });
+
+        const photoData = await photoRes.json();
+        if (!photoRes.ok) {
+          throw new Error(photoData.error || "Failed to upload garment photo");
+        }
+        heroImage = photoData.url;
+      }
+
+      // 2. Upload Video Reel if selected
       if (videoFile) {
-        setUploadStatus("Uploading 360° video reel to Cloudinary...");
+        setUploadStatus("Uploading 360° video drape reel...");
         const videoFormData = new FormData();
         videoFormData.append("file", videoFile);
         videoFormData.append("folder", "primestitch/videos");
@@ -522,14 +527,19 @@ function CloudinaryGarmentUploader() {
 
         const videoData = await videoRes.json();
         if (!videoRes.ok) {
-          throw new Error(videoData.error || "Failed to upload video to Cloudinary");
+          throw new Error(videoData.error || "Failed to upload video reel");
         }
         videoUrl = videoData.url;
+
+        // If no photo was provided, derive high-res poster frame as heroImage
+        if (!heroImage) {
+          heroImage = videoData.url.replace(/\.[^/.]+$/, ".jpg");
+        }
       }
 
       setUploadStatus("Publishing design to catalogue...");
 
-      const newId = `des-cloud-${Date.now()}`;
+      const newId = `des-lookbook-${Date.now()}`;
       const newDesign = {
         id: newId,
         slug: `${garmentCut.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${styleCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
@@ -538,7 +548,7 @@ function CloudinaryGarmentUploader() {
         category,
         startingPrice: Number(startingPrice),
         description,
-        heroImage: photoData.url,
+        heroImage,
         imageAlt: `${garmentCut} ${styleCode} handcrafted in Aba atelier`,
         imageDimensions: "1200 × 1600 px (3:4)",
         videoUrl,
@@ -598,11 +608,11 @@ function CloudinaryGarmentUploader() {
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-accent-emerald" />
               <h4 className="font-bold text-base text-primary font-display">
-                Garment Published to Cloudinary &amp; Live Catalogue!
+                Garment Published to Live Catalogue!
               </h4>
             </div>
             <Badge variant="verified" size="sm">
-              Cloudinary CDN Active
+              Live in Lookbook
             </Badge>
           </div>
 
@@ -639,14 +649,14 @@ function CloudinaryGarmentUploader() {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold font-display text-primary flex items-center gap-2">
               <UploadCloud className="w-5 h-5 text-accent-tape" />
-              <span>Upload New Garment (Photos &amp; Video Reel)</span>
+              <span>Publish Garment Lookbook (Photos, Video Reel, or Both)</span>
             </h2>
             <Badge variant="tape" size="sm">
-              Cloudinary sq0fcvzp
+              Atelier Vault Active
             </Badge>
           </div>
           <p className="text-xs text-text-muted">
-            Upload your garment photos and short video reels without inventing complicated names. The system assigns a visual style code and publishes it immediately to the customer catalogue.
+            Upload garment photography, short 360° video walkaround reels, or both. No complex garment names required—each outfit is assigned a clean visual style reference and published immediately.
           </p>
         </div>
 
@@ -655,9 +665,12 @@ function CloudinaryGarmentUploader() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* 1. Photo File Input */}
             <div className="space-y-2">
-              <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary block">
-                1. Garment Photo (Required) *
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary block">
+                  1. Garment Photography
+                </label>
+                <span className="text-[10px] font-mono text-text-muted">Optional if uploading video</span>
+              </div>
 
               <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[200px] flex flex-col items-center justify-center">
                 {photoPreview ? (
@@ -678,7 +691,7 @@ function CloudinaryGarmentUploader() {
                     </div>
                     <div className="space-y-0.5">
                       <p className="text-xs font-bold text-primary font-mono">
-                        Click or drag &amp; drop garment photo
+                        Click or drag &amp; drop outfit photo
                       </p>
                       <p className="text-[11px] text-text-muted">
                         JPG, PNG, WEBP (Recommended 3:4 portrait)
@@ -695,13 +708,13 @@ function CloudinaryGarmentUploader() {
               </div>
             </div>
 
-            {/* 2. Video Reel File Input (Optional) */}
+            {/* 2. Video Reel File Input */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
-                  2. 360° Video Reel (Optional)
+                  2. 360° Drape Video Reel
                 </label>
-                <Badge variant="brass" size="sm">Video Lookbook</Badge>
+                <span className="text-[10px] font-mono text-text-muted">Optional if uploading photo</span>
               </div>
 
               <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[200px] flex flex-col items-center justify-center">
@@ -723,10 +736,10 @@ function CloudinaryGarmentUploader() {
                     </div>
                     <div className="space-y-0.5">
                       <p className="text-xs font-bold text-primary font-mono">
-                        Add short video reel (drape / walkaround)
+                        Add motion drape / walkaround reel
                       </p>
                       <p className="text-[11px] text-text-muted">
-                        MP4, MOV, WEBM (10–30s mobile clip)
+                        MP4, MOV, WEBM (10–30s walkaround clip)
                       </p>
                     </div>
                   </div>
@@ -739,6 +752,11 @@ function CloudinaryGarmentUploader() {
                 />
               </div>
             </div>
+          </div>
+
+          <div className="bg-surface-muted/60 p-3 rounded-sm border border-border-subtle text-[11px] font-mono text-text-muted flex items-center justify-between">
+            <span>Supported combinations: <strong>Photos only</strong>, <strong>Video reel only</strong>, or <strong>Both together</strong>.</span>
+            <Badge variant="verified" size="sm">Flexible Media</Badge>
           </div>
 
           {/* Garment Details Grid */}
@@ -836,7 +854,7 @@ function CloudinaryGarmentUploader() {
                   {uploadStatus}
                 </span>
               ) : (
-                <span>Uploads directly to Cloudinary: <strong className="text-primary font-bold">sq0fcvzp</strong></span>
+                <span className="text-text-muted">Instant deployment to live customer catalogue with locked delivery SLA.</span>
               )}
             </div>
 
@@ -847,7 +865,7 @@ function CloudinaryGarmentUploader() {
               className="w-full sm:w-auto font-bold shadow-raised px-8"
               rightIcon={<UploadCloud className="w-4 h-4 text-accent-tape" />}
             >
-              {isUploading ? "Uploading to Cloudinary..." : "Upload & Publish to Catalogue"}
+              {isUploading ? "Publishing Outfit..." : "Publish Outfit to Catalogue"}
             </Button>
           </div>
         </form>

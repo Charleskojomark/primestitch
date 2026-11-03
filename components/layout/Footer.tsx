@@ -94,13 +94,8 @@ export function Footer() {
                 <MessageSquare className="w-4 h-4 text-accent-emerald" />
                 <span>WhatsApp: Instant Tailor Desk</span>
               </div>
-              <div className="pt-2">
-                <Link
-                  href="/staff/login"
-                  className="inline-block px-3 py-1.5 rounded-sm bg-slate-800 text-accent-tape hover:bg-slate-700 text-xs font-mono font-semibold"
-                >
-                  Atelier Staff Portal &rarr;
-                </Link>
+              <div className="pt-2 text-[11px] text-slate-400">
+                Mon – Sat: 8:00 AM – 6:30 PM WAT
               </div>
             </div>
           </div>
@@ -117,6 +112,10 @@ export function Footer() {
             <span className="text-slate-600">•</span>
             <Link href="/privacy" className="hover:text-accent-tape transition-colors">
               Privacy Policy
+            </Link>
+            <span className="text-slate-600">•</span>
+            <Link href="/staff/login" className="hover:text-slate-300 text-slate-500 transition-colors">
+              Staff Portal
             </Link>
           </div>
           <div>
