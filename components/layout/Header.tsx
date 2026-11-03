@@ -80,7 +80,7 @@ export function Header() {
               <UserButton afterSignOutUrl="/" />
             </SignedIn>
             <SignedOut>
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" fallbackRedirectUrl="/auth/redirect" signUpFallbackRedirectUrl="/auth/redirect">
                 <button
                   type="button"
                   className="hidden md:flex items-center gap-1.5 text-xs font-mono font-semibold text-primary hover:text-white hover:bg-primary py-2 px-3 rounded-sm border border-border-seam transition-colors"

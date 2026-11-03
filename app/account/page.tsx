@@ -76,12 +76,12 @@ export default function CustomerAccountPage() {
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
-            <SignInButton mode="modal">
+            <SignInButton mode="modal" fallbackRedirectUrl="/auth/redirect" signUpFallbackRedirectUrl="/auth/redirect">
               <Button variant="primary" size="sm" className="flex-1 sm:flex-none">
                 Sign In
               </Button>
             </SignInButton>
-            <SignUpButton mode="modal">
+            <SignUpButton mode="modal" fallbackRedirectUrl="/auth/redirect" signInFallbackRedirectUrl="/auth/redirect">
               <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
                 Create Account
               </Button>

@@ -189,6 +189,25 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
       console.warn("Failed to parse localStorage data", e);
     }
     setIsInitialized(true);
+
+    // Fetch live orders and bookings from Neon PostgreSQL cloud database
+    fetch("/api/orders")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setOrders(data);
+        }
+      })
+      .catch((err) => console.warn("Failed to sync orders from Neon DB", err));
+
+    fetch("/api/bookings")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setBookings(data);
+        }
+      })
+      .catch((err) => console.warn("Failed to sync bookings from Neon DB", err));
   }, []);
 
   // Sync to localStorage
@@ -339,6 +358,13 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
 
     setOrders((prev) => [newOrder, ...prev]);
 
+    // Persist to Neon PostgreSQL cloud database
+    fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newOrder),
+    }).catch((err) => console.warn("Failed to persist order to Neon DB", err));
+
     // If booked measurer was chosen, also create a booking automatically!
     if (draftOrder.measurementMethod === "booked_measurer" && draftOrder.bookingDetails) {
       createBooking({
@@ -410,6 +436,13 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
         };
       })
     );
+
+    // Persist status change to Neon PostgreSQL cloud database
+    fetch(`/api/orders/${encodeURIComponent(orderId)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStage, notes: note }),
+    }).catch((err) => console.warn("Failed to update order in Neon DB", err));
   };
 
   const assignTailorToOrder = (orderId: string, tailorId: string) => {
@@ -436,6 +469,13 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
           : ord
       )
     );
+
+    // Persist tailor assignment to Neon PostgreSQL cloud database
+    fetch(`/api/orders/${encodeURIComponent(orderId)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ assignedTailorId: tailor.id, assignedTailorName: tailor.name }),
+    }).catch((err) => console.warn("Failed to persist tailor assignment to Neon DB", err));
   };
 
   const createBooking = (bookingData: Partial<MeasurementBooking>): MeasurementBooking => {
@@ -458,6 +498,14 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
     };
 
     setBookings((prev) => [newBooking, ...prev]);
+
+    // Persist booking to Neon PostgreSQL cloud database
+    fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newBooking),
+    }).catch((err) => console.warn("Failed to persist booking to Neon DB", err));
+
     return newBooking;
   };
 
@@ -465,6 +513,13 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
     setBookings((prev) =>
       prev.map((b) => (b.id === id ? { ...b, ...updates } : b))
     );
+
+    // Persist booking update to Neon PostgreSQL cloud database
+    fetch(`/api/bookings/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updates),
+    }).catch((err) => console.warn("Failed to update booking in Neon DB", err));
   };
 
   const createBulkRequest = (reqData: Partial<BulkOrderRequest>): BulkOrderRequest => {
@@ -534,17 +589,25 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
   };
 
   const loginStaff = (role: "admin" | "tailor" | "measurer", staffId?: string) => {
+    const finalStaffId = staffId || (role === "tailor" ? "tl-01" : role === "measurer" ? "ms-01" : "admin-01");
     setStaffRole(role);
-    setActiveStaffId(staffId || (role === "tailor" ? "tl-01" : role === "measurer" ? "ms-01" : "admin-01"));
+    setActiveStaffId(finalStaffId);
     try {
       localStorage.setItem(
         STORAGE_KEY_STAFF,
         JSON.stringify({
           role,
-          staffId: staffId || (role === "tailor" ? "tl-01" : role === "measurer" ? "ms-01" : "admin-01"),
+          staffId: finalStaffId,
         })
       );
     } catch (e) {}
+
+    // Set HTTP session cookie for Next.js Middleware RBAC
+    fetch("/api/auth/staff-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role, staffId: finalStaffId }),
+    }).catch(() => {});
   };
 
   const logoutStaff = () => {
@@ -553,6 +616,11 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
     try {
       localStorage.removeItem(STORAGE_KEY_STAFF);
     } catch (e) {}
+
+    // Clear HTTP session cookie
+    fetch("/api/auth/staff-session", {
+      method: "DELETE",
+    }).catch(() => {});
   };
 
   const updateMediaAsset = (id: string, updates: Partial<MediaAsset>) => {

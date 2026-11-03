@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  TAILOR
+  MEASURER
+}
+
+model User {
+  id           String        @id @default(cuid())
+  clerkId      String?       @unique
+  email        String?       @unique
+  name         String?
+  phone        String?
+  role         Role          @default(CUSTOMER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  measurements Measurement?
+  orders       Order[]
+  bookings     Booking[]
+
+  @@map("users")
+}
+
+model Measurement {
+  id            String    @id @default(cuid())
+  userId        String?   @unique
+  user          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customerPhone String?
+  customerEmail String?
+  unit          String    @default("in")
+  chest         Float?
+  shoulder      Float?
+  sleeveLength  Float?
+  neck          Float?
+  waist         Float?
+  trouserLength Float?
+  hips          Float?
+  bicep         Float?
+  thigh         Float?
+  verifiedAt    DateTime?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("measurements")
+}
+
+model Order {
+  id                     String               @id // Order number, e.g. #PS-8492
+  userId                 String?
+  user                   User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerName           String
+  customerPhone          String
+  customerEmail          String?
+  deliveryAddress        String
+  deliveryState          String
+  deliveryLga            String
+  status                 String               @default("Measurement Intake")
+  guaranteedDeliveryDate DateTime
+  totalAmount            Float
+  depositAmount          Float
+  paymentStatus          String               @default("deposit_paid")
+  assignedTailorId       String?
+  assignedTailorName     String?
+  notes                  String?
+  isLate                 Boolean              @default(false)
+  isAtRisk               Boolean              @default(false)
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+
+  items                  OrderItem[]
+  statusHistory          OrderStatusHistory[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id           String  @id @default(cuid())
+  orderId      String
+  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  designId     String
+  designName   String
+  fabricId     String
+  fabricName   String
+  colorName    String
+  colorHex     String
+  quantity     Int     @default(1)
+  unitPrice    Float
+  measurements Json?
+
+  @@map("order_items")
+}
+
+model OrderStatusHistory {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  stage     String
+  timestamp DateTime @default(now())
+  notes     String?
+
+  @@map("order_status_history")
+}
+
+model Booking {
+  id                   String   @id // Booking ID e.g. BK-010
+  userId               String?
+  user                 User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerName         String
+  customerPhone        String
+  address              String
+  area                 String
+  state                String
+  venueType            String   @default("home")
+  date                 String
+  timeSlot             String
+  status               String   @default("scheduled")
+  measurerId           String?
+  measurerName         String?
+  recordedMeasurements Json?
+  notes                String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("bookings")
+}
+
+model Staff {
+  id        String   @id // e.g. tl-01, ms-01, admin-01
+  name      String
+  role      Role
+  email     String?
+  phone     String?
+  area      String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("staff")
+}
+

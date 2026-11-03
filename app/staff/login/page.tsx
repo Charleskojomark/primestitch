@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { usePrimeStitch } from "@/lib/store";
-import { Scissors, ShieldCheck, Ruler, UserCheck, ArrowRight, Lock } from "lucide-react";
+import { Scissors, ShieldCheck, Ruler, UserCheck, ArrowRight, Lock, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
@@ -12,10 +12,27 @@ import { Logo } from "@/components/ui/Logo";
 
 export default function StaffLoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { loginStaff, staffRole, logoutStaff, tailors, measurers } = usePrimeStitch();
 
-  const [selectedRole, setSelectedRole] = useState<"admin" | "tailor" | "measurer">("admin");
+  const redirectTarget = searchParams.get("redirect");
+  const authError = searchParams.get("error");
+  const defaultRole = searchParams.get("role") as "admin" | "tailor" | "measurer" | null;
+
+  const [selectedRole, setSelectedRole] = useState<"admin" | "tailor" | "measurer">(
+    defaultRole || "admin"
+  );
   const [selectedStaffId, setSelectedStaffId] = useState<string>("admin-01");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (defaultRole) {
+      setSelectedRole(defaultRole);
+      if (defaultRole === "admin") setSelectedStaffId("admin-01");
+      if (defaultRole === "tailor") setSelectedStaffId(tailors[0]?.id || "tl-01");
+      if (defaultRole === "measurer") setSelectedStaffId(measurers[0]?.id || "ms-01");
+    }
+  }, [defaultRole, tailors, measurers]);
 
   const handleRoleSelect = (role: "admin" | "tailor" | "measurer") => {
     setSelectedRole(role);
@@ -24,12 +41,35 @@ export default function StaffLoginPage() {
     if (role === "measurer") setSelectedStaffId(measurers[0]?.id || "ms-01");
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // 1. Set server cookie for Middleware RBAC
+      await fetch("/api/auth/staff-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: selectedRole, staffId: selectedStaffId }),
+      });
+    } catch (err) {
+      console.warn("Failed to set staff session cookie", err);
+    }
+
+    // 2. Set local store state
     loginStaff(selectedRole, selectedStaffId);
-    if (selectedRole === "admin") router.push("/admin");
-    if (selectedRole === "tailor") router.push("/tailor");
-    if (selectedRole === "measurer") router.push("/measurer");
+
+    // 3. Redirect to intended destination or role dashboard
+    if (redirectTarget) {
+      router.push(redirectTarget);
+    } else if (selectedRole === "admin") {
+      router.push("/admin");
+    } else if (selectedRole === "tailor") {
+      router.push("/tailor");
+    } else if (selectedRole === "measurer") {
+      router.push("/measurer");
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -50,6 +90,21 @@ export default function StaffLoginPage() {
           Select an operational role to manage order pipelines, update cutting benches, or record doorstep measurements.
         </p>
       </div>
+
+      {authError && (
+        <div className="p-4 bg-error/10 border border-error/30 rounded-sm text-xs font-mono text-error flex items-start gap-3">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <strong className="block font-bold">Access Restricted by Role (RBAC)</strong>
+            <span>
+              {authError === "admin_required" && "You must authenticate with Operations Admin credentials to access that view."}
+              {authError === "tailor_required" && "You must authenticate as a Master Tailor to view the bench production queue."}
+              {authError === "measurer_required" && "You must authenticate as a Field Measurer to view doorstep appointments."}
+              {!["admin_required", "tailor_required", "measurer_required"].includes(authError) && "Please select an authorized role to proceed."}
+            </span>
+          </div>
+        </div>
+      )}
 
       <Card hasTapeTop className="p-6 md:p-8 space-y-6">
         <form onSubmit={handleLogin} className="space-y-6">
