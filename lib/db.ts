@@ -319,3 +319,82 @@ export async function getStaff() {
     active: s.active,
   }));
 }
+
+// DESIGNS (Garment Lookbook Catalog synced with Cloudinary & Neon DB)
+export async function getDesigns() {
+  const rows = await sql`
+    SELECT * FROM designs ORDER BY created_at DESC;
+  `;
+
+  return rows.map((d: any) => ({
+    id: d.id,
+    slug: d.slug || d.id,
+    name: d.name,
+    styleCode: d.style_code,
+    category: d.category,
+    startingPrice: Number(d.starting_price),
+    description: d.description || "",
+    heroImage: d.hero_image,
+    imageAlt: d.image_alt || d.name,
+    imageDimensions: d.image_dimensions || "1200 × 1600 px (3:4)",
+    videoUrl: d.video_url || undefined,
+    standardLeadDays: Number(d.standard_lead_days || 7),
+    featured: d.featured !== false,
+    fabrics: d.fabrics || [],
+    availableColors: d.available_colors || [],
+    createdAt: d.created_at,
+  }));
+}
+
+export async function createDesign(data: any) {
+  const id = data.id || `des-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`;
+  const slug = data.slug || id;
+  const standardLeadDays = Number(data.standardLeadDays || 7);
+  const startingPrice = Number(data.startingPrice || 55000);
+  const featured = data.featured !== false;
+
+  await sql`
+    INSERT INTO designs (
+      id, slug, name, style_code, category, starting_price,
+      description, hero_image, image_alt, image_dimensions,
+      video_url, standard_lead_days, featured, fabrics, available_colors
+    ) VALUES (
+      ${id},
+      ${slug},
+      ${data.name},
+      ${data.styleCode || null},
+      ${data.category || "Traditional"},
+      ${startingPrice},
+      ${data.description || null},
+      ${data.heroImage},
+      ${data.imageAlt || null},
+      ${data.imageDimensions || "1200 × 1600 px (3:4)"},
+      ${data.videoUrl || null},
+      ${standardLeadDays},
+      ${featured},
+      ${JSON.stringify(data.fabrics || [])},
+      ${JSON.stringify(data.availableColors || [])}
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      name = EXCLUDED.name,
+      style_code = EXCLUDED.style_code,
+      category = EXCLUDED.category,
+      starting_price = EXCLUDED.starting_price,
+      description = EXCLUDED.description,
+      hero_image = EXCLUDED.hero_image,
+      video_url = EXCLUDED.video_url,
+      updated_at = NOW();
+  `;
+
+  const rows = await sql`SELECT * FROM designs WHERE id = ${id} LIMIT 1;`;
+  return rows[0];
+}
+
+export async function createBatchDesigns(designsList: any[]) {
+  const results = [];
+  for (const item of designsList) {
+    const created = await createDesign(item);
+    results.push(created);
+  }
+  return results;
+}

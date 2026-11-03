@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { usePrimeStitch } from "@/lib/store";
 import { Logo } from "@/components/ui/Logo";
+import { Badge } from "@/components/ui/Badge";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import {
   Scissors,
@@ -17,11 +18,13 @@ import {
   Menu,
   X,
   Briefcase,
+  LogOut,
+  Shield,
 } from "lucide-react";
 
 export function Header() {
   const pathname = usePathname();
-  const { draftOrder, staffRole } = usePrimeStitch();
+  const { draftOrder, staffRole, staffEmail, logoutStaff } = usePrimeStitch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -74,23 +77,44 @@ export function Header() {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          {/* Clerk Auth Integration */}
-          <div className="flex items-center">
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal" fallbackRedirectUrl="/auth/redirect" signUpFallbackRedirectUrl="/auth/redirect">
-                <button
-                  type="button"
-                  className="hidden md:flex items-center gap-1.5 text-xs font-mono font-semibold text-primary hover:text-white hover:bg-primary py-2 px-3 rounded-sm border border-border-seam transition-colors"
-                >
-                  <User className="w-3.5 h-3.5 text-secondary" />
-                  <span>Sign In</span>
-                </button>
-              </SignInButton>
-            </SignedOut>
-          </div>
+          {/* Auth Integration: Handles both Staff Workstation and Clerk Customer Accounts */}
+          {staffRole ? (
+            <div className="flex items-center gap-1.5">
+              <Link
+                href={staffRole === "admin" ? "/admin" : staffRole === "tailor" ? "/tailor" : "/measurer"}
+                className="hidden md:flex items-center gap-1.5 text-xs font-mono font-semibold text-primary hover:text-white hover:bg-primary py-1.5 px-2.5 rounded-sm border border-border-seam transition-colors"
+              >
+                <Shield className="w-3.5 h-3.5 text-secondary" />
+                <span>{staffRole === "admin" ? "Admin" : staffRole === "tailor" ? "Tailor" : "Measurer"}</span>
+              </Link>
+              <button
+                type="button"
+                onClick={logoutStaff}
+                className="hidden md:flex items-center text-text-muted hover:text-error p-1.5 rounded transition-colors"
+                title="Exit Staff Session"
+                aria-label="Exit staff session"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              <SignedIn>
+                <UserButton afterSignOutUrl="/" />
+              </SignedIn>
+              <SignedOut>
+                <SignInButton mode="modal" fallbackRedirectUrl="/auth/redirect" signUpFallbackRedirectUrl="/auth/redirect">
+                  <button
+                    type="button"
+                    className="hidden md:flex items-center gap-1.5 text-xs font-mono font-semibold text-primary hover:text-white hover:bg-primary py-2 px-3 rounded-sm border border-border-seam transition-colors"
+                  >
+                    <User className="w-3.5 h-3.5 text-secondary" />
+                    <span>Sign In</span>
+                  </button>
+                </SignInButton>
+              </SignedOut>
+            </div>
+          )}
 
           <Link
             href="/order"
@@ -142,15 +166,63 @@ export function Header() {
             })}
           </div>
 
-          <div className="pt-3 border-t border-border-subtle flex items-center justify-between text-xs font-mono">
-            <Link
-              href="/staff/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-primary font-bold hover:underline flex items-center gap-1.5 py-1"
-            >
-              <Briefcase className="w-3.5 h-3.5" />
-              <span>Staff Login (Tailors, Measurers, Admin)</span>
-            </Link>
+          {/* Auth & Staff Status in Mobile Drawer */}
+          <div className="pt-3 border-t border-border-subtle text-xs font-mono">
+            {staffRole ? (
+              <div className="flex items-center justify-between py-1">
+                <Link
+                  href={staffRole === "admin" ? "/admin" : staffRole === "tailor" ? "/tailor" : "/measurer"}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 text-primary font-bold hover:underline"
+                >
+                  <Badge variant="tape" size="sm">
+                    {staffRole.toUpperCase()}
+                  </Badge>
+                  <span className="truncate">{staffEmail || "Workstation"} &rarr;</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    logoutStaff();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-error font-bold text-[11px] hover:underline"
+                >
+                  Exit
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between py-1">
+                <SignedIn>
+                  <div className="flex items-center gap-2">
+                    <UserButton afterSignOutUrl="/" />
+                    <span className="text-text-muted">Account Active</span>
+                  </div>
+                </SignedIn>
+                <SignedOut>
+                  <SignInButton mode="modal" fallbackRedirectUrl="/auth/redirect" signUpFallbackRedirectUrl="/auth/redirect">
+                    <button
+                      type="button"
+                      className="text-primary font-bold hover:underline flex items-center gap-1.5"
+                    >
+                      <User className="w-3.5 h-3.5 text-secondary" />
+                      <span>Customer Sign In</span>
+                    </button>
+                  </SignInButton>
+                </SignedOut>
+
+                {!pathname.startsWith("/admin") && !pathname.startsWith("/tailor") && !pathname.startsWith("/measurer") && (
+                  <Link
+                    href="/staff/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-text-muted hover:text-primary flex items-center gap-1 py-1"
+                  >
+                    <Briefcase className="w-3.5 h-3.5" />
+                    <span>Staff Portal</span>
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

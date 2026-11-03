@@ -102,6 +102,7 @@ interface PrimeStitchContextType {
   resetMediaAsset: (id: string) => void;
   resetAllMediaAssets: () => void;
   addNewDesign: (design: Design) => void;
+  addNewDesigns: (designs: Design[]) => void;
   loginStaff: (role: "admin" | "tailor" | "measurer", staffId?: string, email?: string) => void;
   logoutStaff: () => void;
   linkStaffEmail: (role: "admin" | "tailor" | "measurer", staffId: string, email: string) => void;
@@ -236,6 +237,19 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
         }
       })
       .catch((err) => console.warn("Failed to sync bookings from Neon DB", err));
+
+    fetch("/api/designs")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setDesigns((prev) => {
+            const existingIds = new Set(data.map((d: any) => d.id));
+            const remaining = prev.filter((p) => !existingIds.has(p.id));
+            return [...data, ...remaining];
+          });
+        }
+      })
+      .catch((err) => console.warn("Failed to sync designs from Neon DB", err));
   }, []);
 
   // Sync to localStorage
@@ -771,6 +785,20 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
 
   const addNewDesign = (newDesign: Design) => {
     setDesigns((prev) => [newDesign, ...prev]);
+    fetch("/api/designs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newDesign),
+    }).catch((err) => console.warn("Failed to persist design to Neon DB", err));
+  };
+
+  const addNewDesigns = (newDesignsList: Design[]) => {
+    setDesigns((prev) => [...newDesignsList, ...prev]);
+    fetch("/api/designs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newDesignsList),
+    }).catch((err) => console.warn("Failed to persist batch designs to Neon DB", err));
   };
 
   const resetAllToSeed = () => {
@@ -818,6 +846,7 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
         resetMediaAsset,
         resetAllMediaAssets,
         addNewDesign,
+        addNewDesigns,
         loginStaff,
         logoutStaff,
         linkStaffEmail,

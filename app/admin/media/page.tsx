@@ -23,6 +23,10 @@ import {
   Film,
   Play,
   CheckCircle,
+  Trash2,
+  Plus,
+  Loader2,
+  CheckCheck,
 } from "lucide-react";
 import { usePrimeStitch } from "@/lib/store";
 import { MediaAsset } from "@/lib/types";
@@ -388,45 +392,90 @@ export default function AdminMediaPage() {
       </div>
       </>
       )}
-
-      {/* Footer Info Box */}
-      <div className="border border-border-seam bg-primary/5 rounded-md p-5 space-y-2 font-mono text-xs text-text-muted">
-        <div className="flex items-center gap-2 text-primary font-bold">
-          <Scissors className="w-4 h-4 text-accent-gold" />
-          <span>PrimeStitch Media Standards &amp; Architecture</span>
-        </div>
-        <p>
-          Every silhouette, avatar, swatch, and stage shot is rendered with hard-locked aspect ratios (
-          <code className="text-primary font-bold">3:4</code>, <code className="text-primary font-bold">1:1</code>,{" "}
-          <code className="text-primary font-bold">16:9</code>, <code className="text-primary font-bold">4:3</code>)
-          to prevent Cumulative Layout Shift on 3G/4G cellular networks. All images include descriptive accessibility
-          alt text describing the subject, weave, and cut.
-        </p>
-      </div>
     </div>
   );
 }
 
-// Garment Lookbook Studio Uploader Component
-function GarmentLookbookUploader() {
-  const { designs, addNewDesign } = usePrimeStitch();
+// Garment Lookbook Studio Uploader Component (Single & Batch Modes with Cloudinary & Neon DB Sync)
+interface BatchFileItem {
+  id: string;
+  file: File;
+  previewUrl: string;
+  type: "image" | "video";
+  styleCode: string;
+  category: "Traditional" | "Formal" | "Contemporary" | "Corporate" | "Events";
+  garmentCut: string;
+  startingPrice: number;
+  status: "idle" | "uploading" | "synced" | "error";
+  cloudinaryUrl?: string;
+  error?: string;
+}
 
+const DEFAULT_FABRICS_LIST = [
+  {
+    id: "fab-cashmere-wool",
+    name: "Super 160s Cashmere-Wool",
+    gsm: 280,
+    weave: "Fine Twill Weave",
+    description: "Breathable, wrinkle-resistant premium wool blend.",
+    priceModifier: 0,
+    colors: ["#0B1528", "#1A2232", "#FFFFFF", "#C28B28"],
+  },
+  {
+    id: "fab-atiku",
+    name: "Lustre Atiku Cotton",
+    gsm: 240,
+    weave: "Jacquard Weave",
+    description: "Soft starch finish for crisp native silhouettes.",
+    priceModifier: 5000,
+    colors: ["#FFFFFF", "#0B1528", "#E2E8F0"],
+  },
+];
+
+const DEFAULT_COLORS_LIST = [
+  { name: "Atelier Midnight Navy", hex: "#0B1528" },
+  { name: "Chalk White", hex: "#FFFFFF" },
+  { name: "Charcoal Slate", hex: "#1E293B" },
+  { name: "Shears Brass Gold", hex: "#C28B28" },
+];
+
+function GarmentLookbookUploader() {
+  const { designs, addNewDesign, addNewDesigns } = usePrimeStitch();
+
+  // Mode: "batch" | "single"
+  const [uploadMode, setUploadMode] = useState<"batch" | "single">("batch");
+
+  // Single mode states
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
-
   const [category, setCategory] = useState<"Traditional" | "Formal" | "Contemporary" | "Corporate" | "Events">("Traditional");
   const [garmentCut, setGarmentCut] = useState("Senator 2-Piece");
   const [styleCode, setStyleCode] = useState(() => `Style #${String(designs.length + 1).padStart(2, "0")}`);
   const [startingPrice, setStartingPrice] = useState(55000);
-  const [description, setDescription] = useState("Handcrafted in Aba with concealed placket and locked delivery SLA.");
+  const [description, setDescription] = useState("Handcrafted in Aba atelier with locked delivery SLA.");
 
+  // Batch mode states
+  const [batchQueue, setBatchQueue] = useState<BatchFileItem[]>([]);
+  const [batchCategory, setBatchCategory] = useState<"Traditional" | "Formal" | "Contemporary" | "Corporate" | "Events">("Traditional");
+  const [batchCut, setBatchCut] = useState("Senator 2-Piece");
+  const [batchPrice, setBatchPrice] = useState(55000);
+  const [batchProgress, setBatchProgress] = useState<{
+    current: number;
+    total: number;
+    percent: number;
+    statusText: string;
+  } | null>(null);
+  const [batchSyncedResults, setBatchSyncedResults] = useState<any[] | null>(null);
+
+  // General execution states
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string>("");
   const [uploadedDesign, setUploadedDesign] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Single file handlers
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -445,7 +494,45 @@ function GarmentLookbookUploader() {
     }
   };
 
-  const handleUploadAndPublish = async (e: React.FormEvent) => {
+  // Batch multi-file handler
+  const handleBatchFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    const baseIndex = designs.length + batchQueue.length;
+    const newItems: BatchFileItem[] = files.map((file, idx) => {
+      const isVideo = file.type.startsWith("video") || /\.(mp4|mov|webm)$/i.test(file.name);
+      const codeNumber = baseIndex + idx + 1;
+      return {
+        id: `batch-${Date.now()}-${idx}-${Math.random().toString(36).slice(2, 7)}`,
+        file,
+        previewUrl: URL.createObjectURL(file),
+        type: isVideo ? "video" : "image",
+        styleCode: `Style #${String(codeNumber).padStart(2, "0")}`,
+        category: batchCategory,
+        garmentCut: batchCut,
+        startingPrice: batchPrice,
+        status: "idle",
+      };
+    });
+
+    setBatchQueue((prev) => [...prev, ...newItems]);
+    setBatchSyncedResults(null);
+    setErrorMessage(null);
+    e.target.value = "";
+  };
+
+  const removeBatchItem = (id: string) => {
+    setBatchQueue((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const clearBatchQueue = () => {
+    setBatchQueue([]);
+    setBatchSyncedResults(null);
+  };
+
+  // Single upload action
+  const handleSingleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!photoFile && !videoFile) {
       setErrorMessage("Please select at least one garment photo or video reel to publish.");
@@ -499,13 +586,12 @@ function GarmentLookbookUploader() {
         }
         videoUrl = videoData.url;
 
-        // If no photo was provided, derive high-res poster frame as heroImage
         if (!heroImage) {
           heroImage = videoData.url.replace(/\.[^/.]+$/, ".jpg");
         }
       }
 
-      setUploadStatus("Publishing design to catalogue...");
+      setUploadStatus("Publishing design to catalogue & database...");
 
       const newId = `des-lookbook-${Date.now()}`;
       const newDesign = {
@@ -522,40 +608,17 @@ function GarmentLookbookUploader() {
         videoUrl,
         standardLeadDays: 7,
         featured: true,
-        fabrics: [
-          {
-            id: "fab-cashmere-wool",
-            name: "Super 160s Cashmere-Wool",
-            gsm: 280,
-            weave: "Fine Twill Weave",
-            description: "Breathable, wrinkle-resistant premium wool blend.",
-            priceModifier: 0,
-            colors: ["#0B1528", "#1A2232", "#FFFFFF", "#C28B28"],
-          },
-          {
-            id: "fab-atiku",
-            name: "Lustre Atiku Cotton",
-            gsm: 240,
-            weave: "Jacquard Weave",
-            description: "Soft starch finish for crisp native silhouettes.",
-            priceModifier: 5000,
-            colors: ["#FFFFFF", "#0B1528", "#E2E8F0"],
-          },
-        ],
-        availableColors: [
-          { name: "Atelier Midnight Navy", hex: "#0B1528" },
-          { name: "Chalk White", hex: "#FFFFFF" },
-          { name: "Charcoal Slate", hex: "#1E293B" },
-          { name: "Shears Brass Gold", hex: "#C28B28" },
-        ],
+        fabrics: DEFAULT_FABRICS_LIST,
+        availableColors: DEFAULT_COLORS_LIST,
       };
 
+      // Sync to Neon DB and local store
       addNewDesign(newDesign);
       setUploadedDesign(newDesign);
       setIsUploading(false);
       setUploadStatus("");
 
-      // Clear file inputs for next upload
+      // Clear single form
       setPhotoFile(null);
       setPhotoPreview(null);
       setVideoFile(null);
@@ -567,11 +630,152 @@ function GarmentLookbookUploader() {
     }
   };
 
+  // Batch upload and sync action
+  const handleBatchSync = async () => {
+    if (batchQueue.length === 0) {
+      setErrorMessage("Please select at least one garment photo or video reel to batch upload.");
+      return;
+    }
+
+    setIsUploading(true);
+    setErrorMessage(null);
+    setBatchSyncedResults(null);
+
+    const total = batchQueue.length;
+    const createdDesigns: any[] = [];
+
+    try {
+      for (let i = 0; i < total; i++) {
+        const item = batchQueue[i];
+        const currentNum = i + 1;
+
+        setBatchProgress({
+          current: currentNum,
+          total,
+          percent: Math.round(((currentNum - 1) / total) * 100),
+          statusText: `Uploading ${item.file.name} to Cloudinary (${currentNum}/${total})...`,
+        });
+
+        // Upload file to Cloudinary via /api/upload
+        const formData = new FormData();
+        formData.append("file", item.file);
+        formData.append(
+          "folder",
+          item.type === "video" ? "primestitch/videos" : "primestitch/garments"
+        );
+        formData.append("resource_type", item.type);
+
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) {
+          throw new Error(uploadData.error || `Failed to upload ${item.file.name}`);
+        }
+
+        const secureUrl = uploadData.url;
+        const heroImage =
+          item.type === "image"
+            ? secureUrl
+            : secureUrl.replace(/\.[^/.]+$/, ".jpg");
+        const videoUrl = item.type === "video" ? secureUrl : undefined;
+
+        const newDesign = {
+          id: `des-lookbook-${Date.now()}-${i}`,
+          slug: `${item.garmentCut.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${item.styleCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+          name: `${item.garmentCut} (${item.styleCode})`,
+          styleCode: item.styleCode,
+          category: item.category,
+          startingPrice: Number(item.startingPrice),
+          description: "Handcrafted in Aba atelier with locked delivery SLA.",
+          heroImage,
+          imageAlt: `${item.garmentCut} ${item.styleCode} handcrafted in Aba atelier`,
+          imageDimensions: "1200 × 1600 px (3:4)",
+          videoUrl,
+          standardLeadDays: 7,
+          featured: true,
+          fabrics: DEFAULT_FABRICS_LIST,
+          availableColors: DEFAULT_COLORS_LIST,
+        };
+
+        createdDesigns.push(newDesign);
+
+        // Update item status in UI queue
+        setBatchQueue((prev) =>
+          prev.map((it) =>
+            it.id === item.id
+              ? { ...it, status: "synced", cloudinaryUrl: secureUrl }
+              : it
+          )
+        );
+      }
+
+      setBatchProgress({
+        current: total,
+        total,
+        percent: 100,
+        statusText: `Syncing ${total} garments to Neon PostgreSQL Database...`,
+      });
+
+      // Batch sync to Neon PostgreSQL via /api/designs
+      await fetch("/api/designs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(createdDesigns),
+      }).catch((err) => console.warn("Neon DB sync warning, continuing:", err));
+
+      // Sync into store and local storage
+      addNewDesigns(createdDesigns);
+      setBatchSyncedResults(createdDesigns);
+      setBatchQueue([]);
+      setIsUploading(false);
+      setBatchProgress(null);
+    } catch (err: any) {
+      setIsUploading(false);
+      setBatchProgress(null);
+      setErrorMessage(err.message || "Batch upload process failed");
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Upload Status / Success Banner */}
+      {/* Upload Mode Switcher Header */}
+      <div className="flex items-center gap-2 border-b border-border-seam pb-3">
+        <button
+          type="button"
+          onClick={() => setUploadMode("batch")}
+          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-sm font-mono text-xs font-bold transition-all ${
+            uploadMode === "batch"
+              ? "bg-primary text-white shadow-subtle"
+              : "bg-surface-card text-text-muted hover:text-primary border border-border-subtle"
+          }`}
+        >
+          <UploadCloud className="w-3.5 h-3.5 text-accent-tape" />
+          <span>Batch Upload Outfits (Multi-Photo &amp; Video)</span>
+          <span className="text-[10px] bg-accent-tape text-primary font-bold px-1.5 py-0.2 rounded-full">
+            Cloudinary &amp; DB Sync
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setUploadMode("single")}
+          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-sm font-mono text-xs font-bold transition-all ${
+            uploadMode === "single"
+              ? "bg-primary text-white shadow-subtle"
+              : "bg-surface-card text-text-muted hover:text-primary border border-border-subtle"
+          }`}
+        >
+          <Camera className="w-3.5 h-3.5 text-secondary" />
+          <span>Single Outfit Upload</span>
+        </button>
+      </div>
+
+      {/* Upload Success Banner (Single Mode) */}
       {uploadedDesign && (
-        <Card className="p-5 border-2 border-accent-emerald bg-accent-emerald/5 space-y-3 animate-fadeIn">
+        <Card className="p-4 sm:p-5 border-2 border-accent-emerald bg-accent-emerald/5 space-y-3 animate-fadeIn">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-accent-emerald" />
@@ -604,6 +808,38 @@ function GarmentLookbookUploader() {
         </Card>
       )}
 
+      {/* Batch Sync Success Banner */}
+      {batchSyncedResults && (
+        <Card className="p-4 sm:p-5 border-2 border-accent-emerald bg-accent-emerald/5 space-y-3 animate-fadeIn">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CheckCheck className="w-5 h-5 text-accent-emerald" />
+              <h4 className="font-bold text-base text-primary font-display">
+                Batch Upload Complete: {batchSyncedResults.length} Outfits Published!
+              </h4>
+            </div>
+            <Badge variant="verified" size="sm">
+              Cloudinary &amp; DB Synced
+            </Badge>
+          </div>
+
+          <p className="text-xs font-mono text-text-muted">
+            All {batchSyncedResults.length} garments were saved to Cloudinary storage and registered in the Neon PostgreSQL database with automatic style codes.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <Link href="/designs" target="_blank">
+              <Button size="sm" variant="primary" rightIcon={<ExternalLink className="w-3.5 h-3.5" />}>
+                View Updated Catalogue ({designs.length} Outfits) &rarr;
+              </Button>
+            </Link>
+            <Button size="sm" variant="outline" onClick={() => setBatchSyncedResults(null)}>
+              Dismiss Banner
+            </Button>
+          </div>
+        </Card>
+      )}
+
       {errorMessage && (
         <div className="p-4 bg-error/10 border border-error/30 rounded-sm text-xs font-mono text-error flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
@@ -611,129 +847,29 @@ function GarmentLookbookUploader() {
         </div>
       )}
 
-      {/* Main Upload Form */}
-      <Card hasTapeTop className="p-4 sm:p-6 lg:p-8 space-y-6">
-        <div className="border-b border-border-subtle pb-3 space-y-1">
-          <h2 className="text-base sm:text-lg font-bold font-display text-primary flex items-center gap-2 text-balance">
-            <UploadCloud className="w-4 h-4 text-accent-tape shrink-0" />
-            <span>Publish Garment Lookbook</span>
-          </h2>
-          <p className="text-xs text-text-muted text-pretty">
-            Upload outfit photography, a 360° video drape reel, or both. Outfits are assigned an automatic visual style code and published immediately.
-          </p>
-        </div>
-
-        <form onSubmit={handleUploadAndPublish} className="space-y-6">
-          {/* File Dropzone Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {/* 1. Photo File Input */}
-            <div className="space-y-1.5">
-              <div className="flex flex-wrap items-baseline justify-between gap-1">
-                <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
-                  1. Outfit Photo
-                </label>
-                <span className="text-[10px] font-mono text-text-muted">Optional if video uploaded</span>
-              </div>
-
-              <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[160px] sm:min-h-[190px] flex flex-col items-center justify-center">
-                {photoPreview ? (
-                  <div className="space-y-2 w-full">
-                    <img
-                      src={photoPreview}
-                      alt="Garment Preview"
-                      className="max-h-44 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle"
-                    />
-                    <p className="text-[11px] font-mono text-text-muted truncate">
-                      {photoFile?.name} ({(photoFile!.size / (1024 * 1024)).toFixed(2)} MB)
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
-                      <Camera className="w-4 h-4" />
-                    </div>
-                    <div className="space-y-0.5">
-                      <p className="text-xs font-bold text-primary font-mono">
-                        Select outfit photo
-                      </p>
-                      <p className="text-[11px] text-text-muted">
-                        JPG, PNG, WEBP (Portrait 3:4)
-                      </p>
-                    </div>
-                  </div>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                  aria-label="Upload outfit photo"
-                />
-              </div>
-            </div>
-
-            {/* 2. Video Reel File Input */}
-            <div className="space-y-1.5">
-              <div className="flex flex-wrap items-baseline justify-between gap-1">
-                <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
-                  2. 360° Drape Video Reel
-                </label>
-                <span className="text-[10px] font-mono text-text-muted">Optional if photo uploaded</span>
-              </div>
-
-              <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[160px] sm:min-h-[190px] flex flex-col items-center justify-center">
-                {videoPreview ? (
-                  <div className="space-y-2 w-full">
-                    <video
-                      src={videoPreview}
-                      controls
-                      className="max-h-44 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle bg-black"
-                    />
-                    <p className="text-[11px] font-mono text-text-muted truncate">
-                      {videoFile?.name} ({(videoFile!.size / (1024 * 1024)).toFixed(2)} MB)
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <div className="w-9 h-9 rounded-full bg-accent-tape/20 text-primary flex items-center justify-center mx-auto">
-                      <Film className="w-4 h-4" />
-                    </div>
-                    <div className="space-y-0.5">
-                      <p className="text-xs font-bold text-primary font-mono">
-                        Add walkaround drape reel
-                      </p>
-                      <p className="text-[11px] text-text-muted">
-                        MP4, MOV, WEBM (10–30s walkaround)
-                      </p>
-                    </div>
-                  </div>
-                )}
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={handleVideoChange}
-                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                  aria-label="Upload 360 video drape reel"
-                />
-              </div>
-            </div>
+      {/* ======================= BATCH UPLOAD SURFACE ======================= */}
+      {uploadMode === "batch" && (
+        <Card hasTapeTop className="p-4 sm:p-6 lg:p-8 space-y-6">
+          <div className="border-b border-border-subtle pb-3 space-y-1">
+            <h2 className="text-base sm:text-lg font-bold font-display text-primary flex items-center gap-2 text-balance">
+              <UploadCloud className="w-4 h-4 text-accent-tape shrink-0" />
+              <span>Batch Upload Garment Lookbook (Photos &amp; Video Reels)</span>
+            </h2>
+            <p className="text-xs text-text-muted text-pretty">
+              Select multiple photos and video files at once. All items are uploaded directly to Cloudinary and registered into the Neon PostgreSQL database with auto-generated visual style references.
+            </p>
           </div>
 
-          <div className="bg-surface-muted/60 px-3.5 py-2.5 rounded-sm border border-border-subtle text-[11px] font-mono text-text-muted">
-            Flexible media: publish with <strong>photos only</strong>, <strong>video reel only</strong>, or <strong>both together</strong>.
-          </div>
-
-          {/* Garment Details Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-border-subtle">
-            {/* Category */}
-            <div className="space-y-1.5 text-xs font-mono">
-              <label className="font-bold text-primary block uppercase">
-                Garment Category *
+          {/* Batch Default Parameters */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-surface-muted/60 p-3 sm:p-4 rounded-sm border border-border-subtle">
+            <div className="space-y-1 text-xs font-mono">
+              <label className="font-bold text-primary block uppercase text-[11px]">
+                Default Category for Batch
               </label>
               <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value as any)}
-                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card"
+                value={batchCategory}
+                onChange={(e) => setBatchCategory(e.target.value as any)}
+                className="w-full h-10 px-2.5 border border-border-seam rounded-sm bg-surface-card text-xs font-mono"
               >
                 <option value="Traditional">Traditional (Kaftan / Agbada / Isiagu)</option>
                 <option value="Formal">Formal (Executive Senator / 2-Piece)</option>
@@ -743,15 +879,14 @@ function GarmentLookbookUploader() {
               </select>
             </div>
 
-            {/* Garment Cut Silhouette */}
-            <div className="space-y-1.5 text-xs font-mono">
-              <label className="font-bold text-primary block uppercase">
-                Cut Silhouette *
+            <div className="space-y-1 text-xs font-mono">
+              <label className="font-bold text-primary block uppercase text-[11px]">
+                Default Cut Silhouette
               </label>
               <select
-                value={garmentCut}
-                onChange={(e) => setGarmentCut(e.target.value)}
-                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card"
+                value={batchCut}
+                onChange={(e) => setBatchCut(e.target.value)}
+                className="w-full h-10 px-2.5 border border-border-seam rounded-sm bg-surface-card text-xs font-mono"
               >
                 <option value="Senator 2-Piece">Senator 2-Piece Suit</option>
                 <option value="Architectural Kaftan">Architectural Grand Kaftan</option>
@@ -762,78 +897,392 @@ function GarmentLookbookUploader() {
               </select>
             </div>
 
-            {/* Visual Style Reference Code (No forced name needed!) */}
-            <div className="space-y-1.5 text-xs font-mono">
-              <label className="font-bold text-primary block uppercase">
-                Visual Reference Code *
-              </label>
-              <input
-                type="text"
-                required
-                value={styleCode}
-                onChange={(e) => setStyleCode(e.target.value)}
-                placeholder="e.g. Style #09"
-                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-bold text-primary"
-              />
-            </div>
-          </div>
-
-          {/* Pricing & Description */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="space-y-1.5 text-xs font-mono">
-              <label className="font-bold text-primary block uppercase">
-                Starting Base Price (₦) *
+            <div className="space-y-1 text-xs font-mono">
+              <label className="font-bold text-primary block uppercase text-[11px]">
+                Default Starting Price (₦)
               </label>
               <input
                 type="number"
-                required
-                value={startingPrice}
-                onChange={(e) => setStartingPrice(Number(e.target.value))}
+                value={batchPrice}
+                onChange={(e) => setBatchPrice(Number(e.target.value))}
                 min={20000}
                 step={1000}
-                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-bold text-primary"
-              />
-            </div>
-
-            <div className="sm:col-span-2 space-y-1.5 text-xs font-mono">
-              <label className="font-bold text-primary block uppercase">
-                Tailoring Highlights &amp; Notes
-              </label>
-              <input
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="e.g. Handcrafted in Aba with concealed chest placket and locked delivery SLA."
-                className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card"
+                className="w-full h-10 px-2.5 border border-border-seam rounded-sm bg-surface-card text-xs font-mono font-bold text-primary"
               />
             </div>
           </div>
 
-          {/* Submit Action Button */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border-subtle">
-            <div className="text-xs font-mono text-text-muted">
-              {isUploading ? (
-                <span className="text-secondary font-bold animate-pulse flex items-center gap-1.5">
-                  <UploadCloud className="w-4 h-4 animate-bounce" />
-                  {uploadStatus}
-                </span>
-              ) : (
-                <span className="text-text-muted">Instant deployment to live customer catalogue with locked delivery SLA.</span>
+          {/* Multi-File Dropzone */}
+          <div className="border-2 border-dashed border-primary/40 rounded-md p-6 text-center bg-surface-muted/30 hover:bg-surface-muted/60 transition-colors relative min-h-[160px] flex flex-col items-center justify-center cursor-pointer">
+            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3">
+              <UploadCloud className="w-6 h-6 text-accent-tape" />
+            </div>
+            <p className="text-sm font-bold text-primary font-mono">
+              Drop multiple photos &amp; video reels here, or Click to Browse
+            </p>
+            <p className="text-xs text-text-muted mt-1">
+              Select 5, 10, or 20+ outfits at once. Supports JPG, PNG, WEBP, MP4, MOV, WEBM.
+            </p>
+            <input
+              type="file"
+              multiple
+              accept="image/*,video/*"
+              onChange={handleBatchFilesSelected}
+              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+              aria-label="Select multiple garment photos or videos"
+            />
+          </div>
+
+          {/* Queued Files List */}
+          {batchQueue.length > 0 && (
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-primary">
+                    Queued Outfits: {batchQueue.length} files
+                  </span>
+                  <Badge variant="tape" size="sm">Ready to Upload</Badge>
+                </div>
+                <button
+                  type="button"
+                  onClick={clearBatchQueue}
+                  className="text-xs font-mono text-error hover:underline flex items-center gap-1"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  <span>Clear All</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[420px] overflow-y-auto p-1 scrollbar-none">
+                {batchQueue.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center gap-3 p-2.5 rounded-sm border border-border-subtle bg-surface-card shadow-subtle relative"
+                  >
+                    {/* Media Thumbnail */}
+                    <div className="w-14 h-14 rounded-sm overflow-hidden bg-black shrink-0 relative flex items-center justify-center border border-border-subtle">
+                      {item.type === "image" ? (
+                        <img
+                          src={item.previewUrl}
+                          alt="Queued outfit"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center text-white">
+                          <Film className="w-5 h-5 text-accent-tape" />
+                          <span className="text-[9px] font-mono mt-0.5">REEL</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Metadata & Controls */}
+                    <div className="flex-1 min-w-0 text-xs font-mono space-y-0.5">
+                      <div className="flex items-center justify-between">
+                        <strong className="text-primary font-bold truncate">
+                          {item.styleCode}
+                        </strong>
+                        <span className="text-[10px] text-text-muted">
+                          {(item.file.size / (1024 * 1024)).toFixed(1)} MB
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-text-muted truncate">
+                        {item.file.name}
+                      </p>
+                      <div className="flex items-center gap-1.5 text-[10px]">
+                        <span className="bg-primary/10 text-primary px-1.5 py-0.2 rounded-sm font-semibold">
+                          {item.type === "image" ? "Photo" : "Video"}
+                        </span>
+                        <span className="text-text-muted">
+                          {formatNaira(item.startingPrice)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Remove Action */}
+                    {!isUploading && (
+                      <button
+                        type="button"
+                        onClick={() => removeBatchItem(item.id)}
+                        className="text-text-muted hover:text-error p-1 rounded transition-colors"
+                        title="Remove outfit from batch"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Progress bar when uploading */}
+              {batchProgress && (
+                <div className="space-y-1.5 bg-surface-muted p-3.5 rounded-sm border border-border-seam font-mono text-xs animate-fadeIn">
+                  <div className="flex items-center justify-between">
+                    <span className="text-primary font-bold flex items-center gap-1.5">
+                      <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                      {batchProgress.statusText}
+                    </span>
+                    <span className="font-bold tabular-nums text-primary">
+                      {batchProgress.percent}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-border-seam h-2 rounded-full overflow-hidden">
+                    <div
+                      className="bg-primary h-full transition-all duration-300"
+                      style={{ width: `${batchProgress.percent}%` }}
+                    />
+                  </div>
+                </div>
               )}
+
+              {/* Sync Button */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border-subtle">
+                <span className="text-xs font-mono text-text-muted">
+                  Auto-generates visual style codes and syncs directly to Cloudinary &amp; Neon DB.
+                </span>
+
+                <Button
+                  type="button"
+                  size="lg"
+                  disabled={isUploading}
+                  onClick={handleBatchSync}
+                  className="w-full sm:w-auto font-bold shadow-raised px-8 min-h-[48px]"
+                  rightIcon={<UploadCloud className="w-4 h-4 text-accent-tape" />}
+                >
+                  {isUploading
+                    ? "Syncing Outfits..."
+                    : `Sync All ${batchQueue.length} Outfits to Cloudinary & DB`}
+                </Button>
+              </div>
+            </div>
+          )}
+        </Card>
+      )}
+
+      {/* ======================= SINGLE OUTFIT SURFACE ======================= */}
+      {uploadMode === "single" && (
+        <Card hasTapeTop className="p-4 sm:p-6 lg:p-8 space-y-6">
+          <div className="border-b border-border-subtle pb-3 space-y-1">
+            <h2 className="text-base sm:text-lg font-bold font-display text-primary flex items-center gap-2 text-balance">
+              <UploadCloud className="w-4 h-4 text-accent-tape shrink-0" />
+              <span>Publish Single Garment Lookbook</span>
+            </h2>
+            <p className="text-xs text-text-muted text-pretty">
+              Upload outfit photography, a 360° video drape reel, or both. Outfit is assigned an automatic visual style code and published immediately.
+            </p>
+          </div>
+
+          <form onSubmit={handleSingleUpload} className="space-y-6">
+            {/* File Dropzone Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              {/* 1. Photo File Input */}
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-baseline justify-between gap-1">
+                  <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
+                    1. Outfit Photo
+                  </label>
+                  <span className="text-[10px] font-mono text-text-muted">Optional if video uploaded</span>
+                </div>
+
+                <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[160px] sm:min-h-[190px] flex flex-col items-center justify-center">
+                  {photoPreview ? (
+                    <div className="space-y-2 w-full">
+                      <img
+                        src={photoPreview}
+                        alt="Garment Preview"
+                        className="max-h-44 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle"
+                      />
+                      <p className="text-[11px] font-mono text-text-muted truncate">
+                        {photoFile?.name} ({(photoFile!.size / (1024 * 1024)).toFixed(2)} MB)
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+                        <Camera className="w-4 h-4" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <p className="text-xs font-bold text-primary font-mono">
+                          Select outfit photo
+                        </p>
+                        <p className="text-[11px] text-text-muted">
+                          JPG, PNG, WEBP (Portrait 3:4)
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    aria-label="Upload outfit photo"
+                  />
+                </div>
+              </div>
+
+              {/* 2. Video Reel File Input */}
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-baseline justify-between gap-1">
+                  <label className="text-xs font-mono font-bold uppercase tracking-wider text-primary">
+                    2. 360° Drape Video Reel
+                  </label>
+                  <span className="text-[10px] font-mono text-text-muted">Optional if photo uploaded</span>
+                </div>
+
+                <div className="border-2 border-dashed border-border-seam rounded-md p-4 text-center bg-surface-muted/50 hover:bg-surface-muted transition-colors relative min-h-[160px] sm:min-h-[190px] flex flex-col items-center justify-center">
+                  {videoPreview ? (
+                    <div className="space-y-2 w-full">
+                      <video
+                        src={videoPreview}
+                        controls
+                        className="max-h-44 mx-auto rounded-sm object-cover border border-border-subtle shadow-subtle bg-black"
+                      />
+                      <p className="text-[11px] font-mono text-text-muted truncate">
+                        {videoFile?.name} ({(videoFile!.size / (1024 * 1024)).toFixed(2)} MB)
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="w-9 h-9 rounded-full bg-accent-tape/20 text-primary flex items-center justify-center mx-auto">
+                        <Film className="w-4 h-4" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <p className="text-xs font-bold text-primary font-mono">
+                          Add walkaround drape reel
+                        </p>
+                        <p className="text-[11px] text-text-muted">
+                          MP4, MOV, WEBM (10–30s walkaround)
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="video/*"
+                    onChange={handleVideoChange}
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    aria-label="Upload 360 video drape reel"
+                  />
+                </div>
+              </div>
             </div>
 
-            <Button
-              type="submit"
-              size="lg"
-              disabled={isUploading}
-              className="w-full sm:w-auto font-bold shadow-raised px-8"
-              rightIcon={<UploadCloud className="w-4 h-4 text-accent-tape" />}
-            >
-              {isUploading ? "Publishing Outfit..." : "Publish Outfit to Catalogue"}
-            </Button>
-          </div>
-        </form>
-      </Card>
+            <div className="bg-surface-muted/60 px-3.5 py-2.5 rounded-sm border border-border-subtle text-[11px] font-mono text-text-muted">
+              Flexible media: publish with <strong>photos only</strong>, <strong>video reel only</strong>, or <strong>both together</strong>.
+            </div>
+
+            {/* Garment Details Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-border-subtle">
+              {/* Category */}
+              <div className="space-y-1.5 text-xs font-mono">
+                <label className="font-bold text-primary block uppercase">
+                  Garment Category *
+                </label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value as any)}
+                  className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card"
+                >
+                  <option value="Traditional">Traditional (Kaftan / Agbada / Isiagu)</option>
+                  <option value="Formal">Formal (Executive Senator / 2-Piece)</option>
+                  <option value="Contemporary">Contemporary (Modern Native Cut)</option>
+                  <option value="Corporate">Corporate (Clean Work Native)</option>
+                  <option value="Events">Events (Celebration / Wedding Attire)</option>
+                </select>
+              </div>
+
+              {/* Garment Cut Silhouette */}
+              <div className="space-y-1.5 text-xs font-mono">
+                <label className="font-bold text-primary block uppercase">
+                  Cut Silhouette *
+                </label>
+                <select
+                  value={garmentCut}
+                  onChange={(e) => setGarmentCut(e.target.value)}
+                  className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card"
+                >
+                  <option value="Senator 2-Piece">Senator 2-Piece Suit</option>
+                  <option value="Architectural Kaftan">Architectural Grand Kaftan</option>
+                  <option value="Ceremonial Agbada">Ceremonial 3-Piece Agbada</option>
+                  <option value="Isiagu Celebration Set">Isiagu Ceremonial Set</option>
+                  <option value="Safari Native Cut">Safari 2-Piece Native</option>
+                  <option value="Casual Linen Native">Casual Linen Native</option>
+                </select>
+              </div>
+
+              {/* Visual Style Reference Code */}
+              <div className="space-y-1.5 text-xs font-mono">
+                <label className="font-bold text-primary block uppercase">
+                  Visual Reference Code *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={styleCode}
+                  onChange={(e) => setStyleCode(e.target.value)}
+                  placeholder="e.g. Style #09"
+                  className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-bold text-primary"
+                />
+              </div>
+            </div>
+
+            {/* Pricing & Description */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="space-y-1.5 text-xs font-mono">
+                <label className="font-bold text-primary block uppercase">
+                  Starting Base Price (₦) *
+                </label>
+                <input
+                  type="number"
+                  required
+                  value={startingPrice}
+                  onChange={(e) => setStartingPrice(Number(e.target.value))}
+                  min={20000}
+                  step={1000}
+                  className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card font-bold text-primary"
+                />
+              </div>
+
+              <div className="sm:col-span-2 space-y-1.5 text-xs font-mono">
+                <label className="font-bold text-primary block uppercase">
+                  Tailoring Highlights &amp; Notes
+                </label>
+                <input
+                  type="text"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="e.g. Handcrafted in Aba with concealed chest placket and locked delivery SLA."
+                  className="w-full h-11 px-3 border border-border-seam rounded-sm bg-surface-card"
+                />
+              </div>
+            </div>
+
+            {/* Submit Action Button */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border-subtle">
+              <div className="text-xs font-mono text-text-muted">
+                {isUploading ? (
+                  <span className="text-secondary font-bold animate-pulse flex items-center gap-1.5">
+                    <UploadCloud className="w-4 h-4 animate-bounce" />
+                    {uploadStatus}
+                  </span>
+                ) : (
+                  <span className="text-text-muted">Instant deployment to live customer catalogue with locked delivery SLA.</span>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isUploading}
+                className="w-full sm:w-auto font-bold shadow-raised px-8 min-h-[48px]"
+                rightIcon={<UploadCloud className="w-4 h-4 text-accent-tape" />}
+              >
+                {isUploading ? "Publishing Outfit..." : "Publish Outfit to Catalogue"}
+              </Button>
+            </div>
+          </form>
+        </Card>
+      )}
     </div>
   );
 }

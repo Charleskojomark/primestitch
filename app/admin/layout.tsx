@@ -113,7 +113,7 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-surface-muted/30 pb-16">
+    <div className="bg-surface-muted/30 pb-6 sm:pb-8">
       {/* Admin Command Bar: Relative on mobile to prevent double sticky headers & clipping; sticky on desktop */}
       <div className="relative border-b border-border-seam bg-surface-card shadow-subtle md:sticky md:top-16 md:z-30">
         <div className="max-w-7xl mx-auto px-3 sm:px-6">

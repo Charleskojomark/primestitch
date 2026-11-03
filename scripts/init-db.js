@@ -143,6 +143,30 @@ async function initDb() {
   `;
   console.log("✓ staff table ready");
 
+  // 8. Designs table (Garment Lookbook Catalog synced with Cloudinary)
+  await sql`
+    CREATE TABLE IF NOT EXISTS designs (
+      id VARCHAR(64) PRIMARY KEY,
+      slug VARCHAR(255),
+      name VARCHAR(255) NOT NULL,
+      style_code VARCHAR(64),
+      category VARCHAR(64) NOT NULL,
+      starting_price NUMERIC(12,2) NOT NULL,
+      description TEXT,
+      hero_image TEXT NOT NULL,
+      image_alt TEXT,
+      image_dimensions VARCHAR(64),
+      video_url TEXT,
+      standard_lead_days INT NOT NULL DEFAULT 7,
+      featured BOOLEAN NOT NULL DEFAULT TRUE,
+      fabrics JSONB,
+      available_colors JSONB,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `;
+  console.log("✓ designs table ready");
+
   // Seed default staff benches if empty
   const existingStaff = await sql`SELECT count(*) FROM staff;`;
   if (parseInt(existingStaff[0].count, 10) === 0) {
