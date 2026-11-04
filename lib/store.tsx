@@ -159,6 +159,14 @@ export function PrimeStitchProvider({ children }: { children: React.ReactNode })
   // Hydrate from localStorage once mounted
   useEffect(() => {
     try {
+      const STORAGE_VERSION_TAG = "v3_5_orders_aba_giants_school";
+      const currentVer = localStorage.getItem("primestitch_data_version");
+      if (currentVer !== STORAGE_VERSION_TAG) {
+        localStorage.removeItem(STORAGE_KEY_ORDERS);
+        localStorage.removeItem(STORAGE_KEY_BOOKINGS);
+        localStorage.setItem("primestitch_data_version", STORAGE_VERSION_TAG);
+      }
+
       const storedOrders = localStorage.getItem(STORAGE_KEY_ORDERS);
       if (storedOrders) {
         const parsed = JSON.parse(storedOrders);
